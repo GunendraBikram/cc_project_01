@@ -23,7 +23,7 @@ int line3 =0;
 
 %%
 
-
+void showlexemes();
 int main(int argc[], char *argv[] )
 
 {
