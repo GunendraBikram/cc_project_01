@@ -1,5 +1,8 @@
 %{
 #include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+
 char n_x;
 char str1[1000] ;
 int line =0;
