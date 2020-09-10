@@ -27,7 +27,7 @@ void showlexemes();
 int main(int argc[], char *argv[] )
 
 {
-               yyin = fopen("file3.txt", "r");
+               yyin = fopen("test_case_01.txt", "r");
                
                yylex();
                //printf("Total number of tokens = %c\n",n_x);
