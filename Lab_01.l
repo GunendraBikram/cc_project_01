@@ -26,7 +26,7 @@ char str1[1000] ;
 "<"|">"|"="|"+"|"*"|"-" {addtokens(yytext, linenumber);}
 [+-][0-9]*[.][0-9]+ {printf("No rational numbers are allowed");}
 [\n\t"]
-[_] {printf("Invalid character");
+
 
 
 
