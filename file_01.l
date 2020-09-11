@@ -14,9 +14,6 @@ struct token tokenlist[50];
 
 char n_x;
 char str1[1000] ;
-int line =0;
-int line2 = 0;
-int line3 =0;
 
 %}
 
