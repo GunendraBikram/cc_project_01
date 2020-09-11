@@ -57,10 +57,32 @@ void addtokens(char *str, int linenumber)
   strcpy(tokenlist[tokencount].tokenname,str);
   sprintf(lno,"%d",linenumber);
   strcpy(tokenlist[tokencount].linenumber,lno);
-  printf("\n%s\t%s", tokenlist[tokencount].tokenname, tokenlist[tokencount].linenumber);
+ // printf("\n%s\t%s", tokenlist[tokencount].tokenname, tokenlist[tokencount].linenumber);
  }
 
 
+void showtokens(){
+	int i,j,count;
+	int freq[100];
+	char lineno[100];
+	for(i=1;i<=tokencount;i++) freq[i]=-1;
+	for(i=1;i<=tokencount;i++){
+		count = 1;
+		strcpy(lineno,"");
+		for(j=i+1;j<=tokencount;j++){
+			if(strcmp(tokenlist[i].tokenname, tokenlist[j].tokenname)==0){
+				count++; freq[j]=0; strcat(lineno," "); strcat(lineno,tokenlist[j].linenumber);
+			}
+		}
+		
+		if(freq[i]!=0){
+			freq[i]=count; strcat(tokenlist[i].linenumber, lineno);
+		}
+	}
+	for(i=1;i<=tokencount;i++)
+	if(freq[i]!=0)
+	printf("\n%s:\t %s", tokenlist.tokenname, tokenlist[i].linenumber);
+}
 
 
 
