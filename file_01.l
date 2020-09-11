@@ -27,7 +27,9 @@ int line3 =0;
 [a-zA-Z][-a-zA-Z0-9]* {addtokens(yytext, linenumber);}
 "<"|">"|"="|"+"|"<"|"++"|"*"|"-" {addtokens(yytext, linenumber);}
 "("|")" {printf("%s:\n",yytext);}
-. ;
+[+-][0-9]*[.][0-9]+ {printf("No rational numbers are allowed");}
+[\n\t"]
+
 
 
 
