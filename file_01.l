@@ -25,7 +25,8 @@ int line3 =0;
 \n {linenumber++;}
 \;(.*) {}; 
 [a-zA-Z][-a-zA-Z0-9]* {addtokens(yytext, linenumber);}
-"<"|">"|"="|"+"|"<"|"++"|"*"|"-" {addtokens(yytext, linenumber);}
+"["|"]"|"{"|"}"|"("|")" {addtokens(yytext, linenumber);}
+"<"|">"|"="|"+"|"*"|"-" {addtokens(yytext, linenumber);}
 [+-][0-9]*[.][0-9]+ {printf("No rational numbers are allowed");}
 [\n\t"]
 
@@ -44,12 +45,7 @@ int main(int argc[], char *argv[] )
                fp1= fopen("test_case_01.txt", "r");
                yyin=fp1;
                yylex();
-               //printf("Total number of tokens = %c\n",n_x);
-               //printf("Total number of tokens = %d\n",n_y);
-               //printf("Total number of tokens = %d\n",n_z);
-               //printf("Total number of tokens = %d\n",line);
-               //printf("Total number of tokens = %d\n",line2);
-               //printf("Total number of tokens = %d\n",line3);
+               
                
                return 0;
 }
