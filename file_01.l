@@ -7,10 +7,10 @@ int linenumber=1;
 int tokencount=0;
 int lcount=0;
 struct token{
-char tokenname[100];
-char linenumber[50];
+char tokenname[1000];
+char linenumber[5000];
 };
-struct token tokenlist[50];
+struct token tokenlist[5000];
 
 char n_x;
 char str1[1000] ;
@@ -49,7 +49,7 @@ int main(int argc[], char *argv[] )
 
 void addtokens(char *str, int linenumber)
 { 
-  char lno[100];
+  char lno[1000];
   tokencount++;
   strcpy(tokenlist[tokencount].tokenname,str);
   sprintf(lno,"%d",linenumber);
@@ -60,8 +60,8 @@ void addtokens(char *str, int linenumber)
 
 void showtokens(){
 	int i,j,count;
-	int freq[100];
-	char lineno[100];
+	int freq[1000];
+	char lineno[1000];
 	for(i=1;i<=tokencount;i++) freq[i]=-1;
 	for(i=1;i<=tokencount;i++){
 		count = 1;
