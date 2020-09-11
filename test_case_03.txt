@@ -1,6 +1,6 @@
 printf()
 if _++++
 ---- (()()(()()()(
-if (3 4 )
-define-fun (gcd 2 3) 
-gcd (2 3)
+if (((((((c d )
+define-fun (gcd f g) 
+gcd (c d)

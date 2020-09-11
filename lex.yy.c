@@ -287,10 +287,10 @@ static void yy_fatal_error YY_PROTO(( yyconst char msg[] ));
 
 #define YY_NUM_RULES 8
 #define YY_END_OF_BUFFER 9
-static yyconst short int yy_accept[21] =
+static yyconst short int yy_accept[18] =
     {   0,
-        0,    0,    9,    8,    7,    1,    4,    5,    5,    5,
-        2,    5,    3,    5,    0,    0,    2,    3,    6,    0
+        0,    0,    9,    8,    7,    1,    4,    5,    5,    2,
+        3,    0,    0,    2,    3,    6,    0
     } ;
 
 static yyconst int yy_ec[256] =
@@ -331,38 +331,34 @@ static yyconst int yy_meta[20] =
         1,    1,    1,    1,    3,    1,    1,    1,    1
     } ;
 
-static yyconst short int yy_base[23] =
+static yyconst short int yy_base[20] =
     {   0,
-        0,    0,   32,   33,   33,   33,   33,   33,   13,   15,
-        0,   33,    0,   33,   21,   17,    0,    0,   19,   33,
-       27,   18
+        0,    0,   29,   30,   30,   30,   30,   30,   11,    0,
+        0,   18,   13,    0,    0,   17,   30,   23,   22
     } ;
 
-static yyconst short int yy_def[23] =
+static yyconst short int yy_def[20] =
     {   0,
-       20,    1,   20,   20,   20,   20,   20,   20,   20,   20,
-       21,   20,   22,   20,   20,   20,   21,   22,   20,    0,
-       20,   20
+       17,    1,   17,   17,   17,   17,   17,   17,   17,   18,
+       19,   17,   17,   18,   19,   17,    0,   17,   17
     } ;
 
-static yyconst short int yy_nxt[53] =
+static yyconst short int yy_nxt[50] =
     {   0,
-        4,    5,    6,    7,    7,    8,    9,   10,    4,    4,
-       11,   12,    8,    8,   13,    7,    7,    7,    7,   14,
-       18,   15,   16,   15,   16,   15,   16,   17,   19,   17,
-       19,   20,    3,   20,   20,   20,   20,   20,   20,   20,
-       20,   20,   20,   20,   20,   20,   20,   20,   20,   20,
-       20,   20
+        4,    5,    6,    7,    7,    8,    9,    9,    4,    4,
+       10,    8,    8,    8,   11,    7,    7,    7,    7,   12,
+       13,   12,   13,   14,   15,   14,   16,   16,   17,    3,
+       17,   17,   17,   17,   17,   17,   17,   17,   17,   17,
+       17,   17,   17,   17,   17,   17,   17,   17,   17
     } ;
 
-static yyconst short int yy_chk[53] =
+static yyconst short int yy_chk[50] =
     {   0,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    9,
-       22,    9,    9,   10,   10,   16,   16,   21,   19,   21,
-       15,    3,   20,   20,   20,   20,   20,   20,   20,   20,
-       20,   20,   20,   20,   20,   20,   20,   20,   20,   20,
-       20,   20
+        9,   13,   13,   18,   19,   18,   16,   12,    3,   17,
+       17,   17,   17,   17,   17,   17,   17,   17,   17,   17,
+       17,   17,   17,   17,   17,   17,   17,   17,   17
     } ;
 
 static yy_state_type yy_last_accepting_state;
@@ -387,18 +383,15 @@ int linenumber=1;
 int tokencount=0;
 int lcount=0;
 struct token{
-char tokenname[100];
-char linenumber[50];
+char tokenname[1000];
+char linenumber[5000];
 };
-struct token tokenlist[50];
+struct token tokenlist[5000];
 
 char n_x;
 char str1[1000] ;
-//int line =0;
-//int line2 = 0;
-//int line3 =0;
 
-#line 402 "lex.yy.c"
+#line 395 "lex.yy.c"
 
 /* Macros after this point can all be overridden by user definitions in
  * section 1.
@@ -560,9 +553,9 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
 
-#line 24 "file_01.l"
+#line 21 "file_01.l"
 
-#line 566 "lex.yy.c"
+#line 559 "lex.yy.c"
 
 	if ( yy_init )
 		{
@@ -613,13 +606,13 @@ yy_match:
 			while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 				{
 				yy_current_state = (int) yy_def[yy_current_state];
-				if ( yy_current_state >= 21 )
+				if ( yy_current_state >= 18 )
 					yy_c = yy_meta[(unsigned int) yy_c];
 				}
 			yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
 			++yy_cp;
 			}
-		while ( yy_base[yy_current_state] != 33 );
+		while ( yy_base[yy_current_state] != 30 );
 
 yy_find_action:
 		yy_act = yy_accept[yy_current_state];
@@ -647,45 +640,45 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 25 "file_01.l"
+#line 22 "file_01.l"
 {linenumber++;}
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 26 "file_01.l"
+#line 23 "file_01.l"
 {}; 
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 27 "file_01.l"
+#line 24 "file_01.l"
 {addtokens(yytext, linenumber);}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 28 "file_01.l"
+#line 25 "file_01.l"
 {addtokens(yytext, linenumber);}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 29 "file_01.l"
+#line 26 "file_01.l"
 {addtokens(yytext, linenumber);}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 30 "file_01.l"
+#line 27 "file_01.l"
 {printf("No rational numbers are allowed");}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 31 "file_01.l"
+#line 28 "file_01.l"
 
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 37 "file_01.l"
+#line 34 "file_01.l"
 ECHO;
 	YY_BREAK
-#line 689 "lex.yy.c"
+#line 682 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -977,7 +970,7 @@ static yy_state_type yy_get_previous_state()
 		while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 			{
 			yy_current_state = (int) yy_def[yy_current_state];
-			if ( yy_current_state >= 21 )
+			if ( yy_current_state >= 18 )
 				yy_c = yy_meta[(unsigned int) yy_c];
 			}
 		yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
@@ -1012,11 +1005,11 @@ yy_state_type yy_current_state;
 	while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 		{
 		yy_current_state = (int) yy_def[yy_current_state];
-		if ( yy_current_state >= 21 )
+		if ( yy_current_state >= 18 )
 			yy_c = yy_meta[(unsigned int) yy_c];
 		}
 	yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
-	yy_is_jam = (yy_current_state == 20);
+	yy_is_jam = (yy_current_state == 17);
 
 	return yy_is_jam ? 0 : yy_current_state;
 	}
@@ -1575,7 +1568,7 @@ int main()
 	return 0;
 	}
 #endif
-#line 37 "file_01.l"
+#line 34 "file_01.l"
 
 
 int yywrap(void){}
@@ -1584,7 +1577,7 @@ int main(int argc[], char *argv[] )
 
 {
                FILE *fp1;
-               fp1= fopen("test_case_01.txt", "r");
+               fp1= fopen("test_case_04.txt", "r");
                yyin=fp1;
                yylex();
                
@@ -1594,7 +1587,7 @@ int main(int argc[], char *argv[] )
 
 void addtokens(char *str, int linenumber)
 { 
-  char lno[100];
+  char lno[1000];
   tokencount++;
   strcpy(tokenlist[tokencount].tokenname,str);
   sprintf(lno,"%d",linenumber);
@@ -1605,8 +1598,8 @@ void addtokens(char *str, int linenumber)
 
 void showtokens(){
 	int i,j,count;
-	int freq[100];
-	char lineno[100];
+	int freq[1000];
+	char lineno[1000];
 	for(i=1;i<=tokencount;i++) freq[i]=-1;
 	for(i=1;i<=tokencount;i++){
 		count = 1;
