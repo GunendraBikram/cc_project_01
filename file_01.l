@@ -50,7 +50,7 @@ int main(int argc[], char *argv[] )
                //printf("Total number of tokens = %d\n",line);
                //printf("Total number of tokens = %d\n",line2);
                //printf("Total number of tokens = %d\n",line3);
-               
+               showtokens();
                return 0;
 }
 
@@ -85,7 +85,7 @@ void showtokens(){
 	}
 	for(i=1;i<=tokencount;i++)
 	if(freq[i]!=0)
-	printf("\n%s:\t %s", tokenlist.tokenname, tokenlist[i].linenumber);
+	printf("\n%s:\t %s", tokenlist[i].tokenname, tokenlist[i].linenumber);
 }
 
 
