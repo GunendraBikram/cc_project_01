@@ -24,9 +24,10 @@ char str1[1000] ;
 [a-zA-Z][-a-zA-Z0-9]* {addtokens(yytext, linenumber);}
 "["|"]"|"{"|"}"|"("|")" {addtokens(yytext, linenumber);}
 "<"|">"|"="|"+"|"*"|"-" {addtokens(yytext, linenumber);}
-[+-][0-9]*[.][0-9]+ {printf("No rational numbers are allowed");}
+[-+]*[0-9]*[.][0-9]+ {printf("No rational numbers are allowed");}
 [\n\t"]
 [_] {printf("Invalid character");}
+"+"*|"<"*|">"* {printf("Invalid character");}
 
 
 
@@ -41,7 +42,7 @@ int main(int argc[], char *argv[] )
 
 {
                FILE *fp1;
-               fp1= fopen("test_case_04.txt", "r");
+               fp1= fopen("test_case_05.txt", "r");
                yyin=fp1;
                yylex();
                
