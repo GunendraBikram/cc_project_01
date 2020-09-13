@@ -23,11 +23,11 @@ char str1[1000] ;
 \;(.*) {}; 
 [a-zA-Z][-a-zA-Z0-9]* {addtokens(yytext, linenumber);}
 "["|"]"|"{"|"}"|"("|")" {addtokens(yytext, linenumber);}
-"<"|">"|"="|"+"|"*"|"-" {addtokens(yytext, linenumber);}
+"<"|">"|"="|"+"|"*"|"-"|"~" {addtokens(yytext, linenumber);}
 [-+]*[0-9]*[.][0-9]+ {printf("No rational numbers are allowed");}
 [\n\t"]
 [_] {printf("Invalid character");}
-"+"*|"<"*|">"* {printf("Invalid character");}
+"+"*|"<"*|">"*"|"-"*|"~"*|"^"*|" {printf("Invalid character");}
 
 
 
