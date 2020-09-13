@@ -41,7 +41,7 @@ int main(int argc[], char *argv[] )
 
 {
                FILE *fp1;
-               fp1= fopen("test_case_05.txt", "r");
+               fp1= fopen("test_case_03.txt", "r");
                yyin=fp1;
                yylex();
                
@@ -82,3 +82,6 @@ void showtokens(){
 	if(freq[i]!=0)
 	printf("\n%s:\t %s", tokenlist[i].tokenname, tokenlist[i].linenumber);
 }
+
+
+

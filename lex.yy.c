@@ -385,9 +385,9 @@ static char *yy_last_accepting_cpos;
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
 char *yytext;
-#line 1 "Lab_01.l"
+#line 1 "lab_01.l"
 #define INITIAL 0
-#line 2 "Lab_01.l"
+#line 2 "lab_01.l"
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
@@ -566,7 +566,7 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
 
-#line 21 "Lab_01.l"
+#line 21 "lab_01.l"
 
 #line 572 "lex.yy.c"
 
@@ -653,47 +653,47 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 22 "Lab_01.l"
+#line 22 "lab_01.l"
 {linenumber++;}
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 23 "Lab_01.l"
+#line 23 "lab_01.l"
 {}; 
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 24 "Lab_01.l"
+#line 24 "lab_01.l"
 {addtokens(yytext, linenumber);}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 25 "Lab_01.l"
+#line 25 "lab_01.l"
 {addtokens(yytext, linenumber);}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 26 "Lab_01.l"
+#line 26 "lab_01.l"
 {addtokens(yytext, linenumber);}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 27 "Lab_01.l"
+#line 27 "lab_01.l"
 {printf("No rational numbers are allowed");}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 28 "Lab_01.l"
+#line 28 "lab_01.l"
 
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 29 "Lab_01.l"
+#line 29 "lab_01.l"
 {printf("Invalid character");}
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 36 "Lab_01.l"
+#line 36 "lab_01.l"
 ECHO;
 	YY_BREAK
 #line 700 "lex.yy.c"
@@ -1586,7 +1586,7 @@ int main()
 	return 0;
 	}
 #endif
-#line 36 "Lab_01.l"
+#line 36 "lab_01.l"
 
 
 int yywrap(void){}
@@ -1595,7 +1595,7 @@ int main(int argc[], char *argv[] )
 
 {
                FILE *fp1;
-               fp1= fopen("test_case_05.txt", "r");
+               fp1= fopen("test_case_03.txt", "r");
                yyin=fp1;
                yylex();
                
@@ -1636,3 +1636,6 @@ void showtokens(){
 	if(freq[i]!=0)
 	printf("\n%s:\t %s", tokenlist[i].tokenname, tokenlist[i].linenumber);
 }
+
+
+
