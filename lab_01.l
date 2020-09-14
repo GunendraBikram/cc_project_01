@@ -6,6 +6,9 @@ void addtokens(char *, int);
 int linenumber=1;
 int tokencount=0;
 int lcount=0;
+int varcount=0;
+int constcount=0;
+int opcount=0;
 struct token{
 char tokenname[1000];
 char linenumber[5000];
@@ -31,10 +34,11 @@ expr true|false|obr rop term term cbr | obr not expr cbr | obr and expr expr cbr
 %%
 \n {linenumber++;}
 \;(.*) {}; 
-{var} {addtokens(yytext, linenumber);}
+{const} {constcount++; if((constcount+varcount)==2) opcount=0;} 
+{var} {varcount++; addtokens(yytext, linenumber); if((constcount+varcount)==2) opcount=0; }
 {obr} {addtokens(yytext, linenumber);}
 {cbr} {addtokens(yytext, linenumber);}
-{op} {addtokens(yytext, linenumber);}
+{op} {opcount=++; if(opcount==1) addtokens(yytext, linenumber); else printf("\nInvalid Expression"); varcount=0; constcount=0;}
 {rop} {addtokens(yytext, linenumber);}
 
 {rational} {printf("No rational numbers are allowed");}
