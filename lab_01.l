@@ -19,7 +19,7 @@ struct token tokenlist[5000];
 
 %}
 rational [-+]*[0-9]*[.][0-9]+
-program obr eval expr cbr|obr eval term cbr| obr print expr cbr|obr print term cbr
+program program obr define-fun obr fun cbr term cbr program | obr define-fun obr fun var cbr term cbr program| obr define-fun obr fun var var cbr term cbr program |obr eval expr cbr|obr eval term cbr| obr print expr cbr|obr print term cbr
 type int|bool
 var [a-zA-Z][-a-zA-Z0-9]*
 const [0-9]+
