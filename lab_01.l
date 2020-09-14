@@ -38,7 +38,7 @@ expr true|false|obr rop term term cbr | obr not expr cbr | obr and expr expr cbr
 {var} {varcount++; addtokens(yytext, linenumber); if((constcount+varcount)==2) opcount=0; }
 {obr} {addtokens(yytext, linenumber);}
 {cbr} {addtokens(yytext, linenumber);}
-{op} {opcount=++; if(opcount==1) addtokens(yytext, linenumber); else printf("\nInvalid Expression"); varcount=0; constcount=0;}
+{op} {opcount++; if(opcount==1) addtokens(yytext, linenumber); else printf("\nInvalid Expression"); varcount=0; constcount=0;}
 {rop} {addtokens(yytext, linenumber);}
 
 {rational} {printf("No rational numbers are allowed");}
