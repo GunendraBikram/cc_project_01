@@ -10,7 +10,8 @@ print ( text )
 lcm (get-txt)))))))))))))))
 +4.67676
 -677.67676
-(if (< a g) gcd(+ c d)))
+(if (* a g) gcd(+ c d)))
+def-lcd(<< a b)
 
 
 
