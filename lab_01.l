@@ -57,7 +57,7 @@ int main(int argc[], char *argv[] )
 
 {
                FILE *fp1;
-               fp1= fopen("test_case_03.txt", "r");
+               fp1= fopen("test_case_06.txt", "r");
                yyin=fp1;
                yylex();
                
