@@ -16,19 +16,29 @@ struct token tokenlist[5000];
 
 %}
 rational [-+]*[0-9]*[.][0-9]+
+program obr eval expr cbr|obr eval term cbr| obr print expr cbr|obr print term cbr
+type int|bool
+var [a-zA-Z][-a-zA-Z0-9]*
+const [0-9]+
+obr "("|"{"|"["
+cbr ")"|"{"|"]"
+op "+"|"-"|"*"
+rop "="|"<"|">"|"<="|">="
+term var|const|obr op term term cbr| obr div term term cbr| obr mod term term cbr | obr if expr term term cbr | obr get-int cbr
+expr true|false|obr rop term term cbr | obr not expr cbr | obr and expr expr cbr| obr or expr expr cbr 
 
 
 %%
 \n {linenumber++;}
 \;(.*) {}; 
-[a-zA-Z][-a-zA-Z0-9]* {addtokens(yytext, linenumber);}
-"["|"]"|"{"|"}"|"("|")" {addtokens(yytext, linenumber);}
-"<"|">"|"="|"+"|"*"|"-"|"~" {addtokens(yytext, linenumber);}
+{var} {addtokens(yytext, linenumber);}
+{obr} {addtokens(yytext, linenumber);}
+{cbr} {addtokens(yytext, linenumber);}
+{op} {addtokens(yytext, linenumber);}
+{rop} {addtokens(yytext, linenumber);}
+
 {rational} {printf("No rational numbers are allowed");}
 [\n\t"]
-"_"|"+"*|"<"*|">"*|"-"*|"~"*|"^"*|"="* {printf("Invalid character");}
-
-
 
 
 
