@@ -38,6 +38,7 @@ expr true|false|obr rop term term cbr | obr not expr cbr | obr and expr expr cbr
 {rop} {addtokens(yytext, linenumber);}
 
 {rational} {printf("No rational numbers are allowed");}
+[_]* {printf("Invalid character");}
 [\n\t"]
 
 
