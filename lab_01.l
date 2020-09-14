@@ -39,6 +39,7 @@ expr true|false|obr rop term term cbr | obr not expr cbr | obr and expr expr cbr
 
 {rational} {printf("No rational numbers are allowed");}
 [_]* {printf("Invalid character");}
+[~]* {printf("Invalid character");}
 [\n\t"]
 
 
