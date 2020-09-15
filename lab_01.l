@@ -25,7 +25,7 @@ var [a-zA-Z][-a-zA-Z0-9]*
 const [0-9]+
 obr "("|"{"|"["
 cbr ")"|"{"|"]"
-op "+"|"-"|"*"
+op "+"|"-"|"*"|"/"
 rop "="|"<"|">"|"<="|">="
 term var|const|obr op term term cbr| obr div term term cbr| obr mod term term cbr | obr if expr term term cbr | obr get-int cbr
 expr true|false|obr rop term term cbr | obr not expr cbr | obr and expr expr cbr| obr or expr expr cbr 
