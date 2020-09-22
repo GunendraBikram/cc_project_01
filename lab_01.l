@@ -2,6 +2,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
+#include<ytab.h>
 void addtokens(char *, int);
 int linenumber=1;
 int tokencount=0;
@@ -18,20 +19,24 @@ struct token tokenlist[5000];
 
 
 %}
-rational [-+]*[0-9]*[.][0-9]+
-program program obr define-fun obr fun cbr term cbr program | obr define-fun obr fun var cbr term cbr program| obr define-fun obr fun var var cbr term cbr program |obr eval expr cbr|obr eval term cbr| obr print expr cbr|obr print term cbr
-type int|bool
-var [a-zA-Z][-a-zA-Z0-9]*
-const [0-9]+
-obr "("|"{"|"["
-cbr ")"|"{"|"]"
-op "+"|"-"|"*"|"/"
-rop "="|"<"|">"|"<="|">="
-term var|const|obr op term term cbr| obr div term term cbr| obr mod term term cbr | obr if expr term term cbr | obr get-int cbr
-expr true|false|obr rop term term cbr | obr not expr cbr | obr and expr expr cbr| obr or expr expr cbr 
-
 
 %%
+rational [-+]?[0-9]*[.][0-9]+
+var [a-zA-Z0-9]*
+const [0-9]+
+obr "("
+cbr ")"
+op "+"|"-"|"*"|"div"|"mod"
+rop "="|"<"|">"|"<="|">="
+fun [a-z][-]?[a-z]?+
+type int|bool
+logico "not"|"or"|"and"
+expr true | false 
+predef "define-fun" | "get-int"
+condn "if"
+mat "eval"
+
+
 \n {linenumber++;}
 \;(.*) {}; 
 {const} {constcount++; if((constcount+varcount)==2) opcount=0;} 
@@ -45,9 +50,6 @@ expr true|false|obr rop term term cbr | obr not expr cbr | obr and expr expr cbr
 [_]* {printf("\nInvalid character");}
 [~]* {printf("\nInvalid character");}
 [\n\t"]
-
-
-
 
 %%
 
