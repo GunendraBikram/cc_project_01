@@ -5,7 +5,7 @@ int yylex();
 int flag=0;
 %}
 
-
+//BODMAS
 %start program
 %token NUMBER
 %token ADD SUB MUL DIV
@@ -16,6 +16,12 @@ int flag=0;
 %token MOD
 %token UMINUS
 
+%left NOT AND OR
+%left EQ LT LTE GT GTE
+%left ADD SUB
+%left MUL DIV MOD
+%left UMINUS
+%left OBR CBR
 
 
 %%

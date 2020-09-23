@@ -537,8 +537,8 @@ static const yytype_int8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    27,    27,    29,    30,    31,    32,    33,    34,    35,
-      36,    37,    38,    39,    40,    41,    42,    43,    44
+       0,    28,    28,    30,    31,    32,    33,    34,    35,    36,
+      37,    38,    39,    40,    41,    42,    43,    44,    45
 };
 #endif
 
@@ -1348,103 +1348,103 @@ yyreduce:
   switch (yyn)
     {
   case 2:
-#line 27 "demo.y"
+#line 28 "demo.y"
               {printf("\n%d\n", yyval); return 0;}
 #line 1354 "y.tab.c"
     break;
 
   case 3:
-#line 29 "demo.y"
+#line 30 "demo.y"
                 {yyval=yyvsp[-1]+yyvsp[0];}
 #line 1360 "y.tab.c"
     break;
 
   case 4:
-#line 30 "demo.y"
+#line 31 "demo.y"
                 {yyval=yyvsp[-1]-yyvsp[0];}
 #line 1366 "y.tab.c"
     break;
 
   case 5:
-#line 31 "demo.y"
+#line 32 "demo.y"
                 {yyval=yyvsp[-1]*yyvsp[0];}
 #line 1372 "y.tab.c"
     break;
 
   case 6:
-#line 32 "demo.y"
+#line 33 "demo.y"
                 {yyval=yyvsp[-1]/yyvsp[0];}
 #line 1378 "y.tab.c"
     break;
 
   case 7:
-#line 33 "demo.y"
+#line 34 "demo.y"
                 {yyval=yyvsp[-1] % yyvsp[0];}
 #line 1384 "y.tab.c"
     break;
 
   case 8:
-#line 34 "demo.y"
+#line 35 "demo.y"
                {yyval=(yyvsp[-1]==yyvsp[0]);}
 #line 1390 "y.tab.c"
     break;
 
   case 9:
-#line 35 "demo.y"
+#line 36 "demo.y"
                {yyval=yyvsp[-1]<yyvsp[0];}
 #line 1396 "y.tab.c"
     break;
 
   case 10:
-#line 36 "demo.y"
+#line 37 "demo.y"
                 {yyval=(yyvsp[-1]<=yyvsp[0]);}
 #line 1402 "y.tab.c"
     break;
 
   case 11:
-#line 37 "demo.y"
+#line 38 "demo.y"
                {yyval=yyvsp[-1]>yyvsp[0];}
 #line 1408 "y.tab.c"
     break;
 
   case 12:
-#line 38 "demo.y"
+#line 39 "demo.y"
                 {yyval=(yyvsp[-1]>=yyvsp[0]);}
 #line 1414 "y.tab.c"
     break;
 
   case 13:
-#line 39 "demo.y"
+#line 40 "demo.y"
            {yyval=!yyvsp[0];}
 #line 1420 "y.tab.c"
     break;
 
   case 14:
-#line 40 "demo.y"
+#line 41 "demo.y"
                 {yyval=yyvsp[-1] && yyvsp[0];}
 #line 1426 "y.tab.c"
     break;
 
   case 15:
-#line 41 "demo.y"
+#line 42 "demo.y"
                {yyval=yyvsp[-1]||yyvsp[0];}
 #line 1432 "y.tab.c"
     break;
 
   case 16:
-#line 42 "demo.y"
+#line 43 "demo.y"
               {yyval=-yyvsp[0];}
 #line 1438 "y.tab.c"
     break;
 
   case 17:
-#line 43 "demo.y"
+#line 44 "demo.y"
                {yyval=yyvsp[-1];}
 #line 1444 "y.tab.c"
     break;
 
   case 18:
-#line 44 "demo.y"
+#line 45 "demo.y"
          {yyval=yyvsp[0];}
 #line 1450 "y.tab.c"
     break;
@@ -1682,7 +1682,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 45 "demo.y"
+#line 46 "demo.y"
 
 
 void  main() {  yyparse (); if(flag ==0) printf("\nValid expression\n"); }

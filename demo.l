@@ -33,7 +33,7 @@ define-fun return DEFINE-FUN;
 get-int return GET-INT;
 true return TRUE;
 false return FALSE;
-
+fun return FUN;
 
 
 
