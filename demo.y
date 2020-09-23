@@ -37,7 +37,7 @@ expr:
   LTE expr expr {$$=($2<=$3);}|
   GT expr expr {$$=$2>$3;}|
   GTE expr expr {$$=($2>=$3);}|
-  NOT expr expr {$$=!$2;}|
+  NOT expr {$$=!$2;}|
   AND expr expr {$$=$2 && $3;}|
   OR expr expr {$$=$2||$3;}|
   UMINUS expr {$$=-$2;}|
