@@ -13,12 +13,12 @@ int flag=0;
 %token NOT AND OR
 %token OBR CBR
 %token EVAL
-%token IF
+
 
 
 %left NOT AND OR
 %left EQ LT LTE GT GTE
-%left AND SUB
+%left ADD SUB
 %left MUL DIV MOD
 %left UMINUS
 %left TRUE FALSE
