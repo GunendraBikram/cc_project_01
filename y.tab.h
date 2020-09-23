@@ -66,9 +66,7 @@ extern int yydebug;
     CBR = 272,
     EVAL = 273,
     MOD = 274,
-    UMINUS = 275,
-    TRUE = 276,
-    FALSE = 277
+    UMINUS = 275
   };
 #endif
 /* Tokens.  */
@@ -90,8 +88,6 @@ extern int yydebug;
 #define EVAL 273
 #define MOD 274
 #define UMINUS 275
-#define TRUE 276
-#define FALSE 277
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED

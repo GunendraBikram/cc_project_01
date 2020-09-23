@@ -13,16 +13,10 @@ int flag=0;
 %token NOT AND OR
 %token OBR CBR
 %token EVAL
+%token MOD
+%token UMINUS
 
 
-
-%left NOT AND OR
-%left EQ LT LTE GT GTE
-%left ADD SUB
-%left MUL DIV MOD
-%left UMINUS
-%left TRUE FALSE
-%left OBR CBR
 
 %%
 program: expr {printf("\n%d\n", $$); return 0;}

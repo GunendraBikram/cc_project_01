@@ -25,6 +25,19 @@ mod  return MOD;
 not return NOT;
 and return AND;
 or return OR;
+if return IF;
+eval return EVAL;
+define-fun return DEFINE-FUN;
+[a-zA-Z0-9]* return VAR;
+[a-z][-]?[a-z]?+ return FUN;
+get-int return GET-INT;
+true return TRUE;
+false return FALSE;
+
+
+
+
+
 
 . {printf("lex error%s\n", yytext);}
 

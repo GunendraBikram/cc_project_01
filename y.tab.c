@@ -138,9 +138,7 @@ extern int yydebug;
     CBR = 272,
     EVAL = 273,
     MOD = 274,
-    UMINUS = 275,
-    TRUE = 276,
-    FALSE = 277
+    UMINUS = 275
   };
 #endif
 /* Tokens.  */
@@ -162,8 +160,6 @@ extern int yydebug;
 #define EVAL 273
 #define MOD 274
 #define UMINUS 275
-#define TRUE 276
-#define FALSE 277
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
@@ -486,7 +482,7 @@ union yyalloc
 #define YYLAST   48
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS  23
+#define YYNTOKENS  21
 /* YYNNTS -- Number of nonterminals.  */
 #define YYNNTS  3
 /* YYNRULES -- Number of rules.  */
@@ -495,7 +491,7 @@ union yyalloc
 #define YYNSTATES  48
 
 #define YYUNDEFTOK  2
-#define YYMAXUTOK   277
+#define YYMAXUTOK   275
 
 
 /* YYTRANSLATE(TOKEN-NUM) -- Symbol number corresponding to TOKEN-NUM
@@ -534,15 +530,15 @@ static const yytype_int8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     1,     2,     3,     4,
        5,     6,     7,     8,     9,    10,    11,    12,    13,    14,
-      15,    16,    17,    18,    19,    20,    21,    22
+      15,    16,    17,    18,    19,    20
 };
 
 #if YYDEBUG
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    28,    28,    30,    31,    32,    33,    34,    35,    36,
-      37,    38,    39,    40,    41,    42,    43,    44,    45
+       0,    27,    27,    29,    30,    31,    32,    33,    34,    35,
+      36,    37,    38,    39,    40,    41,    42,    43,    44
 };
 #endif
 
@@ -553,7 +549,7 @@ static const char *const yytname[] =
 {
   "$end", "error", "$undefined", "NUMBER", "ADD", "SUB", "MUL", "DIV",
   "EQ", "LT", "LTE", "GT", "GTE", "NOT", "AND", "OR", "OBR", "CBR", "EVAL",
-  "MOD", "UMINUS", "TRUE", "FALSE", "$accept", "program", "expr", YY_NULLPTR
+  "MOD", "UMINUS", "$accept", "program", "expr", YY_NULLPTR
 };
 #endif
 
@@ -564,7 +560,7 @@ static const yytype_int16 yytoknum[] =
 {
        0,   256,   257,   258,   259,   260,   261,   262,   263,   264,
      265,   266,   267,   268,   269,   270,   271,   272,   273,   274,
-     275,   276,   277
+     275
 };
 # endif
 
@@ -639,17 +635,17 @@ static const yytype_int8 yycheck[] =
 static const yytype_int8 yystos[] =
 {
        0,     3,     4,     5,     6,     7,     8,     9,    10,    11,
-      12,    13,    14,    15,    16,    19,    20,    24,    25,    25,
-      25,    25,    25,    25,    25,    25,    25,    25,    25,    25,
-      25,    25,    25,    25,     0,    25,    25,    25,    25,    25,
-      25,    25,    25,    25,    25,    25,    17,    25
+      12,    13,    14,    15,    16,    19,    20,    22,    23,    23,
+      23,    23,    23,    23,    23,    23,    23,    23,    23,    23,
+      23,    23,    23,    23,     0,    23,    23,    23,    23,    23,
+      23,    23,    23,    23,    23,    23,    17,    23
 };
 
   /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
 static const yytype_int8 yyr1[] =
 {
-       0,    23,    24,    25,    25,    25,    25,    25,    25,    25,
-      25,    25,    25,    25,    25,    25,    25,    25,    25
+       0,    21,    22,    23,    23,    23,    23,    23,    23,    23,
+      23,    23,    23,    23,    23,    23,    23,    23,    23
 };
 
   /* YYR2[YYN] -- Number of symbols on the right hand side of rule YYN.  */
@@ -1352,109 +1348,109 @@ yyreduce:
   switch (yyn)
     {
   case 2:
-#line 28 "demo.y"
+#line 27 "demo.y"
               {printf("\n%d\n", yyval); return 0;}
-#line 1358 "y.tab.c"
+#line 1354 "y.tab.c"
     break;
 
   case 3:
-#line 30 "demo.y"
+#line 29 "demo.y"
                 {yyval=yyvsp[-1]+yyvsp[0];}
-#line 1364 "y.tab.c"
+#line 1360 "y.tab.c"
     break;
 
   case 4:
-#line 31 "demo.y"
+#line 30 "demo.y"
                 {yyval=yyvsp[-1]-yyvsp[0];}
-#line 1370 "y.tab.c"
+#line 1366 "y.tab.c"
     break;
 
   case 5:
-#line 32 "demo.y"
+#line 31 "demo.y"
                 {yyval=yyvsp[-1]*yyvsp[0];}
-#line 1376 "y.tab.c"
+#line 1372 "y.tab.c"
     break;
 
   case 6:
-#line 33 "demo.y"
+#line 32 "demo.y"
                 {yyval=yyvsp[-1]/yyvsp[0];}
-#line 1382 "y.tab.c"
+#line 1378 "y.tab.c"
     break;
 
   case 7:
-#line 34 "demo.y"
+#line 33 "demo.y"
                 {yyval=yyvsp[-1] % yyvsp[0];}
-#line 1388 "y.tab.c"
+#line 1384 "y.tab.c"
     break;
 
   case 8:
-#line 35 "demo.y"
+#line 34 "demo.y"
                {yyval=(yyvsp[-1]==yyvsp[0]);}
-#line 1394 "y.tab.c"
+#line 1390 "y.tab.c"
     break;
 
   case 9:
-#line 36 "demo.y"
+#line 35 "demo.y"
                {yyval=yyvsp[-1]<yyvsp[0];}
-#line 1400 "y.tab.c"
+#line 1396 "y.tab.c"
     break;
 
   case 10:
-#line 37 "demo.y"
+#line 36 "demo.y"
                 {yyval=(yyvsp[-1]<=yyvsp[0]);}
-#line 1406 "y.tab.c"
+#line 1402 "y.tab.c"
     break;
 
   case 11:
-#line 38 "demo.y"
+#line 37 "demo.y"
                {yyval=yyvsp[-1]>yyvsp[0];}
-#line 1412 "y.tab.c"
+#line 1408 "y.tab.c"
     break;
 
   case 12:
-#line 39 "demo.y"
+#line 38 "demo.y"
                 {yyval=(yyvsp[-1]>=yyvsp[0]);}
-#line 1418 "y.tab.c"
+#line 1414 "y.tab.c"
     break;
 
   case 13:
-#line 40 "demo.y"
+#line 39 "demo.y"
            {yyval=!yyvsp[0];}
-#line 1424 "y.tab.c"
+#line 1420 "y.tab.c"
     break;
 
   case 14:
-#line 41 "demo.y"
+#line 40 "demo.y"
                 {yyval=yyvsp[-1] && yyvsp[0];}
-#line 1430 "y.tab.c"
+#line 1426 "y.tab.c"
     break;
 
   case 15:
-#line 42 "demo.y"
+#line 41 "demo.y"
                {yyval=yyvsp[-1]||yyvsp[0];}
-#line 1436 "y.tab.c"
+#line 1432 "y.tab.c"
     break;
 
   case 16:
-#line 43 "demo.y"
+#line 42 "demo.y"
               {yyval=-yyvsp[0];}
-#line 1442 "y.tab.c"
+#line 1438 "y.tab.c"
     break;
 
   case 17:
-#line 44 "demo.y"
+#line 43 "demo.y"
                {yyval=yyvsp[-1];}
-#line 1448 "y.tab.c"
+#line 1444 "y.tab.c"
     break;
 
   case 18:
-#line 45 "demo.y"
+#line 44 "demo.y"
          {yyval=yyvsp[0];}
-#line 1454 "y.tab.c"
+#line 1450 "y.tab.c"
     break;
 
 
-#line 1458 "y.tab.c"
+#line 1454 "y.tab.c"
 
       default: break;
     }
@@ -1686,7 +1682,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 46 "demo.y"
+#line 45 "demo.y"
 
 
 void  main() {  yyparse (); if(flag ==0) printf("\nValid expression\n"); }
