@@ -1,6 +1,0 @@
-printf()
-if _++++
----- (()()(()()()(
-if (((((((c d )
-define-fun (gcd f g) 
-gcd (c d)
