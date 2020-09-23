@@ -5,6 +5,7 @@ extern int yylval;
 int yylex();
 %}
 
+%%
 [0-9]+ {yylval=atoi(yytext); return NUMBER;}
 [ \t] {;}
 [\n] return 0;
