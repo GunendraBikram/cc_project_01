@@ -15,6 +15,7 @@ int flag=0;
 %token EVAL
 %token MOD
 %token UMINUS
+%token IF EVAL
 
 %left NOT AND OR
 %left EQ LT LTE GT GTE
@@ -22,10 +23,18 @@ int flag=0;
 %left MUL DIV MOD
 %left UMINUS
 %left OBR CBR
+%left IF
+%left EVAL
 
 
 %%
-program: expr {printf("\n%d\n", $$); return 0;}
+program: id_list1;
+id_list1: OBR EVAL OBR IF id_list2 CBR CBR |
+          OBR EVAL id_list2 CBR|
+          id_list2
+          ;
+id_list2: expr {printf("\n%d\n", $$); return 0;}
+          ;
 expr: 
   ADD expr expr {$$=$2+$3;}|
   SUB expr expr {$$=$2-$3;}|
@@ -43,7 +52,8 @@ expr:
   UMINUS expr {$$=-$2;}|
   OBR expr CBR {$$=$2;} |
   NUMBER {$$=$1;}
+  ;
 %%
 
 void  main() {  yyparse (); if(flag ==0) printf("\nValid expression\n"); }
-void yyerror (char *s) {printf("Invalid Expression: %s\n", s); flag=1;}
+void yyerror (char *s) {printf("%s\n", s); flag=1;}
