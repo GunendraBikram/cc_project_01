@@ -6,10 +6,12 @@ int yylex();
 %}
 
 %%
-[0-9]+ {yylval=atoi(yytext); return NUMBER;}
+[ \t] {;}       //[a-zA-Z0-9]+ {yylval.str=strdup(yytext); return FUN}
+            
+[a-zA-Z]+ {yylval.str=strdup(yytext); return VAR}     //added
+[0-9]+ {yylval=atoi(yytext); return CONST;}           //added
 true {yylval=1; return TRUE;}
 false {yylval=0; return FALSE;}
-[ \t] {;}
 [\n] return 0;
 "+" return ADD;
 "-" return SUB;
@@ -29,8 +31,9 @@ and return AND;
 or return OR;
 if return IF;
 eval return EVAL;
-
-
+define-fun return DEFINE_FUN;               //added
+print return PRINT;                         //added
+get-int return GET_INT;                     //added
 . {;}
 
 %%

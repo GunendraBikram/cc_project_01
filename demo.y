@@ -7,7 +7,7 @@ int flag=0;
 
 //BODMAS
 %start program
-%token NUMBER
+%token CONST
 %token ADD SUB MUL DIV MOD
 %token EQ LT LTE GT GTE
 %token NOT AND OR
@@ -16,33 +16,47 @@ int flag=0;
 %token IF
 %token UMINUS
 %token TRUE FALSE
+%token VAR //FUN                                //added
+%token DEFINE_FUN PRINT GET_INT                 //added
 
 %left NOT AND OR
 %left EQ LT LTE GT GTE
 %left ADD SUB
 %left MUL DIV MOD
 %left UMINUS
+%left DEFINE_FUN //FUN                                         //added
 %left OBR CBR
 
 
 
 %%
-program: fun {printf("\n%d\n", $$); return 0;}
+program:  fun {printf("\n%d\n", $$); return 0;}
+
+          OBR DEFINE_FUN OBR fun CBR term CBR program{  }|       //added
+          OBR DEFINE_FUN OBR fun VAR CBR term CBR program { }|   //added 
+          OBR DEFINE_FUN OBR OBR VAR VAR CBR term program { } |  //added
+          OBR PRINT expr CBR {$$=$3;} |                          //added
+          OBR PRINT term CBR {$$=$3;}                            //added
+          
+          
           ;
           
-fun: 
-          OBR EVAL expr CBR {$$=$3;}|
+fun:      OBR EVAL expr CBR {$$=$3;}|
           OBR EVAL term CBR {$$=$3;}
           ;
           
-term:     NUMBER {$$=$1;}|
+term:     CONST {$$=$1;}|
           ADD term term {$$=$2+$3;}|
           SUB term term {$$=$2-$3;}|
           MUL term term {$$=$2*$3;}|
           DIV term term {$$=$2/$3;}|
           MOD term term  {$$=$2 % $3;}|
           IF expr expr expr {$$=$2;}|
-          OBR term CBR {$$=$2;}
+          OBR term CBR {$$=$2;} |
+          OBR fun CBR  {$$=$2;}  |               //added
+          OBR fun term {         } |             //added
+          OBR fun term term  CBR {} |             //added
+          OBR GET_INT CBR {}                       //added              
           ;
           
 expr: 

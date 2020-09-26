@@ -49,45 +49,59 @@ extern int yydebug;
 # define YYTOKENTYPE
   enum yytokentype
   {
-    NUMBER = 258,
+    CONST = 258,
     ADD = 259,
     SUB = 260,
     MUL = 261,
     DIV = 262,
-    EQ = 263,
-    LT = 264,
-    LTE = 265,
-    GT = 266,
-    GTE = 267,
-    NOT = 268,
-    AND = 269,
-    OR = 270,
-    OBR = 271,
-    CBR = 272,
-    EVAL = 273,
-    MOD = 274,
-    UMINUS = 275
+    MOD = 263,
+    EQ = 264,
+    LT = 265,
+    LTE = 266,
+    GT = 267,
+    GTE = 268,
+    NOT = 269,
+    AND = 270,
+    OR = 271,
+    OBR = 272,
+    CBR = 273,
+    EVAL = 274,
+    IF = 275,
+    UMINUS = 276,
+    TRUE = 277,
+    FALSE = 278,
+    VAR = 279,
+    DEFINE_FUN = 280,
+    PRINT = 281,
+    GET_INT = 282
   };
 #endif
 /* Tokens.  */
-#define NUMBER 258
+#define CONST 258
 #define ADD 259
 #define SUB 260
 #define MUL 261
 #define DIV 262
-#define EQ 263
-#define LT 264
-#define LTE 265
-#define GT 266
-#define GTE 267
-#define NOT 268
-#define AND 269
-#define OR 270
-#define OBR 271
-#define CBR 272
-#define EVAL 273
-#define MOD 274
-#define UMINUS 275
+#define MOD 263
+#define EQ 264
+#define LT 265
+#define LTE 266
+#define GT 267
+#define GTE 268
+#define NOT 269
+#define AND 270
+#define OR 271
+#define OBR 272
+#define CBR 273
+#define EVAL 274
+#define IF 275
+#define UMINUS 276
+#define TRUE 277
+#define FALSE 278
+#define VAR 279
+#define DEFINE_FUN 280
+#define PRINT 281
+#define GET_INT 282
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
