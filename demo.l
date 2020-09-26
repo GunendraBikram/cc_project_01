@@ -7,6 +7,8 @@ int yylex();
 
 %%
 [0-9]+ {yylval=atoi(yytext); return NUMBER;}
+true {yylval=1; return TRUE;}
+false {yylval=0; return FALSE;}
 [ \t] {;}
 [\n] return 0;
 "+" return ADD;
