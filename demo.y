@@ -8,14 +8,14 @@ int flag=0;
 //BODMAS
 %start program
 %token NUMBER
-%token ADD SUB MUL DIV
+%token ADD SUB MUL DIV MOD
 %token EQ LT LTE GT GTE
 %token NOT AND OR
 %token OBR CBR
 %token EVAL
-%token MOD
+%token IF
 %token UMINUS
-%token IF EVAL
+%token TRUE FALSE
 
 %left NOT AND OR
 %left EQ LT LTE GT GTE
@@ -23,36 +23,42 @@ int flag=0;
 %left MUL DIV MOD
 %left UMINUS
 %left OBR CBR
-%left IF
-%left EVAL
+
 
 
 %%
-program: id_list1;
-id_list1: OBR EVAL OBR IF id_list2 CBR CBR |
-          OBR EVAL id_list2 CBR|
-          id_list2
+program: fun {printf("\n%d\n", $$); return 0;}
           ;
-id_list2: expr {printf("\n%d\n", $$); return 0;}
+          
+fun: 
+          OBR EVAL expr CBR {$$=$3;}|
+          OBR EVAL term CBR {$$=$3;}
           ;
+          
+term:     NUMBER {$$=$1;}|
+          ADD term term {$$=$2+$3;}|
+          SUB term term {$$=$2-$3;}|
+          MUL term term {$$=$2*$3;}|
+          DIV term term {$$=$2/$3;}|
+          MOD term term  {$$=$2 % $3;}|
+          IF expr expr expr {$$=$2;}|
+          OBR term CBR {$$=$2;}
+          ;
+          
 expr: 
-  ADD expr expr {$$=$2+$3;}|
-  SUB expr expr {$$=$2-$3;}|
-  MUL expr expr {$$=$2*$3;}|
-  DIV expr expr {$$=$2/$3;}|
-  MOD expr expr {$$=$2 % $3;}|
-  EQ expr expr {$$=($2==$3);}|
-  LT expr expr {$$=$2<$3;}|
-  LTE expr expr {$$=($2<=$3);}|
-  GT expr expr {$$=$2>$3;}|
-  GTE expr expr {$$=($2>=$3);}|
-  NOT expr {$$=!$2;}|
-  AND expr expr {$$=$2 && $3;}|
-  OR expr expr {$$=$2||$3;}|
-  UMINUS expr {$$=-$2;}|
-  OBR expr CBR {$$=$2;} |
-  NUMBER {$$=$1;}
-  ;
+          TRUE {$$=$1;} | FALSE {$$=$1;} |
+          EQ term term {$$=($2==$3);}|
+          LT term term {$$=$2<$3;}|
+          LTE term term {$$=($2<=$3);}|
+          GT term term {$$=$2>$3;}|
+          GTE term term {$$=($2>=$3);}|
+          NOT expr {$$=!$2;}|
+          AND expr expr {$$=$2 && $3;}|
+          OR expr expr {$$=$2||$3;}|
+          UMINUS expr {$$=-$2;}|
+          OBR expr CBR {$$=$2;} |
+          ;
+          
 %%
 
 void  main() {  yyparse (); if(flag ==0) printf("\nValid expression\n"); }
