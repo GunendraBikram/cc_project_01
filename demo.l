@@ -1,17 +1,17 @@
- %{
+%{
 #include<stdio.h>
 #include "y.tab.h"
-extern int yylval;
+extern YYSTYPE yylval;
 int yylex();
 %}
+
 %%
 [0-9]+ {
-        yylval=atoi(yytext);
-        return CONST;
-        }
-
-true {yylval=1; return TRUE;}
-false {yylval=0; return FALSE;}
+	yylval.val=atoi(yytext);
+	return CONST;
+	}
+true {yylval.val=1; return TRUE;}
+false {yylval.val=0; return FALSE;}
 [ \t] {;}
 [\n] return 0;
 "+" return ADD;
@@ -32,12 +32,15 @@ and return AND;
 or return OR;
 if return IF;
 eval return EVAL;
-. {;}
+define-fun return DEFINEFUN;
+
+
+
+
+. {;} 
 
 %%
 
 int yywrap(void) { return 1;}
-
-
 
 
