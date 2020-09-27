@@ -4,76 +4,55 @@ int yylex();
 #include<stdio.h>
 int flag=0;
 %}
-
-//BODMAS
-%start program
 %token CONST
-%token ADD SUB MUL DIV MOD
+%token ADD SUB MUL DIV
 %token EQ LT LTE GT GTE
 %token NOT AND OR
 %token OBR CBR
-%token EVAL
-%token IF
+%token EVAL IF
 %token UMINUS
 %token TRUE FALSE
-%token VAR //FUN                                //added
-%token DEFINE_FUN PRINT GET_INT                 //added
 
+%start program
 %left NOT AND OR
 %left EQ LT LTE GT GTE
-%left ADD SUB
-%left MUL DIV MOD
+%left ADD  SUB
+%left MUL  DIV MOD
 %left UMINUS
-%left DEFINE_FUN //FUN                                         //added
 %left OBR CBR
 
-
-
-%%
-program:  fun {printf("\n%d\n", $$); return 0;}
-
-          OBR DEFINE_FUN OBR fun CBR term CBR program{  }|       //added
-          OBR DEFINE_FUN OBR fun VAR CBR term CBR program { }|   //added 
-          OBR DEFINE_FUN OBR OBR VAR VAR CBR term program { } |  //added
-          OBR PRINT expr CBR {$$=$3;} |                          //added
-          OBR PRINT term CBR {$$=$3;}                            //added
-          
-          
-          ;
-          
-fun:      OBR EVAL expr CBR {$$=$3;}|
-          OBR EVAL term CBR {$$=$3;}
-          ;
-          
-term:     CONST {$$=$1;}|
-          ADD term term {$$=$2+$3;}|
-          SUB term term {$$=$2-$3;}|
-          MUL term term {$$=$2*$3;}|
-          DIV term term {$$=$2/$3;}|
-          MOD term term  {$$=$2 % $3;}|
-          IF expr expr expr {$$=$2;}|
-          OBR term CBR {$$=$2;} |
-          OBR fun CBR  {$$=$2;}  |               //added
-          OBR fun term {         } |             //added
-          OBR fun term term  CBR {} |             //added
-          OBR GET_INT CBR {}                       //added              
-          ;
-          
-expr: 
-          TRUE {$$=$1;} | FALSE {$$=$1;} |
-          EQ term term {$$=($2==$3);}|
-          LT term term {$$=$2<$3;}|
-          LTE term term {$$=($2<=$3);}|
-          GT term term {$$=$2>$3;}|
-          GTE term term {$$=($2>=$3);}|
-          NOT expr {$$=!$2;}|
-          AND expr expr {$$=$2 && $3;}|
-          OR expr expr {$$=$2||$3;}|
-          UMINUS expr {$$=-$2;}|
-          OBR expr CBR {$$=$2;} |
-          ;
-          
 %%
 
-void  main() {  yyparse (); if(flag ==0) printf("\nValid expression\n"); }
-void yyerror (char *s) {printf("%s\n", s); flag=1;}
+program:fun {printf("\n%d\n", $$); return 0;};
+fun:    OBR EVAL expr CBR {$$=$3;}|
+        OBR EVAL term CBR {$$=$3;}
+        ;
+term:   CONST {$$=$1;}  |
+        ADD term term  {$$=$2+$3;}|
+        SUB term term  {$$=$2-$3;}|
+        MUL term term  {$$=$2*$3;}|
+        DIV  term term  {$$=$2/$3;}|
+        MOD  term term  {$$=$2%$3;}|
+        IF expr expr expr  {$$=$2;}|
+        OBR term CBR {$$=$2;}
+        ;
+expr:   TRUE {$$=$1;} | FALSE {$$=$1;}|
+        EQ term term   {$$=$2==$3;}|
+        LT  term term   {$$=$2<$3;}|
+        LTE  term term   {$$=$2<=$3;}|
+        GT  term term    {$$=$2>$3;}|
+        GTE  term term   {$$=$2>=$3;}|
+        NOT  expr   {$$= !$2;}|
+        AND  expr expr     {$$=($2 && $3);}|
+        OR  expr expr   {$$=$2 || $3;}|
+        UMINUS expr {$$=-$2;}|
+        OBR expr CBR {$$=$2;}
+        ;
+
+%%
+
+void  main(){
+yyparse();
+if(flag==0)printf("\nvalid expression\n"); }
+void yyerror(char *s){ printf("%s\n", s); flag=1;}
+
