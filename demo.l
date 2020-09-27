@@ -1,23 +1,24 @@
-%{
+ %{
 #include<stdio.h>
 #include "y.tab.h"
 extern int yylval;
 int yylex();
 %}
-
 %%
-[ \t] {;}       //[a-zA-Z0-9]+ {yylval.str=strdup(yytext); return FUN}
-            
-[a-zA-Z]+ {yylval.str=strdup(yytext); return VAR}     //added
-[0-9]+ {yylval=atoi(yytext); return CONST;}           //added
+[0-9]+ {
+        yylval=atoi(yytext);
+        return CONST;
+        }
+
 true {yylval=1; return TRUE;}
 false {yylval=0; return FALSE;}
+[ \t] {;}
 [\n] return 0;
 "+" return ADD;
 "-" return SUB;
 "*" return MUL;
 div return DIV;
-mod  return MOD;
+mod return MOD;
 "(" return OBR;
 ")" return CBR;
 "~" return UMINUS;
@@ -31,11 +32,12 @@ and return AND;
 or return OR;
 if return IF;
 eval return EVAL;
-define-fun return DEFINE_FUN;               //added
-print return PRINT;                         //added
-get-int return GET_INT;                     //added
 . {;}
 
 %%
 
-int yywrap(void) {return 1;}
+int yywrap(void) { return 1;}
+
+
+
+
