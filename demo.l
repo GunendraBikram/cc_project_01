@@ -35,7 +35,7 @@ get-int return GETINT;
 print return PRINT;
 [a-zA-Z][a-zA-Z]* {yylval.str= strdup(yytext); return VAR;}
 
-[-+]?[0-9]+ {
+[-]?[1-9][0-9]* {
 	yylval.val=atoi(yytext);
 	return CONST;}
 
