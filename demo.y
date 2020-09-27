@@ -15,7 +15,8 @@ int flag=0;
 %token EVAL IF
 %token UMINUS
 %token<val> TRUE FALSE
-%token DEFINEFUN
+%token DEFINEFUN PRINT
+%token<str> VAR                             
 
 %type<val> program  fun expr term
 
@@ -29,11 +30,21 @@ int flag=0;
 
 %%
 
-program:fun {printf("\n%d\n", $$); return 0;};
+program: fun {printf("\n%d\n", $$); return 0;} |
+        
+        OBR DEFINEFUN OBR fun CBR term CBR program{  }|       //added
+        OBR DEFINEFUN OBR fun VAR CBR term CBR program { }|   //added 
+        OBR DEFINEFUN OBR OBR VAR VAR CBR term program { } |  //added
+        OBR PRINT expr CBR {;} |                              //added
+        OBR PRINT term CBR {;}                                //added
+          
+         ;
+
 fun:	OBR EVAL expr CBR {$$=$3;}| 
 	OBR EVAL term CBR {$$=$3;}
 	;
 term:   CONST {$$=$1;}  | 
+        VAR   {$$=1;}  |
 	ADD term term  {$$=$2+$3;}|
 	SUB term term  {$$=$2-$3;}|
 	MUL term term  {$$=$2*$3;}|
@@ -59,6 +70,6 @@ expr:	TRUE {$$=$1;} | FALSE {$$=$1;}|
 
 void  main(){ 
 yyparse();
-if(flag==0)printf("\nvalid expression\n"); }
+if(flag==0)printf("\n"); }
 void yyerror(char *s){ printf("%s\n", s); flag=1;}
 

@@ -54,26 +54,25 @@ extern int yydebug;
     SUB = 260,
     MUL = 261,
     DIV = 262,
-    MOD = 263,
-    EQ = 264,
-    LT = 265,
-    LTE = 266,
-    GT = 267,
-    GTE = 268,
-    NOT = 269,
-    AND = 270,
-    OR = 271,
-    OBR = 272,
-    CBR = 273,
-    EVAL = 274,
-    IF = 275,
-    UMINUS = 276,
-    TRUE = 277,
-    FALSE = 278,
-    VAR = 279,
-    DEFINE_FUN = 280,
-    PRINT = 281,
-    GET_INT = 282
+    EQ = 263,
+    LT = 264,
+    LTE = 265,
+    GT = 266,
+    GTE = 267,
+    NOT = 268,
+    AND = 269,
+    OR = 270,
+    OBR = 271,
+    CBR = 272,
+    EVAL = 273,
+    IF = 274,
+    UMINUS = 275,
+    TRUE = 276,
+    FALSE = 277,
+    DEFINEFUN = 278,
+    PRINT = 279,
+    VAR = 280,
+    MOD = 281
   };
 #endif
 /* Tokens.  */
@@ -82,30 +81,37 @@ extern int yydebug;
 #define SUB 260
 #define MUL 261
 #define DIV 262
-#define MOD 263
-#define EQ 264
-#define LT 265
-#define LTE 266
-#define GT 267
-#define GTE 268
-#define NOT 269
-#define AND 270
-#define OR 271
-#define OBR 272
-#define CBR 273
-#define EVAL 274
-#define IF 275
-#define UMINUS 276
-#define TRUE 277
-#define FALSE 278
-#define VAR 279
-#define DEFINE_FUN 280
-#define PRINT 281
-#define GET_INT 282
+#define EQ 263
+#define LT 264
+#define LTE 265
+#define GT 266
+#define GTE 267
+#define NOT 268
+#define AND 269
+#define OR 270
+#define OBR 271
+#define CBR 272
+#define EVAL 273
+#define IF 274
+#define UMINUS 275
+#define TRUE 276
+#define FALSE 277
+#define DEFINEFUN 278
+#define PRINT 279
+#define VAR 280
+#define MOD 281
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-typedef int YYSTYPE;
+union YYSTYPE
+{
+#line 9 "demo.y"
+ int val; char *str;
+
+#line 112 "y.tab.h"
+
+};
+typedef union YYSTYPE YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1
 #endif

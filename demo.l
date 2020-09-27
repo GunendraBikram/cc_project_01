@@ -1,15 +1,13 @@
 %{
 #include<stdio.h>
 #include "y.tab.h"
+#include<string.h>
 extern YYSTYPE yylval;
 int yylex();
 %}
 
 %%
-[0-9]+ {
-	yylval.val=atoi(yytext);
-	return CONST;
-	}
+
 true {yylval.val=1; return TRUE;}
 false {yylval.val=0; return FALSE;}
 [ \t] {;}
@@ -33,9 +31,12 @@ or return OR;
 if return IF;
 eval return EVAL;
 define-fun return DEFINEFUN;
+print return PRINT;
+[a-zA-Z][a-zA-Z]* {yylval.str= strdup(yytext); return VAR;}
 
-
-
+[-+]?[0-9]+ {
+	yylval.val=atoi(yytext);
+	return CONST;}
 
 . {;} 
 
