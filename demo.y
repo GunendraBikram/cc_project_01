@@ -15,7 +15,7 @@ int flag=0;
 %token EVAL IF
 %token UMINUS
 %token<val> TRUE FALSE
-%token DEFINEFUN PRINT
+%token DEFINEFUN PRINT GETINT
 %token<str> VAR                             
 
 %type<val> program  fun expr term
@@ -45,13 +45,18 @@ fun:	OBR EVAL expr CBR {$$=$3;}|
 	;
 term:   CONST {$$=$1;}  | 
         VAR   {$$=1;}  |
+        OBR term CBR {$$=$2;}  |         //added
 	ADD term term  {$$=$2+$3;}|
 	SUB term term  {$$=$2-$3;}|
 	MUL term term  {$$=$2*$3;}|
 	DIV  term term  {$$=$2/$3;}|
 	MOD  term term  {$$=$2%$3;}|
-	IF expr expr expr  {$$=$2;}|
-	OBR term CBR {$$=$2;}
+	IF expr expr expr  {$$=$2;} |
+	OBR GETINT CBR    {$$=1;}  |            //added
+	OBR fun CBR       {;}  |          //added
+	OBR fun term CBR   {;} |            //added
+	OBR fun term term CBR {;}           //added
+	
 	;
 expr:	TRUE {$$=$1;} | FALSE {$$=$1;}| 
 	EQ term term   {$$=$2==$3;}|

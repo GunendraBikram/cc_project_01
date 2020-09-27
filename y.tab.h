@@ -71,8 +71,9 @@ extern int yydebug;
     FALSE = 277,
     DEFINEFUN = 278,
     PRINT = 279,
-    VAR = 280,
-    MOD = 281
+    GETINT = 280,
+    VAR = 281,
+    MOD = 282
   };
 #endif
 /* Tokens.  */
@@ -98,8 +99,9 @@ extern int yydebug;
 #define FALSE 277
 #define DEFINEFUN 278
 #define PRINT 279
-#define VAR 280
-#define MOD 281
+#define GETINT 280
+#define VAR 281
+#define MOD 282
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
@@ -108,7 +110,7 @@ union YYSTYPE
 #line 9 "demo.y"
  int val; char *str;
 
-#line 112 "y.tab.h"
+#line 114 "y.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
