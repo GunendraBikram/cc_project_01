@@ -1,6 +1,7 @@
 %{
 #include<stdio.h>
 #include "y.tab.h"
+#include<string.h>
 extern YYSTYPE yylval;
 int yylex();
 %}

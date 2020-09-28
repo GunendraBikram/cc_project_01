@@ -59,5 +59,5 @@ expr:	TRUE {$$=$1;} | FALSE {$$=$1;}|
 
 void  main(){ 
 yyparse();
-if(flag==0)printf("\nvalid expression\n"); }
+if(flag==0)printf("\n"); }
 void yyerror(char *s){ printf("%s\n", s); flag=1;}
