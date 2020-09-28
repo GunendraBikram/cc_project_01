@@ -50,64 +50,64 @@ extern int yydebug;
   enum yytokentype
   {
     CONST = 258,
-    ADD = 259,
-    SUB = 260,
-    MUL = 261,
-    DIV = 262,
-    EQ = 263,
-    LT = 264,
-    LTE = 265,
-    GT = 266,
-    GTE = 267,
-    NOT = 268,
-    AND = 269,
-    OR = 270,
-    OBR = 271,
-    CBR = 272,
-    EVAL = 273,
-    IF = 274,
-    UMINUS = 275,
-    TRUE = 276,
-    FALSE = 277,
-    DEFINEFUN = 278,
-    PRINT = 279,
+    VAR = 259,
+    ADD = 260,
+    SUB = 261,
+    MUL = 262,
+    DIV = 263,
+    EQ = 264,
+    LT = 265,
+    LTE = 266,
+    GT = 267,
+    GTE = 268,
+    NOT = 269,
+    AND = 270,
+    OR = 271,
+    OBR = 272,
+    CBR = 273,
+    EVAL = 274,
+    IF = 275,
+    UMINUS = 276,
+    TRUE = 277,
+    FALSE = 278,
+    DEFINEFUN = 279,
     GETINT = 280,
-    VAR = 281,
+    PRINT = 281,
     MOD = 282
   };
 #endif
 /* Tokens.  */
 #define CONST 258
-#define ADD 259
-#define SUB 260
-#define MUL 261
-#define DIV 262
-#define EQ 263
-#define LT 264
-#define LTE 265
-#define GT 266
-#define GTE 267
-#define NOT 268
-#define AND 269
-#define OR 270
-#define OBR 271
-#define CBR 272
-#define EVAL 273
-#define IF 274
-#define UMINUS 275
-#define TRUE 276
-#define FALSE 277
-#define DEFINEFUN 278
-#define PRINT 279
+#define VAR 259
+#define ADD 260
+#define SUB 261
+#define MUL 262
+#define DIV 263
+#define EQ 264
+#define LT 265
+#define LTE 266
+#define GT 267
+#define GTE 268
+#define NOT 269
+#define AND 270
+#define OR 271
+#define OBR 272
+#define CBR 273
+#define EVAL 274
+#define IF 275
+#define UMINUS 276
+#define TRUE 277
+#define FALSE 278
+#define DEFINEFUN 279
 #define GETINT 280
-#define VAR 281
+#define PRINT 281
 #define MOD 282
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 9 "demo.y"
+#line 10 "demo.y"
  int val; char *str;
 
 #line 114 "y.tab.h"

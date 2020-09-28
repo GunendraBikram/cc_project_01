@@ -23,7 +23,7 @@ int flag=0;
 %token<val> GETINT
 %token<val>PRINT
 %type<val> fun expr term
-%type<str> program
+%type<val> program
 %left IF
 %left NOT AND OR
 %left EQ LT LTE GT GTE
@@ -41,10 +41,10 @@ program:OBR DEFINEFUN OBR fun CBR term  CBR program |
 	;
 fun:	OBR EVAL expr CBR {$$=$3;}| 
 	OBR EVAL term CBR {$$=$3;}|
-	OBR PRINT expr CBR {printf("Error\n");}	|
-	OBR PRINT term CBR {printf("Error\n");}
+	OBR PRINT expr CBR {printf(" ");return 0;}	|
+	OBR PRINT term CBR {printf(" "); return 0;}
 	;
-term:   VAR {$$=1;} | CONST {$$=$1;}  | 
+term:   VAR {printf("Error\n"); return 0;} | CONST {$$=$1;}  | 
 	ADD term term  {$$=$2+$3;}|
 	SUB term term  {$$=$2-$3;}|
 	MUL term term  {$$=$2*$3;}|
@@ -71,6 +71,6 @@ expr:	TRUE {$$=$1;} | FALSE {$$=$1;}|
 
 void  main(){ 
 yyparse();
-if(flag==0)printf("\nvalid expression\n"); }
+if(flag==0)printf("\n"); }
 void yyerror(char *s){ printf("%s\n", s); flag=1;}
 
