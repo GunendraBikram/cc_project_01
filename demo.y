@@ -41,12 +41,12 @@ program:OBR DEFINEFUN OBR fun CBR term  CBR program |
 	;
 fun:	OBR EVAL expr CBR {$$=$3;}| 
 	OBR EVAL term CBR {$$=$3;}|
-	OBR PRINT expr CBR {;}|
-	OBR PRINT term CBR {;}
+	OBR PRINT expr CBR {printf("Error\n");}	|
+	OBR PRINT term CBR {printf("Error\n");}
 	;
-term:   VAR {printf("Error\n");} | CONST {$$=$1;}  | 
+term:   VAR {$$=1;} | CONST {$$=$1;}  | 
 	ADD term term  {$$=$2+$3;}|
-	SUB term term  {$$=($2-$3);}|
+	SUB term term  {$$=$2-$3;}|
 	MUL term term  {$$=$2*$3;}|
 	DIV  term term  {$$=$2/$3;}|
 	MOD  term term  {$$=$2%$3;}|
@@ -71,5 +71,5 @@ expr:	TRUE {$$=$1;} | FALSE {$$=$1;}|
 
 void  main(){ 
 yyparse();
-if(flag==0)printf("\n"); }
+if(flag==0)printf("\nvalid expression\n"); }
 void yyerror(char *s){ printf("%s\n", s); flag=1;}
