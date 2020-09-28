@@ -34,6 +34,8 @@ or return OR;
 if return IF;
 eval return EVAL;
 define-fun return DEFINEFUN;
+get-int  return GETINT;
+print return PRINT;
 [a-zA-Z][a-zA-Z0-9]* {yylval.str=strdup(yytext); return VAR;}
 
 

@@ -8,7 +8,7 @@ int flag=0;
 
 %union { int val; char *str;}
 %token<val> CONST 
-%token ADD SUB MUL DIV 
+%token ADD SUB MUL DIV MOD
 %token EQ LT LTE GT GTE
 %token NOT AND OR
 %token OBR CBR
@@ -17,20 +17,21 @@ int flag=0;
 %token<val> TRUE FALSE
 %token DEFINEFUN
 %token<str> VAR
+%token GETINT
+%token PRINT
 
 %type<val> program  fun expr term
 
 %start program
-%left NOT AND OR
-%left EQ LT LTE GT GTE
-%left ADD  SUB
-%left MUL  DIV MOD
-%left UMINUS
-%left OBR CBR 
 
 %%
 
-program:fun {printf("\n%d\n", $$); return 0;};
+program:
+       fun {printf("\n%d\n", $$); return 0;}
+       ;
+       
+       
+       
 fun:	OBR EVAL expr CBR {$$=$3;}| 
 	OBR EVAL term CBR {$$=$3;}
 	;
