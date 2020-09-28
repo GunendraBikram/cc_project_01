@@ -2,7 +2,6 @@
 #include<stdio.h>
 #include "y.tab.h"
 #include<stdlib.h>
-#include<string.h>
 extern YYSTYPE yylval;
 int yylex();
 %}
@@ -44,4 +43,3 @@ print return PRINT;
 %%
 
 int yywrap(void) { return 1;}
-
