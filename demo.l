@@ -7,7 +7,7 @@ int yylex();
 %}
 
 %%
-[-]?[1-9][0-9]* {
+[-]?[0-9][0-9]* {
 	yylval.val=atoi(yytext);
 	return CONST;
 	}
