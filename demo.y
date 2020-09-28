@@ -6,8 +6,12 @@ int yylex();
 int flag=0;
 %}
 
+
 %union { int val; char *str;}
+%start program
+
 %token<val> CONST 
+%token<str> VAR
 %token ADD SUB MUL DIV 
 %token EQ LT LTE GT GTE
 %token NOT AND OR
@@ -15,12 +19,12 @@ int flag=0;
 %token EVAL IF
 %token UMINUS
 %token<val> TRUE FALSE
-%token DEFINEFUN PRINT GETINT
-%token<str> VAR                             
-
-%type<val> program  fun expr term
-
-%start program
+%token DEFINEFUN
+%token<val> GETINT
+%token<val>PRINT
+%type<val> fun expr term
+%type<str> program
+%left IF
 %left NOT AND OR
 %left EQ LT LTE GT GTE
 %left ADD  SUB
@@ -30,33 +34,25 @@ int flag=0;
 
 %%
 
-program: fun {printf("\n%d\n", $$); return 0;} |
-        
-        OBR DEFINEFUN OBR fun CBR term CBR program{  }|       //added
-        OBR DEFINEFUN OBR fun VAR CBR term CBR program { }|   //added 
-        OBR DEFINEFUN OBR OBR VAR VAR CBR term program { } |  //added
-        OBR PRINT expr CBR {;} |                              //added
-        OBR PRINT term CBR {;}                                //added
-          
-         ;
-
-fun:	OBR EVAL expr CBR {$$=$3;}| 
-	OBR EVAL term CBR {$$=$3;}
+program:OBR DEFINEFUN OBR fun CBR term  CBR program |
+	OBR DEFINEFUN OBR fun VAR  CBR term  CBR program |
+	OBR DEFINEFUN OBR fun VAR VAR CBR term  CBR program| 
+	fun {printf("\n%d\n", $$); return 0;}
 	;
-term:   CONST {$$=$1;}  | 
-        VAR   {$$=1;}  |
-        OBR term CBR {$$=$2;}  |         //added
+fun:	OBR EVAL expr CBR {$$=$3;}| 
+	OBR EVAL term CBR {$$=$3;}|
+	OBR PRINT expr CBR {;}|
+	OBR PRINT term CBR {;}
+	;
+term:   VAR {printf("Error\n");} | CONST {$$=$1;}  | 
 	ADD term term  {$$=$2+$3;}|
-	SUB term term  {$$=$2-$3;}|
+	SUB term term  {$$=($2-$3);}|
 	MUL term term  {$$=$2*$3;}|
 	DIV  term term  {$$=$2/$3;}|
 	MOD  term term  {$$=$2%$3;}|
-	IF expr expr expr  {$$=$2;} |
-	OBR GETINT CBR    {$$=1;}  |            //added
-	OBR fun CBR       {;}  |          //added
-	OBR fun term CBR   {;} |            //added
-	OBR fun term term CBR {;}           //added
-	
+	IF expr expr expr  {$$=$2;}|
+	GETINT| fun | fun term| fun term term|
+	OBR term CBR {$$=$2;}
 	;
 expr:	TRUE {$$=$1;} | FALSE {$$=$1;}| 
 	EQ term term   {$$=$2==$3;}|
@@ -77,4 +73,3 @@ void  main(){
 yyparse();
 if(flag==0)printf("\n"); }
 void yyerror(char *s){ printf("%s\n", s); flag=1;}
-
