@@ -16,6 +16,7 @@ int flag=0;
 %token UMINUS
 %token<val> TRUE FALSE
 %token DEFINEFUN
+%token<str> VAR
 
 %type<val> program  fun expr term
 
