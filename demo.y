@@ -28,9 +28,6 @@ int flag=0;
 
 program:
        fun {printf("\n%d\n", $$); return 0;} |
-       OBR DEFINEFUN OBR fun CBR term CBR program{  }|       
-       OBR DEFINEFUN OBR fun VAR CBR term CBR program { }|  
-       OBR DEFINEFUN OBR OBR VAR VAR CBR term program { } |  
        OBR PRINT expr CBR {;} |                              
        OBR PRINT term CBR {;}                                
        ;
