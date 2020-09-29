@@ -27,17 +27,21 @@ int flag=0;
 %%
 
 program:
-       fun {printf("\n%d\n", $$); return 0;} |
-       OBR PRINT expr CBR {;} |                              
-       OBR PRINT term CBR {;}                                
+        OBR DEFINEFUN OBR fun CBR  CBR {;} |
+        OBR DEFINEFUN OBR fun VAR CBR CBR {;} |
+        OBR DEFINEFUN OBR fun VAR VAR CBR  CBR {;} |
+        fun {printf("\n%d\n", $$); return 0;}                           
        ;
        
        
        
 fun:	OBR EVAL expr CBR {$$=$3;}| 
-	OBR EVAL term CBR {$$=$3;}
+	OBR EVAL term CBR {$$=$3;} |
+	OBR PRINT expr CBR {;} |                              
+        OBR PRINT term CBR {;}        
 	;
-term:   CONST {$$=$1;}  | 
+term:   VAR {printf("syntax error"); return 0;}  |
+        CONST {$$=$1;}  | 
 	ADD term term  {$$=$2+$3;}|
 	SUB term term  {$$=$2-$3;}|
 	MUL term term  {$$=$2*$3;}|
