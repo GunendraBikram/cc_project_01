@@ -47,7 +47,11 @@ term:
 	OBR MOD  term term CBR  {$$=$3%$4;}|
 	OBR IF expr expr expr  CBR  {if ($3 == 1) $$ =$4; else $$=$5;} |
 	VAR { yyerror("Error!");return 0;}  |
-        CONST  {$$=$1;}   
+        CONST  {$$=$1;} |
+        OBR GETINT CBR {;}|
+        OBR VAR CBR {;} |
+        OBR VAR VAR CBR {;}|
+        OBR VAR VAR VAR CBR {;} 
 	
 	;
 expr:	OBR TRUE CBR {$$=$2;} | OBR  FALSE CBR {$$=$2;}| 
