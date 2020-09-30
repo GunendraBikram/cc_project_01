@@ -39,26 +39,26 @@ fun:	OBR EVAL expr CBR {$$=$3;}|
 	OBR PRINT expr CBR {;} |                              
         OBR PRINT term CBR {;}        
 	;
-term:   VAR {printf("syntax error"); return 0;}  |
-        CONST  {$$=$1;}  | 
-	ADD term term  {$$=$2+$3;}|
-	SUB term term  {$$=$2-$3;}|
-	MUL term term  {$$=$2*$3;}|
-	DIV  term term  {$$=$2/$3;}|
-	MOD  term term  {$$=$2%$3;}|
-	IF expr expr expr  {if ($2 == 1) $$ =$3; else $$=$4;} |
-	OBR term CBR  {$$=$2;}
+term:   
+	OBR ADD term term  CBR {$$=$3+$4;}|
+	OBR SUB term term CBR {$$=$3-$4;}|
+	OBR MUL term term CBR {$$=$3*$4;}|
+	OBR DIV  term term CBR {$$=$3/$4;}|
+	OBR MOD  term term CBR  {$$=$3%$4;}|
+	OBR IF expr expr expr  CBR  {if ($3 == 1) $$ =$4; else $$=$5;} |
+	VAR { yyerror("Error!");return 0;}  |
+        CONST  {$$=$1;}   
+	
 	;
-expr:	TRUE {$$=$1;} | FALSE {$$=$1;}| 
-	EQ term term   {$$=$2==$3;}|
-	LT  term term   {$$=$2<$3;}|
-	LTE  term term   {$$=$2<=$3;}|
-	GT  term term    {$$=$2>$3;}|
-	GTE  term term   {$$=$2>=$3;}|
-	NOT  expr         {$$= !$2;}|
-	AND  expr expr     {$$=($2 && $3);}|
-	OR  expr expr   {$$=$2 || $3;}|
-	OBR expr CBR {$$=$2;}	
+expr:	OBR TRUE CBR {$$=$2;} | OBR  FALSE CBR {$$=$2;}| 
+	OBR EQ term term CBR   {$$=$3==$4;}|
+	OBR LT  term term  CBR  {$$=$3<$4;}|
+	OBR LTE  term term  CBR  {$$=$3<=$4;}|
+	OBR GT  term term   CBR  {$$=$3>$4;}|
+	OBR GTE  term term  CBR  {$$=$3>=$4;}|
+	OBR NOT  expr       CBR  {$$= !$3;}|
+	OBR AND  expr expr  CBR   {$$=($3 && $4);}|
+	OBR OR  expr expr  CBR  {$$=$3 || $4;}
 	;
 		
 %%
