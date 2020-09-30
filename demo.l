@@ -22,7 +22,6 @@ div return DIV;
 mod return MOD;
 "(" return OBR;
 ")" return CBR;
-"~" return UMINUS;
 "=" return EQ;
 "<" return LT;
 "<=" return LTE;

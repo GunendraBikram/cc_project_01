@@ -13,7 +13,6 @@ int flag=0;
 %token NOT AND OR
 %token OBR CBR
 %token EVAL IF
-%token UMINUS
 %token<val> TRUE FALSE
 %token DEFINEFUN
 %token<str> VAR
@@ -27,9 +26,9 @@ int flag=0;
 %%
 
 program:
-        OBR DEFINEFUN OBR fun CBR  CBR {;} |
-        OBR DEFINEFUN OBR fun VAR CBR CBR {;} |
-        OBR DEFINEFUN OBR fun VAR VAR CBR  CBR {;} |
+        OBR DEFINEFUN OBR VAR CBR  CBR {;} |
+        OBR DEFINEFUN OBR VAR VAR CBR CBR {;} |
+        OBR DEFINEFUN OBR VAR VAR VAR CBR  CBR {;} |
         fun {printf("\n%d\n", $$); return 0;}                           
        ;
        
@@ -41,14 +40,14 @@ fun:	OBR EVAL expr CBR {$$=$3;}|
         OBR PRINT term CBR {;}        
 	;
 term:   VAR {printf("syntax error"); return 0;}  |
-        CONST {$$=$1;}  | 
+        CONST  {$$=$1;}  | 
 	ADD term term  {$$=$2+$3;}|
 	SUB term term  {$$=$2-$3;}|
 	MUL term term  {$$=$2*$3;}|
 	DIV  term term  {$$=$2/$3;}|
 	MOD  term term  {$$=$2%$3;}|
-	IF expr expr expr  {$$=$2;}|
-	OBR term CBR {$$=$2;}
+	IF expr expr expr  {if ($2 == 1) $$ =$3; else $$=$4;} |
+	OBR term CBR  {$$=$2;}
 	;
 expr:	TRUE {$$=$1;} | FALSE {$$=$1;}| 
 	EQ term term   {$$=$2==$3;}|
@@ -56,10 +55,9 @@ expr:	TRUE {$$=$1;} | FALSE {$$=$1;}|
 	LTE  term term   {$$=$2<=$3;}|
 	GT  term term    {$$=$2>$3;}|
 	GTE  term term   {$$=$2>=$3;}|
-	NOT  expr   {$$= !$2;}|
+	NOT  expr         {$$= !$2;}|
 	AND  expr expr     {$$=($2 && $3);}|
 	OR  expr expr   {$$=$2 || $3;}|
-	UMINUS expr {$$=-$2;}|
 	OBR expr CBR {$$=$2;}	
 	;
 		
