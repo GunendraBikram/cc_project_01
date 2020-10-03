@@ -1,0 +1,38 @@
+digraph print {
+ 1 [label="t1", fontname="monospace"];
+ 2 [label="6", fontname="monospace"];
+ 3 [label="t2", fontname="monospace"];
+ 4 [label="4", fontname="monospace"];
+ 5 [label="t3", fontname="monospace"];
+ 6 [label="3", fontname="monospace"];
+ 7 [label="t4", fontname="monospace"];
+ 8 [label="7", fontname="monospace"];
+ 9 [label="t1", fontname="monospace"];
+ 10 [label="t2", fontname="monospace"];
+ 11 [label="PLUS", fontname="monospace", style=filled, fillcolor=mintcream];
+ 11->9
+ 11->10
+ 12 [label="t3", fontname="monospace"];
+ 13 [label="t4", fontname="monospace"];
+ 14 [label="PLUS", fontname="monospace", style=filled, fillcolor=mintcream];
+ 14->12
+ 14->13
+ 15 [label="EQ", fontname="monospace", style=filled, fillcolor=mintcream];
+ 15->11
+ 15->14
+ 16 [label="PRINT", fontname="monospace", style=filled, fillcolor=mintcream];
+ 16->15
+ 17 [label="DEF-FUN", fontname="monospace", style=filled, fillcolor=mintcream];
+ 17->7
+ 17->8
+ 18 [label="DEF-FUN", fontname="monospace", style=filled, fillcolor=mintcream];
+ 18->5
+ 18->6
+ 19 [label="DEF-FUN", fontname="monospace", style=filled, fillcolor=mintcream];
+ 19->3
+ 19->4
+ 20 [label="DEF-FUN", fontname="monospace", style=filled, fillcolor=mintcream];
+ 20->1
+ 20->2
+ }
+ 

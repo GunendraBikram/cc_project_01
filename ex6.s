@@ -1,0 +1,5 @@
+(define-fun t1 6)
+(define-fun t2 4)
+(define-fun t3 3)
+(define-fun t4 7)
+(print (= (+ (t1) (t2)) (+ (t3) (t4))))
