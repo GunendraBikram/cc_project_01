@@ -53,19 +53,17 @@ extern int yydebug;
     MINUS = 259,
     EQ = 260,
     NOT = 261,
-    AND = 262,
-    LPAR = 263,
-    RPAR = 264,
-    CONST = 265,
-    GETINT = 266,
-    DEFFUN = 267,
-    TRUE = 268,
-    FALSE = 269,
-    ID = 270,
-    ERR = 271,
-    PRINT = 272,
-    CALL = 273,
-    FUNID = 274
+    LPAR = 262,
+    RPAR = 263,
+    GETINT = 264,
+    DEFFUN = 265,
+    TRUE = 266,
+    FALSE = 267,
+    ERR = 268,
+    CALL = 269,
+    PRINT = 270,
+    ID = 271,
+    CONST = 272
   };
 #endif
 /* Tokens.  */
@@ -73,28 +71,26 @@ extern int yydebug;
 #define MINUS 259
 #define EQ 260
 #define NOT 261
-#define AND 262
-#define LPAR 263
-#define RPAR 264
-#define CONST 265
-#define GETINT 266
-#define DEFFUN 267
-#define TRUE 268
-#define FALSE 269
-#define ID 270
-#define ERR 271
-#define PRINT 272
-#define CALL 273
-#define FUNID 274
+#define LPAR 262
+#define RPAR 263
+#define GETINT 264
+#define DEFFUN 265
+#define TRUE 266
+#define FALSE 267
+#define ERR 268
+#define CALL 269
+#define PRINT 270
+#define ID 271
+#define CONST 272
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 9 "ambig.y"
+#line 11 "ambig.y"
 int val; char* str;
 
-#line 98 "y.tab.h"
+#line 94 "y.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

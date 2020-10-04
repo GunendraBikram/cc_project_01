@@ -1,0 +1,48 @@
+program   : LPAR DEFINEFUN LPAR ID RPAR expr RPAR program |
+            LPAR EVAL expr RPAR |
+            LPAR PRINT expr RPAR
+            ;
+
+
+expr       : ID |
+             LPAR  ADD expr expr RPAR |
+             LPAR  MINUS expr expr RPAR |
+             LPAR  MUL expr expr RPAR |
+             LPAR  DIV expr expr RPAR |
+             LPAR  MOD expr expr RPAR |
+             LPAR GETINT RPAR  |
+             LPAR IF expr expr expr 
+             ;
+             
+expr         : LPAR EQ expr expr RPAR |     
+               LPAR GT expr expr RPAR | 
+               LPAR GTEQ expr expr RPAR | 
+               LPAR LT expr expr RPAR | 
+               LPAR LTEQ expr expr RPAR | 
+               LPAR NOT expr RPAR |  
+               LPAR AND expr expr RPAR |   
+               LPAR OR expr expr RPAR |  
+               
+               ;
+               
+ID             : CONST |
+		  id    |
+		  TRUE  |
+		  FALSE
+		  
+		  ;    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+               
+                   
+             
+              
+
+
