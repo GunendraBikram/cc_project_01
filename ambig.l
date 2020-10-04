@@ -1,11 +1,10 @@
 %{
 #include "y.tab.h"
-#include<string.h>
 int yylex();
 %}
 %%
 [ \t\n] {}
-[-]?[1-9][0-9]* { yylval.str = strdup(yytext); return CONST;}
+[-]?[1-9][0-9]* { yylval.val = atoi(yytext); return CONST;}
 "not" {return NOT;}
 "=" {return EQ;}
 "+" {return PLUS;}
@@ -14,7 +13,6 @@ int yylex();
 "get-int" return GETINT;
 "true" return TRUE;
 "false" return FALSE;
-"and" return AND;
 "print" return PRINT;
 [a-zA-Z][a-zA-Z0-9]* { yylval.str = strdup(yytext); return ID;}
 [(] {return LPAR;}
@@ -22,4 +20,3 @@ int yylex();
 . {printf("Lex error: %s\n", yytext); return ERR;}
 %%
 int yywrap(void) {return 1;}
-
