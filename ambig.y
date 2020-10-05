@@ -1,162 +1,81 @@
 %{
-void yyerror(char *s);
-int yylex();
-#include<stdio.h>
-#include<string.h>
-#include "containers.h"
-
-
+  void yyerror (char *s);
+  int yylex();
+  #include "containers.h"
 %}
+
 
 %union {int val; char* str;}
 %start program
 
-%token<val> PLUS MINUS EQ NOT LPAR RPAR  GETINT DEFFUN TRUE FALSE  ERR CALL
-%token PRINT EVAL 
-%token<str> ID CONST  
-%type<val> expr id 
+%token  PRINT EVAL 
+%token<val> FUNID1 FUNID2 FUNID3  PLUS MINUS AND EQ NOT LPAR RPAR CALL GETINT DEFFUN TRUE FALSE ERR
+%token<str> ID CONST
+%type<val> expr id funid1 funid2 //funid3 
 
 
 %%
+program :
+  LPAR PRINT expr RPAR {
+    insert_child ($3);
+    insert_node("PRINT", PRINT);}
 
+  | LPAR EVAL expr RPAR{
+    insert_child ($3);
+    insert_node("EVAL", EVAL);}
 
+  | LPAR DEFFUN  funid1  expr RPAR program {
+    insert_children (2, $3, $4);
+    insert_node("DEF-FUN", DEFFUN);}
 
-program: 
-LPAR PRINT expr RPAR { 
-current_node_id ++;
-insert_child ($3);
-insert_node_tmp(current_node_id, "PRINT", false,PRINT); 
-//$$=current_node_id;
-printf("My print\n");
-} 
+ | LPAR DEFFUN funid2 id expr RPAR program {
+    insert_children (3, $3, $4, $5);
+    insert_node("DEF-FUN", DEFFUN);}
 
-|LPAR EVAL expr RPAR {
-current_node_id ++;
-insert_child ($3);
-insert_node_tmp(current_node_id, "EVAL", false,EVAL);
-//$$=current_node_id;
-printf("My evaluation\n");
-} 
-
-
-|LPAR DEFFUN  id expr RPAR program { 
-current_node_id ++;
-insert_child ($3);
-insert_child ($4);
-insert_node_tmp (current_node_id, "DEFINE", false, DEFFUN);
-//$$=current_node_id; 
-}
-
-
-|LPAR DEFFUN  id id  expr RPAR program {
-current_node_id ++;
-insert_child ($3);
-insert_child ($4);
-insert_child ($5);
-insert_node_tmp (current_node_id, "DEFINE", false, DEFFUN);
-//$$=current_node_id;
-}
-
-|LPAR DEFFUN id id id  expr RPAR program {
-current_node_id ++;
-insert_child ($3);
-insert_child ($4);
-insert_child ($5);
-insert_child ($6);
-insert_node_tmp (current_node_id, "DEFINE", false, DEFFUN);
-//$$=current_node_id;
-}
+// | LPAR DEFFUN funid3 id id expr RPAR program {
+//    insert_children (4, $4, $5, $6, $8);
+//    insert_node("DEF-FUN", DEFFUN);}
 ;
 
+funid1 : ID { $$ = insert_node($1, FUNID1);};
+funid2 : ID { $$ = insert_node($1, FUNID2);};
+//funid3 : ID { $$ = insert_node($1, FUNID3);};
 
-id: ID{
-current_node_id ++;
-//insert_child($1);
-insert_node_tmp (current_node_id,$1, false, ID) ;
-$$=current_node_id;
-}
+
+id: ID { $$ = insert_node($1, ID);}
+
+expr :
+  CONST {$$ = insert_node ($1, CONST);}
+  | TRUE{ $$ = insert_node("TRUE", TRUE);}
+  | FALSE { $$ = insert_node("FALSE", FALSE);}
+  | LPAR PLUS expr expr RPAR {
+    insert_children (2, $3, $4);
+    $$ = insert_node("PLUS", PLUS);}
+  | LPAR MINUS expr expr RPAR {
+    insert_children (2, $3, $4);
+    $$ = insert_node("MINUS", MINUS);}
+  | LPAR EQ expr expr RPAR {
+    insert_children (2, $3, $4);
+    $$ = insert_node("EQ", EQ);}
+  | LPAR AND expr expr RPAR {
+    insert_children (2, $3, $4);
+    $$ = insert_node("AND", AND);}
+  | LPAR NOT expr RPAR {
+    insert_child ($3);
+    $$ = insert_node("NOT", NOT);}
+  | LPAR ID RPAR {
+    $$ = insert_node($2, CALL);}
+  | LPAR GETINT RPAR {
+    $$ = insert_node("GET-INT", CALL);}
 ;
 
-expr: CONST{
-current_node_id ++;
-//insert_child($1);
-insert_node_tmp (current_node_id, $1, false, CONST);
-$$=current_node_id;
-}
-
-|LPAR PLUS expr expr  RPAR {
-current_node_id ++;
-insert_child($3);
-insert_child($4);
-insert_node_tmp (current_node_id, "PLUS", false, PLUS);
-$$=current_node_id;
-}
-
-|LPAR MINUS expr expr  RPAR{
-current_node_id ++;
-insert_child($3);
-insert_child($4);
-insert_node_tmp (current_node_id, "MINUS", false, MINUS);
-$$=current_node_id;
-}
-
-|LPAR GETINT RPAR{
-current_node_id ++;
-//insert_child($3);
-//insert_child($4);
-insert_node_tmp (current_node_id, "GET_INT", true, GETINT);
-$$=current_node_id;
-}
-
-|LPAR id RPAR{
-current_node_id ++;
-insert_child($2);
-//insert_child($4);
-insert_node_tmp (current_node_id, "CALL" , false, CALL);
-$$=current_node_id;
-}
-
-|TRUE{
-current_node_id ++;
-//insert_child($3);
-//insert_child($4);
-insert_node_tmp (current_node_id, "true", true, TRUE);
-
-$$=current_node_id;
-}
-
-|FALSE{
-current_node_id ++;
-//insert_child($3);
-//insert_child($4);
-insert_node_tmp (current_node_id, "false", true, FALSE);
-$$=current_node_id;
-}
-
-|LPAR  EQ expr expr  RPAR{
-current_node_id ++;
-insert_child($3);
-insert_child($4);
-insert_node_tmp (current_node_id, "EQ", false, EQ);
-$$=current_node_id;
-}
-
-|LPAR NOT expr  RPAR{
-current_node_id ++;
-insert_child($3);
-//insert_child($4);
-insert_node_tmp (current_node_id, "NOT", false, NOT);
-$$=current_node_id;
-}
-;
 %%
 
-int main(void) {
-int ret= yyparse();
-if (ret == 0) print_ast();
-free_ast();
-return ret;
+int main (void) {
+  int retval = yyparse();
+  if (retval == 0) print_ast();      // run "dot -Tpdf ast.dot -o ast.pdf" to create a PDF
+  free_ast();
+  return retval;
 }
 
-void yyerror (char *s) {printf("%s\n", s);}
-© 2020 GitHub, Inc.
+void yyerror (char *s) {printf ("%s\n", s
