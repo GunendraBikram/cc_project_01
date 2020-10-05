@@ -12,7 +12,7 @@ int yylex();
 %start program
 
 %token<val> PLUS MINUS EQ NOT LPAR RPAR  GETINT DEFFUN TRUE FALSE  ERR CALL
-%token PRINT 
+%token PRINT EVAL 
 %token<str> ID CONST  
 %type<val> expr id 
 
@@ -27,24 +27,52 @@ current_node_id ++;
 insert_child ($3);
 insert_node_tmp(current_node_id, "PRINT", false,PRINT); 
 //$$=current_node_id;
-printf("My expression\n");
+printf("My print\n");
+} 
+
+|LPAR EVAL expr RPAR {
+current_node_id ++;
+insert_child ($3);
+insert_node_tmp(current_node_id, "EVAL", false,EVAL);
+//$$=current_node_id;
+printf("My evaluation\n");
 } 
 
 
-|LPAR DEFFUN id expr RPAR program { 
-
+|LPAR DEFFUN  id expr RPAR program { 
 current_node_id ++;
 insert_child ($3);
 insert_child ($4);
 insert_node_tmp (current_node_id, "DEFINE", false, DEFFUN);
 //$$=current_node_id; 
 }
+
+
+|LPAR DEFFUN  id id  expr RPAR program {
+current_node_id ++;
+insert_child ($3);
+insert_child ($4);
+insert_child ($5);
+insert_node_tmp (current_node_id, "DEFINE", false, DEFFUN);
+//$$=current_node_id;
+}
+
+|LPAR DEFFUN id id id  expr RPAR program {
+current_node_id ++;
+insert_child ($3);
+insert_child ($4);
+insert_child ($5);
+insert_child ($6);
+insert_node_tmp (current_node_id, "DEFINE", false, DEFFUN);
+//$$=current_node_id;
+}
 ;
+
 
 id: ID{
 current_node_id ++;
 //insert_child($1);
-insert_node_tmp (current_node_id,"ID", false, ID) ;
+insert_node_tmp (current_node_id,$1, false, ID) ;
 $$=current_node_id;
 }
 ;
@@ -74,7 +102,6 @@ $$=current_node_id;
 
 |LPAR GETINT RPAR{
 current_node_id ++;
-
 //insert_child($3);
 //insert_child($4);
 insert_node_tmp (current_node_id, "GET_INT", true, GETINT);
@@ -91,7 +118,6 @@ $$=current_node_id;
 
 |TRUE{
 current_node_id ++;
-
 //insert_child($3);
 //insert_child($4);
 insert_node_tmp (current_node_id, "true", true, TRUE);
@@ -101,7 +127,6 @@ $$=current_node_id;
 
 |FALSE{
 current_node_id ++;
-
 //insert_child($3);
 //insert_child($4);
 insert_node_tmp (current_node_id, "false", true, FALSE);
@@ -134,3 +159,4 @@ return ret;
 }
 
 void yyerror (char *s) {printf("%s\n", s);}
+© 2020 GitHub, Inc.
