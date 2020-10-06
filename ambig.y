@@ -26,11 +26,11 @@ program :
     insert_node("EVAL", EVAL);}
 
   | LPAR DEFFUN  LPAR id RPAR  expr RPAR program {
-    insert_children (2, $4, $5);
+    insert_children (2, $4, $6);
     insert_node("DEF-FUN", DEFFUN);}
 
  | LPAR DEFFUN LPAR id id RPAR expr RPAR program {
-    insert_children (3, $4, $5, $6);
+    insert_children (3, $4, $5, $7);
     insert_node("DEF-FUN", DEFFUN);}
  
  | LPAR DEFFUN LPAR id id id RPAR expr RPAR program{
