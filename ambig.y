@@ -78,4 +78,4 @@ int main (void) {
   return retval;
 }
 
-void yyerror (char *s) {printf ("%s\n", s
+void yyerror (char *s) {printf ("%s\n", s);}

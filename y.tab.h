@@ -49,48 +49,58 @@ extern int yydebug;
 # define YYTOKENTYPE
   enum yytokentype
   {
-    PLUS = 258,
-    MINUS = 259,
-    EQ = 260,
-    NOT = 261,
-    LPAR = 262,
-    RPAR = 263,
-    GETINT = 264,
-    DEFFUN = 265,
-    TRUE = 266,
-    FALSE = 267,
-    ERR = 268,
-    CALL = 269,
-    PRINT = 270,
-    ID = 271,
-    CONST = 272
+    PRINT = 258,
+    EVAL = 259,
+    FUNID1 = 260,
+    FUNID2 = 261,
+    FUNID3 = 262,
+    PLUS = 263,
+    MINUS = 264,
+    AND = 265,
+    EQ = 266,
+    NOT = 267,
+    LPAR = 268,
+    RPAR = 269,
+    CALL = 270,
+    GETINT = 271,
+    DEFFUN = 272,
+    TRUE = 273,
+    FALSE = 274,
+    ERR = 275,
+    ID = 276,
+    CONST = 277
   };
 #endif
 /* Tokens.  */
-#define PLUS 258
-#define MINUS 259
-#define EQ 260
-#define NOT 261
-#define LPAR 262
-#define RPAR 263
-#define GETINT 264
-#define DEFFUN 265
-#define TRUE 266
-#define FALSE 267
-#define ERR 268
-#define CALL 269
-#define PRINT 270
-#define ID 271
-#define CONST 272
+#define PRINT 258
+#define EVAL 259
+#define FUNID1 260
+#define FUNID2 261
+#define FUNID3 262
+#define PLUS 263
+#define MINUS 264
+#define AND 265
+#define EQ 266
+#define NOT 267
+#define LPAR 268
+#define RPAR 269
+#define CALL 270
+#define GETINT 271
+#define DEFFUN 272
+#define TRUE 273
+#define FALSE 274
+#define ERR 275
+#define ID 276
+#define CONST 277
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 11 "ambig.y"
+#line 8 "ambig.y"
 int val; char* str;
 
-#line 94 "y.tab.h"
+#line 104 "y.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
