@@ -1,6 +1,7 @@
 %{
 #include "y.tab.h"
 int yylex();
+#include<string.h>
 %}
 %%
 [ \t\n] {}
@@ -22,7 +23,7 @@ int yylex();
 "false" return FALSE;
 "and" return AND;
 "print" return PRINT;
-[a-zA-Z][a-zA-Z0-9]* { yylval.str = strdup(yytext); return id;}
+[a-zA-Z][a-zA-Z0-9]* { yylval.str = strdup(yytext); return ID;}        //changed id to ID
 [(] {return LPAR;}
 [)] {return RPAR;}
 . {printf("Lex error: %s\n", yytext); return ERR;}

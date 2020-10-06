@@ -2,6 +2,7 @@
   void yyerror (char *s);
   int yylex();
   #include "containers.h"
+  #include<string.h>
 %}
 
 
@@ -11,7 +12,7 @@
 %token  PRINT EVAL 
 %token<val> FUNID1 FUNID2 FUNID3  PLUS MINUS MUL DIV MOD  AND EQ LT GT LTEQ GTEQ NOT LPAR RPAR CALL GETINT DEFFUN  TRUE FALSE ERR
 %token<str> ID CONST
-%type<val> expr id funid1 funid2 funid3  
+%type<val> expr id //funid1 funid2 funid3             //comeents added
 
 
 %%
@@ -37,9 +38,9 @@ program :
     insert_node("DEF-FUN", DEFFUN);}
  ;
 
-funid1 : ID { $$ = insert_node($1, FUNID1);};
-funid2 : ID { $$ = insert_node($1, FUNID2);};
-funid3 : ID { $$ = insert_node($1, FUNID3);}; 
+//funid1 : ID { $$ = insert_node($1, FUNID1);};         //comments added
+//funid2 : ID { $$ = insert_node($1, FUNID2);};
+//funid3 : ID { $$ = insert_node($1, FUNID3);}; 
 
 
 
