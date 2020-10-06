@@ -24,16 +24,16 @@ program :
     insert_child ($3);
     insert_node("EVAL", EVAL);}
 
-  | LPAR DEFFUN  funid1  expr RPAR program {
-    insert_children (2, $3, $4);
+  | LPAR DEFFUN  LPAR id RPAR  expr RPAR program {
+    insert_children (2, $4, $5);
     insert_node("DEF-FUN", DEFFUN);}
 
- | LPAR DEFFUN funid2 id expr RPAR program {
-    insert_children (3, $3, $4, $5);
+ | LPAR DEFFUN LPAR id id RPAR expr RPAR program {
+    insert_children (3, $4, $5, $6);
     insert_node("DEF-FUN", DEFFUN);}
  
- | LPAR DEFFUN funid3 id id expr RPAR program{
-    insert_children (4, $3, $4, $5, $6);
+ | LPAR DEFFUN LPAR id id id RPAR expr RPAR program{
+    insert_children (4, $4, $5, $6, $8);
     insert_node("DEF-FUN", DEFFUN);}
  ;
 
