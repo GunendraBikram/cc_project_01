@@ -90,7 +90,7 @@ expr :
     insert_children (2, $3, $4);
     $$ = insert_node("AND", AND);}
   | LPAR NOT expr RPAR {
-    insert_child ($3);
+    insert_child ($3); 
     $$ = insert_node("NOT", NOT);}
   | LPAR ID RPAR {
     $$ = insert_node($2, CALL);}
@@ -102,11 +102,11 @@ id: ID { $$ = insert_node($1, ID);}
 
 %%
 
-int main (void) {
-  int retval = yyparse();
-  if (retval == 0) print_ast();      // run "dot -Tpdf ast.dot -o ast.pdf" to create a PDF
-  free_ast();
-  return retval;
-}
+//int main (void) {
+  //int retval = yyparse();
+  //if (retval == 0) print_ast();      // run "dot -Tpdf ast.dot -oast.pdf" to create a PDF
+  //free_ast();
+  //return retval;
+//}
 
 void yyerror (char *s) {printf ("%s\n", s);}
