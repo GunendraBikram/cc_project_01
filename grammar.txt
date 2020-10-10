@@ -1,20 +1,30 @@
-program   : LPAR DEFINEFUN LPAR ID RPAR expr RPAR program |
+
+
+
+program   : 
+            LPAR DEFFUN  fund1  expr RPAR program|
             LPAR EVAL expr RPAR |
             LPAR PRINT expr RPAR
             ;
+fund1       : LPAR fund2 RPAR | 
+              LPAR funcd2 fund3 RPAR
 
+fund2    : id ;             
+fund3    : id fund3 | 
+            id;
+             
+fund3    : id id|
+            id;
 
-expr       : ID |
+expr       : CONST|
              LPAR  ADD expr expr RPAR |
              LPAR  MINUS expr expr RPAR |
              LPAR  MUL expr expr RPAR |
              LPAR  DIV expr expr RPAR |
              LPAR  MOD expr expr RPAR |
              LPAR GETINT RPAR  |
-             LPAR IF expr expr expr 
-             ;
-             
-expr         : LPAR EQ expr expr RPAR |     
+             LPAR IF expr expr expr RPAR|
+              LPAR EQ expr expr RPAR |     
                LPAR GT expr expr RPAR | 
                LPAR GTEQ expr expr RPAR | 
                LPAR LT expr expr RPAR | 
@@ -22,10 +32,14 @@ expr         : LPAR EQ expr expr RPAR |
                LPAR NOT expr RPAR |  
                LPAR AND expr expr RPAR |   
                LPAR OR expr expr RPAR |  
+               LPAR id RPAR |
+               LPAR id expr RPAR |
+               LPAR id expr expr RPAR |
+               
                
                ;
                
-ID             : CONST |
+ID             : 
 		  id    |
 		  TRUE  |
 		  FALSE
@@ -34,7 +48,12 @@ ID             : CONST |
     
     
     
-    
+program: LPAR DEFFUN func expr RPAR program {} 
+func: LPAR functionname RPAR {} | LPAR functionname functionparam RPAR {} 
+functionname: id 
+functionparam : id functionparam {} | id 
+functionparam : id id {} | id {} 
+var: BOOL {} | INT {}   
     
     
     

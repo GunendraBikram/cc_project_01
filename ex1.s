@@ -1,2 +1,2 @@
-(define-fun t1 (= (+ 1 (- 2 3)) 6))
-(print(t1))
+(define-fun (name v) (if (> v 0) 10 20))
+(print (name (get-int)))

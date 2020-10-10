@@ -5,8 +5,8 @@ int yylex();
 %}
 %%
 [ \t\n] {}
-[-]?[1-9][0-9]* { yylval.str = strdup(yytext); return CONST;}
-"not" {return NOT;}
+
+
 "=" {return EQ;}
 "+" {return PLUS;}
 "-" {return MINUS;}
@@ -15,17 +15,23 @@ int yylex();
 "<" {return LT;}
 ">=" {return LTEQ;}
 "<=" {return GTEQ;}
+"not" {return NOT;}
 "div" {return DIV;}
 "mod" {return MOD;}
+"or"  {return OR;}
+"and" return AND;
 "define-fun" return DEFFUN;
 "get-int" return GETINT;
 "true" return TRUE;
 "false" return FALSE;
-"and" return AND;
 "print" return PRINT;
-[a-zA-Z][a-zA-Z0-9]* { yylval.str = strdup(yytext); return ID;}        //changed id to ID
+"eval"  return EVAL;
+"if"  return IF;
 [(] {return LPAR;}
 [)] {return RPAR;}
+[-]?[1-9][0-9]* { yylval.str = strdup(yytext); return CONST;}
+[a-zA-Z][a-zA-Z0-9]* { yylval.str = strdup(yytext); return ID;}        //changed id to ID
+
 . {printf("Lex error: %s\n", yytext); return ERR;}
 %%
 int yywrap(void) {return 1;}
