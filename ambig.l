@@ -1,37 +1,34 @@
 %{
 #include "y.tab.h"
 int yylex();
-#include<string.h>
 %}
 %%
 [ \t\n] {}
-
-
+[-]?[1-9][0-9]* { yylval.str = strdup(yytext); return CONST;}
+"not" {return NOT;}
 "=" {return EQ;}
+"<" {return LT;}
+">" {return GT;}
+"<=" {return LTEQ;}
+">=" {return GTEQ;}
 "+" {return PLUS;}
 "-" {return MINUS;}
 "*" {return MUL;}
-">" {return GT;}
-"<" {return LT;}
-">=" {return LTEQ;}
-"<=" {return GTEQ;}
-"not" {return NOT;}
-"div" {return DIV;}
-"mod" {return MOD;}
-"or"  {return OR;}
-"and" return AND;
+"div" return DIV;
+"mod" return MOD;
+
 "define-fun" return DEFFUN;
 "get-int" return GETINT;
-"true" return TRUE;
-"false" return FALSE;
+"if" return IF;
+"true"  {yylval.val=1; return BOOL;}
+"false" {yylval.val=0;  return BOOL;}
+"and" return AND;
+"or" return OR;
 "print" return PRINT;
-"eval"  return EVAL;
-"if"  return IF;
+[a-zA-Z][a-zA-Z0-9]* { yylval.str = strdup(yytext); return ID;}
 [(] {return LPAR;}
 [)] {return RPAR;}
-[-]?[1-9][0-9]* { yylval.str = strdup(yytext); return CONST;}
-[a-zA-Z][a-zA-Z0-9]* { yylval.str = strdup(yytext); return ID;}        //changed id to ID
-
 . {printf("Lex error: %s\n", yytext); return ERR;}
 %%
 int yywrap(void) {return 1;}
+
