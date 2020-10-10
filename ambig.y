@@ -23,7 +23,7 @@ program :
     insert_node("EVAL", EVAL);}
 
   | LPAR DEFFUN LPAR funid funparam RPAR funrtype funbody RPAR  program {
-    insert_children (2, $3, $4);
+    insert_children (2, $4, $5);
     insert_node("DEF-FUN", DEFFUN);
 }
 
