@@ -12,14 +12,14 @@
 %token  PRINT EVAL 
 %token<val> PLUS MINUS MUL DIV MOD  AND EQ LT GT LTEQ GTEQ NOT LPAR RPAR CALL GETINT DEFFUN  TRUE FALSE ERR OR IF FUNID
 %token<str> ID CONST                                     
-%type<val> expr id  expr2 expr3 fun1  fun2  fun3          
+%type<val> expr id  expr1 expr2 expr3 fun1  fun2  fun3          
 
 
 %%
 program :
      LPAR PRINT expr RPAR {
   
-    insert_child ($3);
+   insert_child ($3);                                 
     insert_node("PRINT", PRINT);
     }
 
@@ -149,33 +149,31 @@ expr :
   | LPAR GETINT RPAR {
    
     $$ = insert_node("GET-INT", CALL);
-      }
-   | LPAR expr2 RPAR 
-   {
-        insert_child ($2);
-        $$ =insert_node("AND", AND);        
+      }    
    
-   }  |  LPAR expr3 RPAR 
+     |   expr1                                         //added
       {
-      insert_child ($2);
-        $$ =insert_node("AND", AND);       
+      //insert_child ($1);
+        //$$ =insert_node("AND", AND);       
       }
-      | LPAR ID RPAR  {                             
-    $$ = insert_node($2, CALL);
-      }
+      
       
 ;      
       
-expr2 : expr ID 
-       {insert_children (2, $1,$2);
-        $$ =insert_node("AND", AND);  
-       }
-;
+expr1         :  LPAR expr RPAR                                          
+              | expr2  
+               | expr3          
+               ;
 
-expr3 : expr2 ID   
-        {insert_children (2, $1,$2);
-        $$ =insert_node("AND", AND);  
-       } 
+
+expr2          :  LPAR expr expr RPAR  
+                
+               ;
+
+
+expr3          : LPAR expr expr expr RPAR 
+               
+
       
 ; 
 

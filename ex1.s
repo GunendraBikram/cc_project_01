@@ -1,2 +1,1 @@
-(define-fun (name v )  (if (> v 0) 20 10))
-
+(print (f1 (<= (f2 1 2) (f2 2 1)) (>= (f2 1 2) (f2 2 1))

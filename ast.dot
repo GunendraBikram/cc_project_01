@@ -4,8 +4,8 @@ digraph print {
  3 [label="GT", fontname="monospace", style=filled, fillcolor=mintcream];
  3->1
  3->2
- 4 [label="20", fontname="monospace"];
- 5 [label="10", fontname="monospace"];
+ 4 [label="10", fontname="monospace"];
+ 5 [label="20", fontname="monospace"];
  6 [label="IF", fontname="monospace", style=filled, fillcolor=mintcream];
  6->3
  6->4
