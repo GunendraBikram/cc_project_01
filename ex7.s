@@ -1,2 +1,3 @@
-(define-fun t2 (and true (and (t2) true)))
-(print (t2))
+(define-fun (f1 v1 v2) (and v1 v2))
+(define-fun (f2 v1 v2) (+ v1 v2))
+(print (f1 (<= (f2 1 2) (f2 2 1)) (>= (f2 1 2) (f2 2 1))
