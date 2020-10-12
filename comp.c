@@ -9,7 +9,7 @@ struct node_str* bool_fun_t;
 
 
 int is_expr(int t, char* fname){
-if(t==TRUE || t== FALSE || t==EQ || t==NOT || t==AND ||t==OR || t==LT || t==LTEQ || t==GT || t==GTEQ) return true;
+if(t==TRUE || t== FALSE || t==EQ || t==NOT || t==AND ||t==OR || t==LT || t==GT ) return true;
 if(t==CALL && 0==find_str(fname, bool_fun_r)) return true;
 return false;
 }
