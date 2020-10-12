@@ -25,10 +25,10 @@ int yylex();
 "and" return AND;
 "or" return OR;
 "print" return PRINT;
+"eval" return EVAL;
 [a-zA-Z][a-zA-Z0-9]* { yylval.str = strdup(yytext); return ID;}
 [(] {return LPAR;}
 [)] {return RPAR;}
 . {printf("Lex error: %s\n", yytext); return ERR;}
 %%
 int yywrap(void) {return 1;}
-
