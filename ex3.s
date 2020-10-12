@@ -1,1 +1,1 @@
-(define-fun (name v) (if v v v))
+print (notdefinedfunction 1 2 3))

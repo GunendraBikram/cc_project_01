@@ -1,14 +1,6 @@
 digraph print {
- 1 [label="v", fontname="monospace"];
- 2 [label="0", fontname="monospace"];
- 3 [label="GT", fontname="monospace", style=filled, fillcolor=mintcream];
- 3->1
- 3->2
- 4 [label="10", fontname="monospace"];
- 5 [label="20", fontname="monospace"];
- 6 [label="IF", fontname="monospace", style=filled, fillcolor=mintcream];
- 6->3
- 6->4
- 6->5
+ 1 [label="7", fontname="monospace"];
+ 2 [label="EVAL", fontname="monospace", style=filled, fillcolor=mintcream];
+ 2->1
  }
  

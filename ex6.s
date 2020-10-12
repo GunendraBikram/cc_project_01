@@ -1,1 +1,1 @@
-(print (notdefinedfunction 1 2 3))
+(print (f1 (<= (f2 1 2) (f2 2 1)) (>= (f2 1 2) (f2 2 1))
