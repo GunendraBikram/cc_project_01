@@ -2,192 +2,114 @@
   void yyerror (char *s);
   int yylex();
   #include "containers.h"
-  #include<string.h>
 %}
 
 
 %union {int val; char* str;}
 %start program
-
-%token  PRINT EVAL 
-%token<val> PLUS MINUS MUL DIV MOD  AND EQ LT GT LTEQ GTEQ NOT LPAR RPAR CALL GETINT DEFFUN  TRUE FALSE ERR OR IF FUNID
-%token<str> ID CONST                                     
-%type<val> expr id  expr1 expr2 expr3 fun1  fun2  fun3          
-
-
+%token  PRINT 
+%token<val> IF  FUNID OR  EVAL LT GT LTEQ GTEQ  MUL DIV MOD  PLUS MINUS AND EQ NOT LPAR RPAR CALL GETINT DEFFUN TRUE FALSE ERR
+%token<str> ID CONST
+%type<val> expr id funid funbody 
 %%
+
 program :
-     LPAR PRINT expr RPAR {
-  
-   insert_child ($3);                                 
-    insert_node("PRINT", PRINT);
-    }
-
-  | LPAR EVAL expr RPAR{
+  LPAR PRINT expr RPAR {
     insert_child ($3);
-    insert_node("EVAL", EVAL);
-    }
-
+    insert_node("PRINT", PRINT);}
   
-    | LPAR DEFFUN fun1 expr RPAR                
-                                   
-                                               
- ;
+  |LPAR EVAL expr RPAR {
+    insert_child ($3);
+    insert_node("EVAL", EVAL);}
 
 
- 
-fun1          :  LPAR id RPAR 
-                  
-               
-                                                        
-              | fun2  
-               | fun3          
-               ;
 
+  | LPAR DEFFUN LPAR  funid RPAR  funbody RPAR program {
+    insert_children (2, $4, $6);
+    insert_node("DEF-FUN", DEFFUN);
+}
 
-fun2          :  LPAR id id RPAR  
-                
-               ;
-
-
-fun3          : LPAR id id id RPAR 
-               
-
-;     
-
+funid : ID { $$ = insert_node($1, FUNID);}
+	|funid id {;}
+	|funid id id {;}
+	;
+id: ID {$$ = insert_node($1, FUNID);};
+funbody: expr; 
 
 expr :
-  CONST {
-  $$ =insert_node ($1 ,CONST);
-  
-  }
-  | ID {
-   $$ = insert_node($1,ID);
-  
-  }
-  | TRUE{
-    
-    $$ =insert_node("TRUE", TRUE);
-    }
-  | FALSE { 
-
-   $$=insert_node("FALSE", FALSE);
-   }
-
+  CONST {$$ = insert_node ($1, CONST);}
+  | TRUE{ $$ = insert_node("TRUE", TRUE);}
+  | FALSE { $$ = insert_node("FALSE", FALSE);}
   | LPAR PLUS expr expr RPAR {
-  
     insert_children (2, $3, $4);
-     $$ = insert_node("PLUS", PLUS);
-    }
+    $$ = insert_node("PLUS", PLUS);}
   | LPAR MINUS expr expr RPAR {
- 
     insert_children (2, $3, $4);
-    $$=("MINUS", MINUS);
-    }
-  | LPAR DIV expr expr RPAR {
+    $$ = insert_node("MINUS", MINUS);}
 
-    insert_children (2, $3, $4);
-    $$ =insert_node("DIV", DIV);
-    }
   | LPAR MUL expr expr RPAR {
+    insert_children (2, $3, $4);
+    $$ = insert_node("MUL", MUL);}
+  | LPAR DIV expr expr RPAR {
+    insert_children (2, $3, $4);
+    $$ = insert_node("DIV", DIV);}
 
+  | LPAR MOD  expr expr RPAR {
     insert_children (2, $3, $4);
-    $$ =insert_node("MUL", MUL);
-   }
-  | LPAR MOD expr expr RPAR {
-   
-    insert_children (2, $3, $4);
-    $$=insert_node("MOD", MOD);
-    }
+    $$ = insert_node("MOD", MOD);}
+ // | LPAR MINUS expr expr RPAR {
+ //   insert_children (2, $3, $4);
+ //   $$ = insert_node("MINUS", MINUS);}
+
+
+
 
 
   | LPAR EQ expr expr RPAR {
     insert_children (2, $3, $4);
-    $$=insert_node("EQ", EQ);
-    }
-
-   | LPAR LT expr expr RPAR {
+    $$ = insert_node("EQ", EQ);}
+  
+  | LPAR LT  expr expr RPAR {
     insert_children (2, $3, $4);
-     $$ = insert_node("LT", LT);
-      
-    }
-   | LPAR GT expr expr RPAR {
-   
+    $$ = insert_node("LT", LT);}
+  | LPAR GT  expr expr RPAR {
     insert_children (2, $3, $4);
-      $$ =insert_node("GT", GT);
-    
-    }
-   | LPAR LTEQ expr expr RPAR {
-   
+    $$ = insert_node("GT", GT);}
+  | LPAR LTEQ expr expr RPAR {
     insert_children (2, $3, $4);
-    $$ = insert_node("LTEQ", LTEQ);
-      
-    }
+    $$ = insert_node("LTEQ", LTEQ);}
   | LPAR GTEQ expr expr RPAR {
- 
     insert_children (2, $3, $4);
-    $$ =insert_node("GTEQ", GTEQ);
-      }
-  | LPAR AND expr expr RPAR {
-    
+    $$ = insert_node("GTEQ", GTEQ);}
+
+
+
+| LPAR AND expr expr RPAR {
     insert_children (2, $3, $4);
-    $$ =insert_node("AND", AND);
-       
-    }
+    $$ = insert_node("AND", AND);}
   | LPAR NOT expr RPAR {
+    insert_child ($3);
+    $$ = insert_node("NOT", NOT);}
 
-    insert_child ($3); 
-    $$ = insert_node("NOT", NOT);
-      }
-  
-  | LPAR IF expr expr expr RPAR{         
-    insert_children(3,$3,$4,$5);
-    $$ =insert_node("IF", IF);
-  
-  
-  }   
+  | LPAR OR  expr expr RPAR {
+    insert_children (2, $3, $4);
+    $$ = insert_node("OR", OR);}
+  | LPAR ID RPAR {
+    $$ = insert_node($2, CALL);}
   | LPAR GETINT RPAR {
-   
-    $$ = insert_node("GET-INT", CALL);
-      }    
-   
-     |   expr1                                         //added
-      {
-      //insert_child ($1);
-        //$$ =insert_node("AND", AND);       
-      }
-      
-      
-;      
-      
-expr1         :  LPAR expr RPAR                                          
-              | expr2  
-               | expr3          
-               ;
+    $$ = insert_node("GET-INT", CALL);}
+
+  | LPAR IF  expr expr expr  RPAR {
+    //insert_children (2, $3, $4);
+    $$ = insert_node("IF", IF);
+	$$=$3;}
 
 
-expr2          :  LPAR expr expr RPAR  
-                
-               ;
 
 
-expr3          : LPAR expr expr expr RPAR 
-               
-
-      
-; 
-
-id: ID { 
-     current_node_id++;
-     $$ = current_node_id;}
+;
 
 %%
 
-int main (void) {
-  int retval = yyparse();
-  if (retval == 0) print_ast();      // run "dot -Tpdf ast.dot -oast.pdf" to create a PDF
-  free_ast();
-  return retval;
-}
 
 void yyerror (char *s) {printf ("%s\n", s);}
