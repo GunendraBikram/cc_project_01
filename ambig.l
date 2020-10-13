@@ -1,37 +1,36 @@
 %{
 #include "y.tab.h"
 int yylex();
-#include<string.h>
 %}
 %%
 [ \t\n] {}
-
-
+[-]?[1-9][0-9]* { yylval.str = strdup(yytext); return CONST;}
+"not" {return NOT;}
 "=" {return EQ;}
 "+" {return PLUS;}
 "-" {return MINUS;}
 "*" {return MUL;}
-">" {return GT;}
 "<" {return LT;}
-">=" {return LTEQ;}
-"<=" {return GTEQ;}
-"not" {return NOT;}
+">" {return GT;}
+"<=" {return LTEQ;}
+">=" {return GTEQ;}
+
+
 "div" {return DIV;}
 "mod" {return MOD;}
-"or"  {return OR;}
-"and" return AND;
 "define-fun" return DEFFUN;
 "get-int" return GETINT;
 "true" return TRUE;
 "false" return FALSE;
+"and" return AND;
+"or" return OR;
 "print" return PRINT;
-"eval"  return EVAL;
-"if"  return IF;
+"eval" return EVAL;
+"if" return IF;
+[a-zA-Z][a-zA-Z0-9]* { yylval.str = strdup(yytext); return ID;}
 [(] {return LPAR;}
 [)] {return RPAR;}
-[-]?[0-9][0-9]* { yylval.str = strdup(yytext); return CONST;}
-[a-zA-Z][a-zA-Z0-9]* { yylval.str = strdup(yytext); return ID;}        //changed id to ID
-
 . {printf("Lex error: %s\n", yytext); return ERR;}
 %%
 int yywrap(void) {return 1;}
+
