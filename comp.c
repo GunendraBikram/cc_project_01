@@ -9,13 +9,13 @@ struct node_str* bool_fun_t;
 
 
 int is_fla(int t, char* fname){
-if(t==TRUE || t== FALSE || t==EQ || t==NOT || t==AND) return true;
+if(t==TRUE || t== FALSE || t==EQ || t==NOT || t==AND || t== OR || t== GT || t == LT || t== GTEQ || t== LTEQ) return true;
 if(t==CALL && 0==find_str(fname, bool_fun_r)) return true;
 return false;
 }
 
 int is_term(int t, char* fname){
-if (t==CONST || PLUS || t==MINUS) return true;
+if (t==CONST || PLUS || t==MINUS || t== MUL || t== DIV || t == MOD) return true;
 if(t==CALL && 0 == find_str(fname, int_fun_r)) return true;
 return false;
 }

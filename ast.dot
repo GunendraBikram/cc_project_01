@@ -1,6 +1,18 @@
 digraph print {
- 1 [label="7", fontname="monospace"];
- 2 [label="EVAL", fontname="monospace", style=filled, fillcolor=mintcream];
- 2->1
+ 1 [label="name", fontname="monospace"];
+ 2 [label="10", fontname="monospace"];
+ 3 [label="20", fontname="monospace"];
+ 4 [label="GT", fontname="monospace", style=filled, fillcolor=mintcream];
+ 4->2
+ 4->3
+ 5 [label="1", fontname="monospace"];
+ 6 [label="2", fontname="monospace"];
+ 7 [label="IF", fontname="monospace"];
+ 8 [label="name", fontname="monospace"];
+ 9 [label="PRINT", fontname="monospace", style=filled, fillcolor=mintcream];
+ 9->8
+ 10 [label="DEF-FUN", fontname="monospace", style=filled, fillcolor=mintcream];
+ 10->1
+ 10->4
  }
  

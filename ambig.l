@@ -4,7 +4,7 @@ int yylex();
 %}
 %%
 [ \t\n] {}
-[-]?[1-9][0-9]* { yylval.str = strdup(yytext); return CONST;}
+[-]?[0-9][0-9]* { yylval.str = strdup(yytext); return CONST;}
 "not" {return NOT;}
 "=" {return EQ;}
 "+" {return PLUS;}

@@ -30,8 +30,10 @@ program :
 }
 
 funid : ID { $$ = insert_node($1, FUNID);}
-	|funid id {;}
-	|funid id id {;}
+	|funid id 
+	{
+	insert_child($2);}
+	//|funid id id {;}
 	;
 id: ID {$$ = insert_node($1, FUNID);};
 funbody: expr; 
