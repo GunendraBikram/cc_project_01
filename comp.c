@@ -67,23 +67,3 @@ if (retval == 0) print_ast();
 free_ast();
 return retval;
 }
-
-
-
-
-int fun3(struct ast* tmp){
-return 0;
-}
-
-
-
-int main(void){
-int retval = yyparse();
-if(retval == 0) visit_ast(get_fun);
-push_str("GET-INT", &int_fun_r, &int_fun_t);
-if(retval == 0) visit_ast(type_check);
-//if(retval == 0) visit_ast(fun3);
-if (retval == 0) print_ast();
-free_ast();
-return retval;
-}
