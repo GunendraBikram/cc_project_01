@@ -9,13 +9,13 @@ struct node_str* bool_fun_t;
 
 
 int is_fla(int t, char* fname){
-if(t==TRUE || t== FALSE || t==EQ || t==NOT || t==AND || t== OR || t== LT || t ==GT || t== LTEQ t== GTEQ ) return true;
+if(t==TRUE || t== FALSE || t==EQ || t==NOT || t==AND) return true;
 if(t==CALL && 0==find_str(fname, bool_fun_r)) return true;
 return false;
 }
 
 int is_term(int t, char* fname){
-if (t==CONST || PLUS || t==MINUS || t== MUL || t==DIV || t== MOD) return true;
+if (t==CONST || PLUS || t==MINUS) return true;
 if(t==CALL && 0 == find_str(fname, int_fun_r)) return true;
 return false;
 }
@@ -47,6 +47,26 @@ int get_fun(struct ast* tmp){
 return 0;
 }
 
+
+
+
+
+int fun3(struct ast* tmp){
+return 0;
+}
+
+
+
+int main(void){
+int retval = yyparse();
+if(retval == 0) visit_ast(get_fun);
+push_str("GET-INT", &int_fun_r, &int_fun_t);
+if(retval == 0) visit_ast(type_check);
+//if(retval == 0) visit_ast(fun3);
+if (retval == 0) print_ast();
+free_ast();
+return retval;
+}
 
 
 
