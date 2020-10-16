@@ -15,7 +15,7 @@ return false;
 }
 
 int is_term(int t, char* fname){
-if (t==CONST || PLUS || t==MINUS || t== MUL || t== DIV || t == MOD) return true;
+if (t==CONST || t == PLUS || t==MINUS || t== MUL || t== DIV || t == MOD) return true;
 if(t==CALL && 0 == find_str(fname, int_fun_r)) return true;
 return false;
 }
