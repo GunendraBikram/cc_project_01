@@ -33,4 +33,3 @@ int yylex();
 . {printf("Lex error: %s\n", yytext); return ERR;}
 %%
 int yywrap(void) {return 1;}
-
