@@ -1,5 +1,6 @@
 %{
 #include "y.tab.h"
+#include<string.h>
 int yylex();
 %}
 %%

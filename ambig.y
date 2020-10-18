@@ -32,20 +32,23 @@ program :
   | LPAR DEFFUN LPAR  funid id RPAR   funbody RPAR program {
     insert_children (3, $4, $5, $7);
     insert_node("DEF-FUN", DEFFUN);}
-    ;
-
+    
+  | LPAR DEFFUN LPAR  funid  id id RPAR   funbody RPAR program  {
+    insert_children(4,$4,$5,$6,$8);
+    insert_node("DEF-FUN",DEFFUN);
+  
+  }
+;
 funid : ID { $$ = insert_node($1, FUNID);}
-//	|funid id  {;}
-//	|funid id id  {;}
-	;
-id : ID {$$ = insert_node($1, FUNID);};
 
+//id : ID {$$ = insert_node($1, FUNID);};
 
+;
 
 funbody: expr; 
 
 expr :
- ID {$$=insert_node ($1, CALL);}
+    ID {$$=insert_node ($1, CALL);}
   | CONST {$$ = insert_node ($1, CONST);}
   | TRUE{ $$ = insert_node("TRUE", TRUE);}
   | FALSE { $$ = insert_node("FALSE", FALSE);}
@@ -66,9 +69,6 @@ expr :
   | LPAR MOD  expr expr RPAR {
     insert_children (2, $3, $4);
     $$ = insert_node("MOD", MOD);}
- // | LPAR MINUS expr expr RPAR {
- //   insert_children (2, $3, $4);
- //   $$ = insert_node("MINUS", MINUS);}
   | LPAR EQ expr expr RPAR {
     insert_children (2, $3, $4);
     $$ = insert_node("EQ", EQ);}
@@ -102,21 +102,15 @@ expr :
     $$ = insert_node($2, CALL);}
   | LPAR GETINT RPAR {
     $$ = insert_node("GET-INT", CALL);}
-//  | LPAR funid RPAR {
-//    insert_child ($2);
-//    $$ = insert_node("FUNID", FUNID);}
-//  | LPAR funid expr RPAR {
-//    insert_children (2, $2, $3);	
-//    $$ = insert_node("FUNID", FUNID);}
-//  | LPAR funid expr expr RPAR {
-//    insert_children (3, $2, $3, $4);
-//    $$ = insert_node("FUNID", FUNID);} 
   | LPAR IF  expr expr expr  RPAR {
   insert_children (3, $3, $4, $5);
   $$ = insert_node("IF", IF);
 	}
-
-
+   //| LPAR expr RPAR {;}
+   //| LPAR expr expr RPAR {;}
+   	
+;
+id : ID {$$ = insert_node($1, FUNID);};
 
 
 ;

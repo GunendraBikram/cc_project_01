@@ -1,1 +1,1 @@
-(define-fun (name v1 v2) v1)
+(define-fun (v) r10)

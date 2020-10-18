@@ -1,1 +1,1 @@
-(define-fun (name v1) (+ v2 v3))
+(print (notdefinedfunction 1 2 3))
