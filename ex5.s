@@ -1,1 +1,2 @@
-(define-fun (v) r10)
+(define-fun (f2 v1 v2) (+v1 v2))
+(print (f2))
