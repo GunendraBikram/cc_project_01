@@ -10,7 +10,7 @@
 %token  PRINT 
 %token<val> IF  FUNID OR  EVAL LT GT LTEQ GTEQ  MUL DIV MOD  PLUS MINUS AND EQ NOT LPAR RPAR CALL GETINT DEFFUN TRUE FALSE ERR
 %token<str> ID CONST
-%type<val> expr id funid funbody 
+%type<val> expr id   funid funbody 
 %%
 
 program :
@@ -24,22 +24,29 @@ program :
 
 
 
-  | LPAR DEFFUN LPAR  funid RPAR  funbody RPAR program {
+  | LPAR DEFFUN LPAR  funid RPAR   funbody RPAR program {
     insert_children (2, $4, $6);
-    insert_node("DEF-FUN", DEFFUN);
-}
+    insert_node("DEF-FUN", DEFFUN);}
+
+
+  | LPAR DEFFUN LPAR  funid id RPAR   funbody RPAR program {
+    insert_children (3, $4, $5, $7);
+    insert_node("DEF-FUN", DEFFUN);}
+    ;
 
 funid : ID { $$ = insert_node($1, FUNID);}
-	|funid id 
-	{
-	insert_child($2);}
-	//|funid id id {;}
+//	|funid id  {;}
+//	|funid id id  {;}
 	;
-id: ID {$$ = insert_node($1, FUNID);};
+id : ID {$$ = insert_node($1, FUNID);};
+
+
+
 funbody: expr; 
 
 expr :
-  CONST {$$ = insert_node ($1, CONST);}
+ ID {$$=insert_node ($1, CALL);}
+  | CONST {$$ = insert_node ($1, CONST);}
   | TRUE{ $$ = insert_node("TRUE", TRUE);}
   | FALSE { $$ = insert_node("FALSE", FALSE);}
   | LPAR PLUS expr expr RPAR {
@@ -62,11 +69,6 @@ expr :
  // | LPAR MINUS expr expr RPAR {
  //   insert_children (2, $3, $4);
  //   $$ = insert_node("MINUS", MINUS);}
-
-
-
-
-
   | LPAR EQ expr expr RPAR {
     insert_children (2, $3, $4);
     $$ = insert_node("EQ", EQ);}
@@ -100,11 +102,19 @@ expr :
     $$ = insert_node($2, CALL);}
   | LPAR GETINT RPAR {
     $$ = insert_node("GET-INT", CALL);}
-
+//  | LPAR funid RPAR {
+//    insert_child ($2);
+//    $$ = insert_node("FUNID", FUNID);}
+//  | LPAR funid expr RPAR {
+//    insert_children (2, $2, $3);	
+//    $$ = insert_node("FUNID", FUNID);}
+//  | LPAR funid expr expr RPAR {
+//    insert_children (3, $2, $3, $4);
+//    $$ = insert_node("FUNID", FUNID);} 
   | LPAR IF  expr expr expr  RPAR {
-    //insert_children (2, $3, $4);
-    $$ = insert_node("IF", IF);
-	$$=$3;}
+  insert_children (3, $3, $4, $5);
+  $$ = insert_node("IF", IF);
+	}
 
 
 
