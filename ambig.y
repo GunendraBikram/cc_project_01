@@ -41,8 +41,6 @@ program :
 ;
 funid : ID { $$ = insert_node($1, FUNID);}
 
-//id : ID {$$ = insert_node($1, FUNID);};
-
 ;
 
 funbody: expr; 
@@ -58,7 +56,6 @@ expr :
   | LPAR MINUS expr expr RPAR {
     insert_children (2, $3, $4);
     $$ = insert_node("MINUS", MINUS);}
-
   | LPAR MUL expr expr RPAR {
     insert_children (2, $3, $4);
     $$ = insert_node("MUL", MUL);}
@@ -85,29 +82,33 @@ expr :
   | LPAR GTEQ expr expr RPAR {
     insert_children (2, $3, $4);
     $$ = insert_node("GTEQ", GTEQ);}
-
-
-
-| LPAR AND expr expr RPAR {
+  | LPAR AND expr expr RPAR {
     insert_children (2, $3, $4);
     $$ = insert_node("AND", AND);}
   | LPAR NOT expr RPAR {
     insert_child ($3);
     $$ = insert_node("NOT", NOT);}
-
   | LPAR OR  expr expr RPAR {
     insert_children (2, $3, $4);
     $$ = insert_node("OR", OR);}
-  | LPAR ID RPAR {
-    $$ = insert_node($2, CALL);}
+ 
   | LPAR GETINT RPAR {
     $$ = insert_node("GET-INT", CALL);}
   | LPAR IF  expr expr expr  RPAR {
   insert_children (3, $3, $4, $5);
-  $$ = insert_node("IF", IF);
+   $$ = insert_node("IF", IF);
 	}
-   //| LPAR expr RPAR {;}
-   //| LPAR expr expr RPAR {;}
+   | LPAR ID RPAR {
+    $$ = insert_node($2, CALL);}	
+   | LPAR ID expr RPAR {                           
+   //insert_children(2,$2, $3);                                //segmentation core fault dumped eroor
+   $$= insert_node("ID", CALL);                        //removed $2 but still getting error  
+   ;}                                              // $$ removed from insert_node but getting error       
+   | LPAR ID expr expr RPAR {
+   //insert_children(2,$2,$3,$4);                   //insert_children is giving error
+   $$ = insert_node("ID", CALL);
+   
+   ;}
    	
 ;
 id : ID {$$ = insert_node($1, FUNID);};
