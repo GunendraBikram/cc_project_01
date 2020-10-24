@@ -101,12 +101,12 @@ expr :
    | LPAR ID RPAR {
     $$ = insert_node($2, CALL);}	
    | LPAR ID expr RPAR {                           
-   //insert_children(2,$2, $3);                                //segmentation core fault dumped eroor
-   $$= insert_node("ID", CALL);                        //removed $2 but still getting error  
+   insert_child($3);                                //segmentation core fault dumped eroor
+   $$= insert_node($2, CALL);                        //removed $2 but still getting error  
    ;}                                              // $$ removed from insert_node but getting error       
    | LPAR ID expr expr RPAR {
-   //insert_children(2,$2,$3,$4);                   //insert_children is giving error
-   $$ = insert_node("ID", CALL);
+   insert_children(2,$3,$4);                   //insert_children is giving error
+   $$ = insert_node($2, CALL);
    
    ;}
    	

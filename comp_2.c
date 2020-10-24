@@ -180,7 +180,7 @@ int main(void)
   	push_str("GET-INT", &int_funs_r, &int_funs_t);
   	if(retval == 0) retval = visit_ast(get_fun_types);
   	if(retval== 0) retval = visit_ast(type_check);
-  	if(retval == 0) retval = print_ast();
+  	if(retval == 0) print_ast();
 
     else return 1;
 
