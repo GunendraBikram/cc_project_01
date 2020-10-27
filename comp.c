@@ -48,12 +48,15 @@ int type_check(struct ast* ast_node)
 
 }
 
-int get_fun_types(struct ast* ast_node) {
+
+
+
+int get_var_types(struct ast* ast_node) {
 if (ast_node->ntoken == CALL) {
   char* call_id = ast_node->token;
   if(0 == find_str(call_id, int_funs_r) && 0== find_str(call_id,bool_funs_r))
   {
-  	printf("function %s has not been defined\n", call_id);
+  	printf("variable %s has not been defined\n", call_id);
   	return 1;
   }
  }
@@ -63,7 +66,7 @@ if(ast_node->ntoken == FUNID)
  	if(0 == find_str(ast_node->token, int_funs_r)  ||
  	  (0 == find_str(ast_node->token, bool_funs_r)))
  	{
- 		printf("function %s has been defined twice\n", ast_node);
+ 		printf("variable %s has been defined twice\n", ast_node);
  		return 1;
  	}
 
@@ -84,6 +87,46 @@ if(ast_node->ntoken == FUNID)
    return 0;
   
 } 
+
+
+
+int get_fun_types(struct ast* ast_node) {
+if (ast_node->ntoken == CALL) {
+  char* call_id = ast_node->token;
+  if(0 == find_str(call_id, int_funs_r) && 0== find_str(call_id,bool_funs_r))
+  {
+  	printf("function  %s has not been defined\n", call_id);
+  	return 1;
+  }
+ }
+
+if(ast_node->ntoken == FUNID)
+ {
+ 	if(0 == find_str(ast_node->token, int_funs_r)  ||
+ 	  (0 == find_str(ast_node->token, bool_funs_r)))
+ 	{
+ 		printf("function  %s has been defined twice\n", ast_node);
+ 		return 1;
+ 	}
+
+ 	struct ast* body = get_child(ast_node->parent, 2);
+
+
+ 	if(is_term(body->ntoken, ast_node->token))
+ 	{
+ 		push_str(ast_node->token, &int_funs_r, &int_funs_t);
+ 	}
+
+ 	else if (is_expr(body->ntoken, ast_node->token))
+ 	{
+ 		push_str(ast_node->token, &bool_funs_r, &bool_funs_t);
+ 	}
+   }
+   
+   return 0;
+  
+} 
+
 
 
 
@@ -179,6 +222,7 @@ int main(void)
   	int retval = yyparse();
   	push_str("GET-INT", &int_funs_r, &int_funs_t);
   	if(retval == 0) retval = visit_ast(get_fun_types);
+	if(retval == 0) retval = visit_ast(get_var_types);
   	if(retval== 0) retval = visit_ast(type_check);
   	if(retval == 0)  print_ast();
 
@@ -187,3 +231,7 @@ int main(void)
    visit_ast(translate);
 
   }
+
+
+
+
