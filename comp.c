@@ -164,60 +164,60 @@ int translate(struct ast *node)
 	  	printf("v%d := %s v%d\n",node->id,node->id );
       
 
- //     if(node->ntoken == CALL)
- //     {
+     if(node->ntoken == CALL)
+     {
       	//load to input register
- //     	printf("call %s\n", node-> token);
- //     	printf(" v%d := rv\n", node->id);
+     	printf("call %s\n", node-> token);
+     	printf(" v%d := rv\n", node->id);
 
 
-  //    }
+    }
 
-  //    if(node->ntoken == IF	)
+    if(node->ntoken == IF	)
 
-   //   {
+   {
 
-   //   	printf("br v%d  bb%d  bb%d\n", get_child(node,1)->id, get_child(node,2)->id,get_child(node,3)->id);
+   	printf("br v%d  bb%d  bb%d\n", get_child(node,1)->id, get_child(node,2)->id,get_child(node,3)->id);
 
-   //   	printf("bb%s\n",get_child(node,2)->id);
+   	printf("bb%s\n",get_child(node,2)->id);
 
 
-   //     printf(" v%d : = v%d\n", node->id,get_child(node,2)->id);
+     printf(" v%d : = v%d\n", node->id,get_child(node,2)->id);
           
-   //    printf("br bb%s", node->id);   //to 	the join
+     printf("br bb%s", node->id);   //to 	the join
 
-  //      printf("bb%s\n",get_child(node,3)->id);
-  //    	printf(" v%d : = v%d\n", node->id,get_child(node,3)->id);
+        printf("bb%s\n",get_child(node,3)->id);
+      	printf(" v%d : = v%d\n", node->id,get_child(node,3)->id);
 
 
-  //    	printf("br bb%d\n", node->id);   //to 	the join
+      	printf("br bb%d\n", node->id);   //to 	the join
 
-  //      printf("bb%d\n",node->id);
+       printf("bb%d\n",node->id);
 
       	//translator for join(merge)
 
       	//printf(" v%d := if v%d then v%d else %d\n", node->id,get_child(node,1)->id, get_child(node,2)->id, get_child(node,3)->id);
-   //   } 
+	   } 
 
-//	  if((is_term(node->ntoken,node->token) || is_fla(node->ntoken, node->token))  &&
-//	  	(node->parent->ntoken == DEFFUN || node-> parent->ntoken== PRINT))
+	  if((is_term(node->ntoken,node->token) || is_expr(node->ntoken, node->token))  &&
+	  	(node->parent->ntoken == DEFFUN || node-> parent->ntoken== PRINT))
 
-//	  {
-//	  	if(node-> parent->ntoken== PRINT)
-//         { 
-//         	printf(" a1 := v%d\n", node->id);
+	  {
+	  	if(node-> parent->ntoken== PRINT)
+         { 
+         	printf(" a1 := v%d\n", node->id);
 
-//         	printf(" call := print\n");
+         	printf(" call := print\n");
             
-//        }
+        }
 
-//        else {
- //	   	     printf(" rv :=v%d\n", node->id);
+        else {
+	   	     printf(" rv :=v%d\n", node->id);
 
-// 	   	 }
-//	         printf("br exit\n");
+ 	   	 }
+	         printf("br exit\n");
        
-//       }
+       }
     //if(node->ntoken == VARID)
 	 //printf(" vi%d := %s\n", node->id, get_register_from_symbol_table(node->token));
 
@@ -242,16 +242,4 @@ int main(void)
    visit_ast(translate);
 
   }
-
-
-
-
-
-
-
-
-
-
-
-
 
