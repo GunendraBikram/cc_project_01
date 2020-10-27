@@ -10,7 +10,7 @@
 %token  PRINT 
 %token<val> IF  FUNID OR  EVAL LT GT LTEQ GTEQ  MUL DIV MOD  PLUS MINUS AND EQ NOT LPAR RPAR CALL GETINT DEFFUN TRUE FALSE ERR
 %token<str> ID CONST
-%type<val> expr id   funid funbody 
+%type<val> expr id  funid funbody 
 %%
 
 program :
@@ -111,7 +111,7 @@ expr :
    ;}
    	
 ;
-id : ID {$$ = insert_node($1, FUNID);};
+id : ID {$$ = insert_node($1,ID);};          //changed from FUNID to ID
 
 
 ;

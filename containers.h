@@ -11,7 +11,7 @@
 #include <string.h>
 #include <stdarg.h>
 
-struct dstr { char* id1; char* id2; };          // A pair of strings: can be useful whenstoring variables associated to a function
+struct dstr { char* id1; char* id2;};          // A pair of strings: can be useful when storing variables associated to a function
 
 struct node_int { int id; struct node_int* next; };
 struct node_str { char* id; struct node_str* next; };
