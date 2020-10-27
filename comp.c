@@ -9,6 +9,17 @@ struct node_str* bool_funs_t;
 struct node_istr* funs_r;
 struct node_istr* funs_t;
 
+struct node_str* int_var_r;
+struct node_str* int_var_t;
+struct node_str* bool_var_r;
+struct node_str* bool_var_t;
+struct node_istr* var_r;
+struct node_istr* var_t;
+
+
+
+
+
 bool is_term(int t, char *str)
      {
      	if (t==CONST || t == PLUS || t==MINUS || t== IF || t==MUL || t==DIV || t==MOD || t==GETINT) return true;
@@ -54,7 +65,7 @@ int type_check(struct ast* ast_node)
 int get_var_types(struct ast* ast_node) {
 if (ast_node->ntoken == CALL) {
   char* call_id = ast_node->token;
-  if(0 == find_str(call_id, int_funs_r) && 0== find_str(call_id,bool_funs_r))
+  if(0 == find_str(call_id, int_var_r) && 0== find_str(call_id,bool_var_r))
   {
   	printf("variable %s has not been defined\n", call_id);
   	return 1;
@@ -63,8 +74,8 @@ if (ast_node->ntoken == CALL) {
 
 if(ast_node->ntoken == FUNID)
  {
- 	if(0 == find_str(ast_node->token, int_funs_r)  ||
- 	  (0 == find_str(ast_node->token, bool_funs_r)))
+ 	if(0 == find_str(ast_node->token, int_var_r)  ||
+ 	  (0 == find_str(ast_node->token, bool_var_r)))
  	{
  		printf("variable %s has been defined twice\n", ast_node);
  		return 1;
@@ -75,12 +86,12 @@ if(ast_node->ntoken == FUNID)
 
  	if(is_term(body->ntoken, ast_node->token))
  	{
- 		push_str(ast_node->token, &int_funs_r, &int_funs_t);
+ 		push_str(ast_node->token, &int_var_r, &int_var_t);
  	}
 
  	else if (is_expr(body->ntoken, ast_node->token))
  	{
- 		push_str(ast_node->token, &bool_funs_r, &bool_funs_t);
+ 		push_str(ast_node->token, &bool_var_r, &bool_var_t);
  	}
    }
    
@@ -231,6 +242,15 @@ int main(void)
    visit_ast(translate);
 
   }
+
+
+
+
+
+
+
+
+
 
 
 
