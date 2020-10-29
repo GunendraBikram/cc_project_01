@@ -6,22 +6,24 @@ struct node_str* int_funs_r;
 struct node_str* int_funs_t;
 struct node_str* bool_funs_r;
 struct node_str* bool_funs_t;
-struct node_istr* funs_r;
-struct node_istr* funs_t;
+//struct node_istr* funs_r;
+//struct node_istr* funs_t;
+struct node_str* arities_r;
+struct node_str* arities_t;
 
 
 struct node_str* int_var_r;
 struct node_str* int_var_t;
 struct node_str* bool_var_r;
 struct node_str* bool_var_t;
-struct node_istr* var_r;
-struct node_istr* var_t;
+//struct node_istr* var_r;
+//struct node_istr* var_t;
 
 
 bool is_term(int t, char *str)
      {
      	if (t==CONST || t == PLUS || t==MINUS || t== IF || t== MUL || t==MOD || t==DIV|| t==GETINT) return true;
-        if (t== CALL && 0 == find_str(str, int_funs_r)) return true;
+      if (t== CALL && 0 == find_str(str, int_funs_r)) return true;
 	//if (t== CALL && 0 == find_str(str, int_var_r)) return true;
         return false;
      }	 
@@ -29,26 +31,34 @@ bool is_term(int t, char *str)
 
 bool is_expr(int t, char *str)
     {
-     if (t==TRUE || t== FALSE || t==EQ || t==NOT || t==AND || t == LT || t==GT || t== LTEQ || t==GTEQ ) return true;
+     if (t==TRUE || t== FALSE || t==EQ || t==NOT || t==AND || t == LT || t==GT || t== LTEQ || t==GTEQ || t == OR) return true;
      if(t == CALL && 0 == find_str(str, bool_funs_r)) return true;
      //if(t == CALL && 0 == find_str(str, bool_var_r)) return true;
      return false;
     }
 
+bool is_fun(int t, char *str)
+{ 
+  if(t== FUNID || t == ID) return true;
+  return false;
+
+}
+
+
 int type_check(struct ast* ast_node)
 {
-	int ntoken = ast_node->ntoken;
-	int needs_term = (ntoken == PLUS || ntoken == MINUS || ntoken == MUL  || ntoken == DIV || ntoken == MOD );
-	int needs_expr  = (ntoken == NOT || ntoken == AND);
+	int ntoken = ast_node->ntoken;    //added IF in token
+	int needs_term = (ntoken == PLUS || ntoken == IF || ntoken == MINUS || ntoken == MUL  || ntoken == DIV || ntoken == MOD  || ntoken == LT || ntoken == GT  || ntoken == LTEQ || ntoken == GTEQ);
+	int needs_expr  = (ntoken == NOT || ntoken == AND || ntoken == OR);                      //problem
 	//  || ntoken == LT || ntoken == GT  || ntoken == LTEQ || ntoken == GTEQ);
 	struct ast_child* temp_child_root = ast_node-> child;
 	while(temp_child_root!= NULL)
 	{
-		struct ast* child_node = temp_child_root->id;
+		struct ast* child_node = temp_child_root->id;    
 
 		if((needs_term && !is_expr(child_node->ntoken,child_node->token)) ||
 		 (needs_expr && !is_expr(child_node->ntoken, child_node->token))) {
-		printf("Does not type check");
+		printf("Does not type check\n");
 
 		return 1;
 	}
@@ -69,7 +79,7 @@ if (ast_node->ntoken == CALL) {
   }
  }
 
-if(ast_node->ntoken == FUNID)
+if(ast_node->ntoken == ID)        //FUNID shoube be ID
  {
  	if(0 == find_str(ast_node->token, int_var_r)  ||
  	  (0 == find_str(ast_node->token, bool_var_r)))
@@ -81,7 +91,7 @@ if(ast_node->ntoken == FUNID)
  	struct ast* body = get_child(ast_node->parent, 2);
 
 
- 	if(is_term(body->ntoken, ast_node->token))
+ 	if(is_term(body->ntoken, ast_node->token))          //
  	{
  		push_str(ast_node->token, &int_var_r, &int_var_t);
  	}
@@ -94,7 +104,7 @@ if(ast_node->ntoken == FUNID)
    
    return 0;
   
-} 
+}  
 
 int get_fun_types(struct ast* ast_node) {
 if (ast_node->ntoken == CALL) {
@@ -106,7 +116,7 @@ if (ast_node->ntoken == CALL) {
   }
  }
 
-if(ast_node->ntoken == FUNID)
+if(ast_node->ntoken == FUNID)                                                  //implememt the logic of arities here
  {
  	if(0 == find_str(ast_node->token, int_funs_r)  ||
  	  (0 == find_str(ast_node->token, bool_funs_r)))
@@ -133,7 +143,40 @@ if(ast_node->ntoken == FUNID)
   
 } 
 
+/*-----------------For checking the arities-------------------------------------*/
 
+int get_arities_type(struct ast* ast_node)                             //checking for arities
+{                                                    //check the type of variable and then store it in symbol tabel
+  int ntoken = ast_node->ntoken;
+  if(ntoken == FUNID)
+    //ntoken->next;
+   //int ntoken = ast_node->ntoken;
+   //struct ast_child* temp_child_root = ast_node-> child;              //
+   while(ntoken!=RPAR)                                   //while with ntoken!=NULL
+   { 
+
+    printf("Check_1\n");
+    if(ntoken == RPAR);      //push arities in symbol tabel
+    break;                   //v is CHAR  or 0 is CONST 
+                             //check the type of variable and also where it's is occuring   
+    
+   }
+   
+  //printf("%c", ntoken);
+  //printf("check_2\n");
+   
+  
+  return 0;
+  
+  
+  
+  //return 1;  
+
+
+
+
+
+}
 
 int translate(struct ast *node)
 { //mytranslator from ast to cfg
@@ -155,7 +198,7 @@ int translate(struct ast *node)
 		printf("v%d := not v%d\n",node->id, get_child(node,1)->id );
 	  
 	  if (node->ntoken == CONST)
-	  	printf("v%d := %s v%d\n",node->id,node->id );
+	  	printf("v%d := %d v%d\n",node->id,node->id );   //%s to %d
       
 
       if(node->ntoken == CALL)
@@ -173,14 +216,14 @@ int translate(struct ast *node)
 
       	printf("br v%d  bb%d  bb%d\n", get_child(node,1)->id, get_child(node,2)->id,get_child(node,3)->id);
 
-      	printf("bb%s\n",get_child(node,2)->id);
+      	printf("bb%d\n",get_child(node,2)->id);         //changed %s to %d
 
 
-        printf(" v%d : = v%d\n", node->id,get_child(node,2)->id);
+        printf(" v%d : = v%d\n", node->id,get_child(node,2)->id); 
           
-       printf("br bb%s", node->id);   //to 	the join
+       printf("br bb%d", node->id);   //to 	the join changed %s to %d      
 
-        printf("bb%s\n",get_child(node,3)->id);
+        printf("bb%d\n",get_child(node,3)->id);  //changed %s to %d
       	printf(" v%d : = v%d\n", node->id,get_child(node,3)->id);
 
 
@@ -227,13 +270,14 @@ int main(void)
   	int retval = yyparse();
   	push_str("GET-INT", &int_funs_r, &int_funs_t);
   	if(retval == 0) retval = visit_ast(get_fun_types);
-	if(retval == 0) retval =visit_ast(get_var_types);
-  	if(retval== 0) retval = visit_ast(type_check);
+	if(retval == 0) retval =visit_ast(get_var_types);               //commented out
+  	//if(retval== 0) retval = visit_ast(type_check);
+    if(retval== 0) retval = visit_ast(get_arities_type);
   	if(retval == 0)  print_ast();
 
     else return 1;
 
-   visit_ast(translate);
+    visit_ast(translate);
 
   }
 

@@ -111,7 +111,7 @@ expr :
    ;}
    	
 ;
-id : ID {$$ = insert_node($1, FUNID);};   	// alternate ID for FUNID
+id : ID {$$ = insert_node($1, ID);};   	// alternate ID for FUNID
 
 
 ;
