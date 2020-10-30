@@ -1,27 +1,66 @@
 digraph print {
- 1 [label="name", fontname="monospace"];
- 2 [label="v", fontname="monospace"];
- 3 [label="h", fontname="monospace"];
- 4 [label="v", fontname="monospace"];
- 5 [label="0", fontname="monospace"];
- 6 [label="GT", fontname="monospace", style=filled, fillcolor=mintcream];
+ 1 [label="f1", fontname="monospace"];
+ 2 [label="v1", fontname="monospace"];
+ 3 [label="v2", fontname="monospace"];
+ 4 [label="v1", fontname="monospace"];
+ 5 [label="v2", fontname="monospace"];
+ 6 [label="AND", fontname="monospace", style=filled, fillcolor=mintcream];
  6->4
  6->5
- 7 [label="10", fontname="monospace"];
- 8 [label="20", fontname="monospace"];
+ 7 [label="1", fontname="monospace"];
+ 8 [label="0", fontname="monospace"];
  9 [label="IF", fontname="monospace", style=filled, fillcolor=mintcream];
  9->6
  9->7
  9->8
- 10 [label="GET-INT", fontname="monospace"];
- 11 [label="name", fontname="monospace", style=filled, fillcolor=mintcream];
- 11->10
- 12 [label="PRINT", fontname="monospace", style=filled, fillcolor=mintcream];
- 12->11
- 13 [label="DEF-FUN", fontname="monospace", style=filled, fillcolor=mintcream];
- 13->1
- 13->2
- 13->3
- 13->9
+ 10 [label="f2", fontname="monospace"];
+ 11 [label="v1", fontname="monospace"];
+ 12 [label="v2", fontname="monospace"];
+ 13 [label="v1", fontname="monospace"];
+ 14 [label="v2", fontname="monospace"];
+ 15 [label="PLUS", fontname="monospace", style=filled, fillcolor=mintcream];
+ 15->13
+ 15->14
+ 16 [label="1", fontname="monospace"];
+ 17 [label="2", fontname="monospace"];
+ 18 [label="f2", fontname="monospace", style=filled, fillcolor=mintcream];
+ 18->16
+ 18->17
+ 19 [label="2", fontname="monospace"];
+ 20 [label="1", fontname="monospace"];
+ 21 [label="f2", fontname="monospace", style=filled, fillcolor=mintcream];
+ 21->19
+ 21->20
+ 22 [label="LTEQ", fontname="monospace", style=filled, fillcolor=mintcream];
+ 22->18
+ 22->21
+ 23 [label="1", fontname="monospace"];
+ 24 [label="2", fontname="monospace"];
+ 25 [label="f2", fontname="monospace", style=filled, fillcolor=mintcream];
+ 25->23
+ 25->24
+ 26 [label="2", fontname="monospace"];
+ 27 [label="1", fontname="monospace"];
+ 28 [label="f2", fontname="monospace", style=filled, fillcolor=mintcream];
+ 28->26
+ 28->27
+ 29 [label="GTEQ", fontname="monospace", style=filled, fillcolor=mintcream];
+ 29->25
+ 29->28
+ 30 [label="f1", fontname="monospace", style=filled, fillcolor=mintcream];
+ 30->22
+ 30->29
+ 31 [label="PRINT", fontname="monospace", style=filled, fillcolor=mintcream];
+ 31->30
+ 32 [label="DEF-FUN", fontname="monospace", style=filled, fillcolor=mintcream];
+ 32->10
+ 32->11
+ 32->12
+ 32->15
+ 33 [label="DEF-FUN", fontname="monospace", style=filled, fillcolor=mintcream];
+ 33->1
+ 33->2
+ 33->3
+ 33->9
  }
  

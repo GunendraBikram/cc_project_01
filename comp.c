@@ -22,7 +22,7 @@ struct node_str* bool_var_t;
 
 bool is_term(int t, char *str)
      {
-     	if (t==CONST || t == PLUS || t==MINUS || t== IF || t== MUL || t==MOD || t==DIV|| t==GETINT) return true;
+      if (t==CONST || t == PLUS || t==MINUS || t== IF || t== MUL || t==MOD || t==DIV|| t==GETINT) return true;
       if (t== CALL && 0 == find_str(str, int_funs_r)) return true;
 	//if (t== CALL && 0 == find_str(str, int_var_r)) return true;
         return false;
@@ -47,9 +47,10 @@ bool is_fun(int t, char *str)
 
 int type_check(struct ast* ast_node)
 {
-	int ntoken = ast_node->ntoken;    //added IF in token
-	int needs_term = (ntoken == PLUS || ntoken == IF || ntoken == MINUS || ntoken == MUL  || ntoken == DIV || ntoken == MOD  || ntoken == LT || ntoken == GT  || ntoken == LTEQ || ntoken == GTEQ);
-	int needs_expr  = (ntoken == NOT || ntoken == AND || ntoken == OR);                      //problem
+	//int ntoken = ast_node->ntoken;    //added IF in token
+	char* token = ast_node->token;   //added the token part and ntoken removed all from this  getting the warnings
+	int needs_term = (token == "PLUS" || token == "IF" || token == "MINUS" || token == "MUL"  || token == "DIV" || token == "MOD"  || token == "LT" || token == "GT"  || token == "LTEQ" || token == "GTEQ");
+	int needs_expr  = (token == "NOT" || token == "AND" || token == "OR");                      //problem added "" here
 	//  || ntoken == LT || ntoken == GT  || ntoken == LTEQ || ntoken == GTEQ);
 	struct ast_child* temp_child_root = ast_node-> child;
 	while(temp_child_root!= NULL)
@@ -83,7 +84,7 @@ if(ast_node->ntoken == ID)        //FUNID shoube be ID
  {
  	if(0 == find_str(ast_node->token, int_var_r)  ||
  	  (0 == find_str(ast_node->token, bool_var_r)))
- 	{
+ 	{   
  		printf("variable %s has been defined twice\n", ast_node);
  		return 1;
  	}
@@ -290,10 +291,10 @@ int main(void)
   {
   	int retval = yyparse();
   	push_str("GET-INT", &int_funs_r, &int_funs_t);
-  	if(retval == 0) retval = visit_ast(get_fun_types);
-	//if(retval == 0) retval =visit_ast(get_var_types);               //commented out
-  	//if(retval== 0) retval = visit_ast(type_check);
-	//    if(retval== 0) retval = visit_ast(get_arities_type);
+  	if(retval == 0) retval = visit_ast(get_fun_types);              //not harming the output till now
+	if(retval == 0) retval =visit_ast(get_var_types);               //passing now
+  	if(retval== 0) retval = visit_ast(type_check);
+	// if(retval== 0) retval = visit_ast(get_arities_type);
   	if(retval == 0)  print_ast();
 
     else return 1;
