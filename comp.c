@@ -180,7 +180,7 @@ int get_arities_type(struct ast* ast_node)                             //checkin
 
 int translate(struct ast *node)
 { //mytranslator from ast to cfg
-	printf("visited: %s\n", 	node->token);
+//	printf("visited: %s\n", 	node->token);
 	if(node->ntoken == FUNID) 
 		{
 
@@ -188,78 +188,99 @@ int translate(struct ast *node)
 	      printf("entry:\n");
        
         }
-	if(node->ntoken ==LT || node->ntoken ==EQ || node->ntoken == PLUS  || node->ntoken == MINUS || node->ntoken ==AND )
+	if(node->ntoken ==LT || node->ntoken ==EQ || node->ntoken == PLUS  || node->ntoken == MINUS || node->ntoken ==AND || node->ntoken ==GT || node->ntoken ==LTEQ || node->ntoken == GTEQ  || node->ntoken == OR || node->ntoken ==MUL || node->ntoken ==DIV || node->ntoken ==MOD )
 	{
 		printf(" v%d := v%d %s v%d\n",node->id, get_child(node,1)-> id, node->token, get_child(node,2)->id );
 	}
 
 	if(node->ntoken ==NOT)//|| node->ntoken ==EQ || node->ntoken == PLUS  || node->ntoken == MINUS || node->ntoken ==AND )
 	
-		printf("v%d := not v%d\n",node->id, get_child(node,1)->id );
+		printf(" v%d := not  v%d\n",node->id,  get_child(node,1)->id );
 	  
-	  if (node->ntoken == CONST)
-	  	printf("v%d := %d v%d\n",node->id,node->id );   //%s to %d
-      
+	if (node->ntoken == CONST)
+	  	printf(" v%d := %s \n",node->id, node->token);   //%s to %d
+	
 
-      if(node->ntoken == CALL)
+	//need to support function call
+	if(node->ntoken ==CALL){
+	// for supporting the function call with arguments
+	//load to input register
+	printf(" call %s\n", node->token);
+	printf(" v%d:= rv\n", node->id); //load from return register
+	}
+
+	if(node->ntoken ==IF){
+	printf(" br v%d bb%d bb%d\n",get_child(node, 1)->id, get_child(node, 2)->id, get_child(node, 3)->id);
+	
+	printf("bb%d:\n", get_child(node, 2)->id);
+	
+	printf(" v%d := v%d\n", node->id, get_child(node,2)->id);	
+	printf(" br bb%d\n",node->id);
+		
+	printf("bb%d\n", get_child(node, 3)->id);
+	printf(" v%d := v%d\n", node->id, get_child(node,3)->id);
+	printf(" br bb%d\n",node->id);
+	printf("bb%d\n",node->id);	//translator for the join merge
+	//printf(" v%d := if v%d then v%d else v%d\n", node->id, get_child(node, 1)->id, get_child(node, 2)->id, get_child(node, 3)->id);
+	}
+
+	//19.10 indicating the termination of computing the body of the function
+        if((is_term(node->ntoken, node->token) || is_expr(node->ntoken, node->token))  && (node->parent->ntoken ==DEFFUN || node->parent->ntoken ==PRINT))
+	{
+	 if(node->parent->ntoken == PRINT){
+	 printf(" a1 := v%d\n", node->id);
+	 printf(" call := print\n");
+	 }
+
+	else {
+	 printf(" rv := v%d\n", node->id);
+	 }
+	printf(" br exit\n");
+ 
+	}
+
+	return 0;
+
+
+
+/*      if(node->ntoken == CALL)
       {
       	//load to input register
       	printf("call %s\n", node-> token);
       	printf(" v%d := rv\n", node->id);
-
-
       }
-
       if(node->ntoken == IF	)
-
       {
-
       	printf("br v%d  bb%d  bb%d\n", get_child(node,1)->id, get_child(node,2)->id,get_child(node,3)->id);
-
       	printf("bb%d\n",get_child(node,2)->id);         //changed %s to %d
-
-
         printf(" v%d : = v%d\n", node->id,get_child(node,2)->id); 
           
        printf("br bb%d", node->id);   //to 	the join changed %s to %d      
-
         printf("bb%d\n",get_child(node,3)->id);  //changed %s to %d
       	printf(" v%d : = v%d\n", node->id,get_child(node,3)->id);
-
-
       	printf("br bb%d\n", node->id);   //to 	the join
-
         printf("bb%d\n",node->id);
-
       	//translator for join(merge)
-
       	//printf(" v%d := if v%d then v%d else %d\n", node->id,get_child(node,1)->id, get_child(node,2)->id, get_child(node,3)->id);
       } 
-
 	  if((is_term(node->ntoken,node->token) || is_expr(node->ntoken, node->token))  &&
 	  	(node->parent->ntoken == DEFFUN || node-> parent->ntoken== PRINT))
-
 	  {
 	  	if(node-> parent->ntoken== PRINT)
          { 
          	printf(" a1 := v%d\n", node->id);
-
          	printf(" call := print\n");
             
         }
-
         else {
  	   	     printf(" rv :=v%d\n", node->id);
-
  	   	 }
 	         printf("br exit\n");
        
        }
     //if(node->ntoken == VARID)
 	 //printf(" vi%d := %s\n", node->id, get_register_from_symbol_table(node->token));
-
-
-   
+  */ 
   return 0;
 }
 
@@ -270,9 +291,9 @@ int main(void)
   	int retval = yyparse();
   	push_str("GET-INT", &int_funs_r, &int_funs_t);
   	if(retval == 0) retval = visit_ast(get_fun_types);
-	if(retval == 0) retval =visit_ast(get_var_types);               //commented out
+	//if(retval == 0) retval =visit_ast(get_var_types);               //commented out
   	//if(retval== 0) retval = visit_ast(type_check);
-    if(retval== 0) retval = visit_ast(get_arities_type);
+	//    if(retval== 0) retval = visit_ast(get_arities_type);
   	if(retval == 0)  print_ast();
 
     else return 1;
@@ -280,22 +301,4 @@ int main(void)
     visit_ast(translate);
 
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
