@@ -22,7 +22,7 @@ struct node_str* bool_var_t;
 
 bool is_term(int t, char *str)
      {
-      if (t==CONST || t == PLUS || t==MINUS || t== IF || t== MUL || t==MOD || t==DIV|| t==GETINT) return true;
+     	if (t==CONST || t == PLUS || t==MINUS || t== IF || t== MUL || t==MOD || t==DIV|| t==GETINT) return true;
       if (t== CALL && 0 == find_str(str, int_funs_r)) return true;
 	//if (t== CALL && 0 == find_str(str, int_var_r)) return true;
         return false;
@@ -47,10 +47,9 @@ bool is_fun(int t, char *str)
 
 int type_check(struct ast* ast_node)
 {
-	//int ntoken = ast_node->ntoken;    //added IF in token
-	char* token = ast_node->token;   //added the token part and ntoken removed all from this  getting the warnings
-	int needs_term = (token == "PLUS" || token == "IF" || token == "MINUS" || token == "MUL"  || token == "DIV" || token == "MOD"  || token == "LT" || token == "GT"  || token == "LTEQ" || token == "GTEQ");
-	int needs_expr  = (token == "NOT" || token == "AND" || token == "OR");                      //problem added "" here
+	int ntoken = ast_node->ntoken;    //added IF in token
+	int needs_term = (ntoken == PLUS || ntoken == IF || ntoken == MINUS || ntoken == MUL  || ntoken == DIV || ntoken == MOD  || ntoken == LT || ntoken == GT  || ntoken == LTEQ || ntoken == GTEQ);
+	int needs_expr  = (ntoken == NOT || ntoken == AND || ntoken == OR);                      //problem
 	//  || ntoken == LT || ntoken == GT  || ntoken == LTEQ || ntoken == GTEQ);
 	struct ast_child* temp_child_root = ast_node-> child;
 	while(temp_child_root!= NULL)
@@ -84,7 +83,7 @@ if(ast_node->ntoken == ID)        //FUNID shoube be ID
  {
  	if(0 == find_str(ast_node->token, int_var_r)  ||
  	  (0 == find_str(ast_node->token, bool_var_r)))
- 	{   
+ 	{
  		printf("variable %s has been defined twice\n", ast_node);
  		return 1;
  	}
@@ -174,10 +173,47 @@ int get_arities_type(struct ast* ast_node)                             //checkin
   //return 1;  
 
 
-
-
-
 }
+
+
+int bb_num =0;
+void rec_descend(struct ast* node){
+	if(node->ntoken ==IF) {
+	 int bb_then_num = bb_num +1;
+	 int bb_else_num = bb_num +2;
+	 int bb_join_num = bb_num +3;
+	 bb_num +=3;
+ 	 printf("    <<<< NODE ID %d >>>> \n", get_child(node, 1)->id);
+ 	 printf(" br v<cond> bb%d, bb%d\n", bb_then_num, bb_else_num);
+	 printf("bb:%d\n", bb_then_num);
+	 rec_descend(get_child(node,2));	
+	 printf("    <<<< NODE ID %d >>>>   \n", get_child(node, 2)->id);
+	 printf(" br bb%d\n", bb_join_num);
+	 printf("bb:%d\n", bb_else_num);
+	 rec_descend(get_child(node,3));
+	 printf("    <<<< NODE ID %d >>>>  \n", get_child(node, 3)->id);
+	 printf(" br bb%d\n", bb_join_num);
+	 printf("bb%d\n", bb_join_num);
+	}
+	else {
+		struct ast_child* tmp = node->child;
+		while(tmp!=NULL){
+		rec_descend(tmp->id);
+		tmp = tmp->next;
+		}
+	}
+}
+
+
+int br_struct(struct ast* node){
+ if(node->ntoken ==FUNID){
+ printf("= = function %s\n", node->token);
+ rec_descend(node->parent);
+ }  
+ return 0;
+}
+
+
 
 int translate(struct ast *node)
 { //mytranslator from ast to cfg
@@ -190,42 +226,47 @@ int translate(struct ast *node)
        
         }
 	if(node->ntoken ==LT || node->ntoken ==EQ || node->ntoken == PLUS  || node->ntoken == MINUS || node->ntoken ==AND || node->ntoken ==GT || node->ntoken ==LTEQ || node->ntoken == GTEQ  || node->ntoken == OR || node->ntoken ==MUL || node->ntoken ==DIV || node->ntoken ==MOD )
-	{
-		printf(" v%d := v%d %s v%d\n",node->id, get_child(node,1)-> id, node->token, get_child(node,2)->id );
+	{       if (node->parent->ntoken == IF &&
+		 (get_child(node->parent,2) ==node ||
+		 get_child(node->parent,3) ==node))
+		 printf(" v%d := v%d %s v%d\n",node->parent->id, get_child(node,1)-> id, node->token, get_child(node,2)->id );
+		else
+		 printf(" v%d := v%d %s v%d\n",node->id, get_child(node,1)-> id, node->token, get_child(node,2)->id );
 	}
 
 	if(node->ntoken ==NOT)//|| node->ntoken ==EQ || node->ntoken == PLUS  || node->ntoken == MINUS || node->ntoken ==AND )
 	
 		printf(" v%d := not  v%d\n",node->id,  get_child(node,1)->id );
 	  
-	if (node->ntoken == CONST)
-	  	printf(" v%d := %s \n",node->id, node->token);   //%s to %d
-	
+	if (node->ntoken == CONST) //58.20 
+	{
+         if (node->parent->ntoken == IF &&
+		(get_child(node->parent,2) ==node ||
+		get_child(node->parent,3) ==node))
 
+	  printf(" v%d := %s \n",node->parent->id, node->token);   //%s to %d
+	 else
+	  printf(" v%d := %s \n",node->id, node->token);
+	}
 	//need to support function call
 	if(node->ntoken ==CALL){
 	// for supporting the function call with arguments
 	//load to input register
-	printf(" call %s\n", node->token);
-	printf(" v%d:= rv\n", node->id); //load from return register
+		printf(" call %s\n", node->token);
+	         if (node->parent->ntoken == IF &&
+			(get_child(node->parent,2) ==node ||
+			get_child(node->parent,3) ==node))
+			printf(" v%d:= rv\n", node->id);
+	 	else
+			printf(" v%d:= rv\n", node->parent->id);  //load from return register
 	}
 
-	if(node->ntoken ==IF){
-	printf(" br v%d bb%d bb%d\n",get_child(node, 1)->id, get_child(node, 2)->id, get_child(node, 3)->id);
-	
-	printf("bb%d:\n", get_child(node, 2)->id);
-	
-	printf(" v%d := v%d\n", node->id, get_child(node,2)->id);	
-	printf(" br bb%d\n",node->id);
-		
-	printf("bb%d\n", get_child(node, 3)->id);
-	printf(" v%d := v%d\n", node->id, get_child(node,3)->id);
-	printf(" br bb%d\n",node->id);
-	printf("bb%d\n",node->id);	//translator for the join merge
-	//printf(" v%d := if v%d then v%d else v%d\n", node->id, get_child(node, 1)->id, get_child(node, 2)->id, get_child(node, 3)->id);
-	}
 
 	//19.10 indicating the termination of computing the body of the function
+
+ 	 //printf("    <<<< NODE ID %d >>>> \n", node->id);
+
+
         if((is_term(node->ntoken, node->token) || is_expr(node->ntoken, node->token))  && (node->parent->ntoken ==DEFFUN || node->parent->ntoken ==PRINT))
 	{
 	 if(node->parent->ntoken == PRINT){
@@ -291,15 +332,15 @@ int main(void)
   {
   	int retval = yyparse();
   	push_str("GET-INT", &int_funs_r, &int_funs_t);
-  	if(retval == 0) retval = visit_ast(get_fun_types);              //not harming the output till now
-	if(retval == 0) retval =visit_ast(get_var_types);               //passing now
-  	if(retval== 0) retval = visit_ast(type_check);
-	// if(retval== 0) retval = visit_ast(get_arities_type);
+  	if(retval == 0) retval = visit_ast(get_fun_types);
+	//if(retval == 0) retval =visit_ast(get_var_types);               //commented out
+  	//if(retval== 0) retval = visit_ast(type_check);
+	//    if(retval== 0) retval = visit_ast(get_arities_type);
   	if(retval == 0)  print_ast();
 
     else return 1;
-
-    visit_ast(translate);
+	visit_ast(br_struct);
+	visit_ast(translate);
 
   }
 
