@@ -47,9 +47,11 @@ bool is_fun(int t, char *str)
 
 int type_check(struct ast* ast_node)
 {
-	int ntoken = ast_node->ntoken;    //added IF in token
-	int needs_term = (ntoken == PLUS || ntoken == IF || ntoken == MINUS || ntoken == MUL  || ntoken == DIV || ntoken == MOD  || ntoken == LT || ntoken == GT  || ntoken == LTEQ || ntoken == GTEQ);
-	int needs_expr  = (ntoken == NOT || ntoken == AND || ntoken == OR);                      //problem
+	//int ntoken = ast_node->ntoken;    //added IF in token
+    char* token = ast_node->token; 
+
+	int needs_term = (token == "PLUS" || token == "IF" || token == "MINUS" || token == "MUL"  || token == "DIV" || token == "MOD"  || token == "LT" || token == "GT"  || token == "LTEQ" || token == "GTEQ");
+	int needs_expr  = (token == "NOT" || token == "AND" || token == "OR");                      //problem
 	//  || ntoken == LT || ntoken == GT  || ntoken == LTEQ || ntoken == GTEQ);
 	struct ast_child* temp_child_root = ast_node-> child;
 	while(temp_child_root!= NULL)
@@ -267,7 +269,7 @@ int translate(struct ast *node)
  	 //printf("    <<<< NODE ID %d >>>> \n", node->id);
 
 
-        if((is_term(node->ntoken, node->token) || is_expr(node->ntoken, node->token))  && (node->parent->ntoken ==DEFFUN || node->parent->ntoken ==PRINT))
+       if((is_term(node->ntoken, node->token) || is_expr(node->ntoken, node->token))  && (node->parent->ntoken ==DEFFUN || node->parent->ntoken ==PRINT))
 	{
 	 if(node->parent->ntoken == PRINT){
 	 printf(" a1 := v%d\n", node->id);
@@ -333,9 +335,9 @@ int main(void)
   	int retval = yyparse();
   	push_str("GET-INT", &int_funs_r, &int_funs_t);
   	if(retval == 0) retval = visit_ast(get_fun_types);
-	//if(retval == 0) retval =visit_ast(get_var_types);               //commented out
-  	//if(retval== 0) retval = visit_ast(type_check);
-	//    if(retval== 0) retval = visit_ast(get_arities_type);
+	if(retval == 0) retval =visit_ast(get_var_types);               //commented out
+  	if(retval== 0) retval = visit_ast(type_check);
+	// if(retval== 0) retval = visit_ast(get_arities_type);
   	if(retval == 0)  print_ast();
 
     else return 1;
