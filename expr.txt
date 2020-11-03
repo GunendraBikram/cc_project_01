@@ -1,0 +1,7 @@
+push_dstr(ast_node->token,            ,&int_funs_r,&int_funs_t);
+push_dstr(ast_node->token,            ,&int_bools_r,&int_bools_t);
+ 
+
+node->parent->id //%s
+
+ get_child(node, 3)->id      //%s

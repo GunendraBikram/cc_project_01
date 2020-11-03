@@ -26,7 +26,7 @@ char* pop_str (struct node_str** r);
 int find_str(char* c, struct node_str* r);
 int print_str(struct node_str* r);
 
-void push_dstr (char* c1, char* c2, struct node_dstr** r, struct node_dstr** t);
+void push_dstr (char* c1, char* c2, struct node_dstr** r, struct node_dstr** t);   //for dstr
 int find_dstr(char* c1, char* c2, struct node_dstr* r);
 
 void push_int (int i, struct node_int** r, struct node_int** t);
@@ -49,6 +49,65 @@ void print_ast(); //    run "dot -Tpdf ast.dot -o ast.pdf" to create a PDF. Requ
 void free_ast();
 
 // static data structres used in the lab:
+
+//data strructurses for the CFG
+
+
+//data structure for assignment 
+
+
+struct sequence{
+   
+  char lhs ;          //for LHS value
+
+  char rhs;            //for RHS value, can be const, register, and operation
+  
+
+  struct sequence* next; 
+} ;
+
+
+
+// for basic blocks
+struct cfg_blocks {
+
+ char fun_calls;                     //for storing function and calls 
+ int br_num ;                           // for branching instructions
+ char br;                              //for the branch
+
+ struct cfg_blocks* next;           //the next pointer  
+
+
+} ;
+
+
+// for pushing the value
+void push_sequence(char* reg, struct sequence** r, struct sequence**t );
+
+//for traversing the value in the cfg
+void traverse_CGF(char* reg) ;                   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 static int current_node_id = 0;
 static struct ast_child* ast_child_root = NULL;

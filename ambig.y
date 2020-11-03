@@ -16,11 +16,11 @@
 program :
   LPAR PRINT expr RPAR {
     insert_child ($3);
-    insert_node("PRINT", PRINT);}
+    insert_node("PRINT", PRINT);}   //change to FUNID
   
   |LPAR EVAL expr RPAR {
     insert_child ($3);
-    insert_node("EVAL", EVAL);}
+    insert_node("EVAL", EVAL);}         //change to FUNID
 
 
 

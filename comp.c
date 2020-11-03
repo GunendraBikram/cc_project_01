@@ -132,7 +132,7 @@ if(ast_node->ntoken == FUNID)                                                  /
 
  	if(is_term(body->ntoken, ast_node->token))
  	{
- 		push_str(ast_node->token, &int_funs_r, &int_funs_t);
+ 		push_str(ast_node->token, &int_funs_r, &int_funs_t);                   
  	}
 
  	else if (is_expr(body->ntoken, ast_node->token))
@@ -145,37 +145,6 @@ if(ast_node->ntoken == FUNID)                                                  /
   
 } 
 
-/*-----------------For checking the arities-------------------------------------*/
-
-int get_arities_type(struct ast* ast_node)                             //checking for arities
-{                                                    //check the type of variable and then store it in symbol tabel
-  int ntoken = ast_node->ntoken;
-  if(ntoken == FUNID)
-    //ntoken->next;
-   //int ntoken = ast_node->ntoken;
-   //struct ast_child* temp_child_root = ast_node-> child;              //
-   while(ntoken!=RPAR)                                   //while with ntoken!=NULL
-   { 
-
-    printf("Check_1\n");
-    if(ntoken == RPAR);      //push arities in symbol tabel
-    break;                   //v is CHAR  or 0 is CONST 
-                             //check the type of variable and also where it's is occuring   
-    
-   }
-   
-  //printf("%c", ntoken);
-  //printf("check_2\n");
-   
-  
-  return 0;
-  
-  
-  
-  //return 1;  
-
-
-}
 
 
 int bb_num =0;
@@ -269,9 +238,9 @@ int translate(struct ast *node)
  	 //printf("    <<<< NODE ID %d >>>> \n", node->id);
 
 
-       if((is_term(node->ntoken, node->token) || is_expr(node->ntoken, node->token))  && (node->parent->ntoken ==DEFFUN || node->parent->ntoken ==PRINT))
+       if((is_term(node->ntoken, node->token) || is_expr(node->ntoken, node->token))  && (node->parent->ntoken ==DEFFUN || node->parent->ntoken ==FUNID))  //change to FUNID
 	{
-	 if(node->parent->ntoken == PRINT){
+	 if(node->parent->ntoken == PRINT){       //change to FUNID
 	 printf(" a1 := v%d\n", node->id);
 	 printf(" call := print\n");
 	 }
@@ -341,7 +310,7 @@ int main(void)
   	if(retval == 0)  print_ast();
 
     else return 1;
-	visit_ast(br_struct);
+	//visit_ast(br_struct);
 	visit_ast(translate);
 
   }
