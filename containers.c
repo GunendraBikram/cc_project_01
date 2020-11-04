@@ -6,6 +6,7 @@
  **/
 
 #include "containers.h"
+#include<string.h>
 
 void push_int (int i, struct node_int** r, struct node_int** t){
   if (*r == NULL)   // If root is null - empty list
@@ -302,3 +303,82 @@ void free_ast() {
     free(current_root);
   }
 }
+
+//-----------------------------------------------------functions for CFG-----------------------------------------------------------
+
+
+/*void push_sequence(char* reg, struct sequence** r, struct sequence** t )  //function defination
+
+{
+   if (*r == NULL)   // If root is null - empty list
+  {
+    *r = (struct sequence*)malloc(sizeof(struct sequence)); //Create a new node a assign the root pointer tp tail
+    (*r)->next = NULL;
+    *t = *r;
+  }
+  else
+  {
+    struct sequence* ptr; //Non-empty list
+    ptr = (struct sequence*)malloc(sizeof(struct sequence)); // Create a new node, put it after tail as a new node
+    ptr->next = NULL;
+    (*t)->next = ptr;
+    (*t) = ptr;
+  }
+  
+
+}  */
+
+
+void traverse_CGF(struct sequence* ptr)
+{
+  
+while(ptr!=NULL)
+
+
+  //printf("the value is %c" ,ptr->lhs);
+  //printf("the value is %c", ptr->rhs );
+  ptr = ptr->next;
+
+}      
+
+
+
+void insert(struct sequence *head, char x[10], char y[10])
+{
+  
+  struct sequence *ptr = (struct sequence*)malloc(sizeof(struct sequence));
+  struct sequence  *p= head;
+  //ptr-> lhs = *x;
+  strncpy(ptr->lhs,x,10);
+  //ptr-> rhs= *y;
+  strncpy(ptr->rhs,y,10);
+  while(p->next!= NULL)
+  {
+    p = p->next;
+
+  }
+  p->next = ptr;
+  ptr->next = NULL;
+  //return head;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

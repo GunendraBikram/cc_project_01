@@ -58,9 +58,9 @@ void free_ast();
 
 struct sequence{
    
-  char lhs ;          //for LHS value
+  char lhs[10];          //for LHS value
 
-  char rhs;            //for RHS value, can be const, register, and operation
+  char rhs[10];            //for RHS value, can be const, register, and operation
   
 
   struct sequence* next; 
@@ -81,29 +81,16 @@ struct cfg_blocks {
 } ;
 
 
-// for pushing the value
-void push_sequence(char* reg, struct sequence** r, struct sequence**t );
+
 
 //for traversing the value in the cfg
-void traverse_CGF(char* reg) ;                   
+void traverse_CGF(struct sequence* ptr) ;                   
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// for pushing the value
+void insert(struct sequence *head, char x[10], char y[10]) ;
 
 
 
