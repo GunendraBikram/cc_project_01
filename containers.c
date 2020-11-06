@@ -328,17 +328,17 @@ void free_ast() {
 
 }  */
 
-
+/*
 void traverse_CGF(struct sequence* ptr)
 {
   
 while(ptr!=NULL)
 
-
+  {
   //printf("the value is %c" ,ptr->lhs);
   //printf("the value is %c", ptr->rhs );
   ptr = ptr->next;
-
+  }
 }      
 
 
@@ -346,12 +346,14 @@ void traverse_blocks(struct cfg_blocks* ptr)
 {
   
   while(ptr!=NULL)
-
+ {
   ptr= ptr->next;
-
+  }
 }
 
+ */
 
+/*
 void insert_seq(struct sequence *head, char x[10], char y[10])
 {
   
@@ -372,6 +374,7 @@ void insert_seq(struct sequence *head, char x[10], char y[10])
 }
 
 
+*/
 
 void insert_cfg(struct cfg_blocks *head, int a, int b)
 {

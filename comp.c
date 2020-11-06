@@ -1,5 +1,6 @@
 #include"y.tab.h"
 #include"containers.h"
+#include<string.h>
 int yyparse();
 
 struct node_str* int_funs_r;
@@ -16,6 +17,55 @@ struct node_str* bool_var_r;
 struct node_str* bool_var_t;
 //struct node_istr* var_r;
 //struct node_istr* var_t;
+
+struct sequence{
+   
+  char lhs[10];          //for LHS value
+
+  char rhs[10];            //for RHS value, can be const, register, and operation
+  
+
+  struct sequence* next; 
+} ;
+
+
+
+void insert_seq(struct sequence *head, char x[10], char y[10])
+{
+  
+  struct sequence *ptr = (struct sequence*)malloc(sizeof(struct sequence));
+  struct sequence  *p= head;
+  //ptr-> lhs = *x;
+  strncpy(ptr->lhs,x,10);
+  //ptr-> rhs= *y;
+  strncpy(ptr->rhs,y,10);
+  while(p->next!= NULL)
+  {
+    p = p->next;
+
+  }
+  p->next = ptr;
+  ptr->next = NULL;
+  //return head;
+}
+
+void traverse_CGF(struct sequence* ptr)
+{
+  
+while(ptr!=NULL)
+
+  {
+  printf("the value is %s" ,ptr->lhs);
+  printf("the value is %s", ptr->rhs );
+  ptr = ptr->next;
+  }
+}      
+ 
+
+
+
+//head= (struct sequence*)malloc(sizeof(struct sequence));   //memory alloctaed
+
 
 
 bool is_term(int t, char *str)
@@ -178,6 +228,8 @@ int br_struct(struct ast *node){
  return 0;
 }
 
+//struct sequence *head;                                        //head node initialized
+//head= (struct sequence*)malloc(sizeof(struct sequence));
 
 
 int translate(struct ast *node)
@@ -185,8 +237,17 @@ int translate(struct ast *node)
 //	printf("visited: %s\n", 	node->token);
 	if(node->ntoken == FUNID ) 
 		{
+          
+          struct sequence *head;                                            //initiliazation of head
+	      head= (struct sequence*)malloc(sizeof(struct sequence));           //memory allocation
 
 	      printf("\n= = function %s\n",node->token );
+
+	      
+	      insert_seq(head, "data", "make");     //insertion in the sequnece
+
+	      //traverse_CGF(head);                      //segmentaion core fault dumped error
+
 	      printf("entry:\n");
 
         }
@@ -323,6 +384,8 @@ int main(void)
   	if(retval == 0)	 print_ast();
 	else return 1;
 	//visit_ast(br_struct);
+
+
 	visit_ast(translate);
 
   }

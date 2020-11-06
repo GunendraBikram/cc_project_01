@@ -55,7 +55,7 @@ void free_ast();
 
 //data structure for assignment 
 
-
+/*
 struct sequence{
    
   char lhs[10];          //for LHS value
@@ -66,9 +66,12 @@ struct sequence{
   struct sequence* next; 
 } ;
 
-
+*/
 
 // for basic blocks
+
+
+
 struct cfg_blocks {
 
  int fun_calls;                     //for storing function and calls 
@@ -84,13 +87,13 @@ struct cfg_blocks {
 
 
 //for traversing the value in the cfg
-void traverse_CGF(struct sequence* ptr) ;                   
+//void traverse_CGF(struct sequence* ptr) ;                   
 
 
 void traverse_blocks(struct cfg_blocks* ptr);
 
 // for pushing the value
-void insert_seq(struct sequence *head, char x[10], char y[10]) ;
+///void insert_seq(struct sequence *head, char x[10], char y[10]) ;
 
 void insert_cfg(struct cfg_blocks *head, int a, int b) ;
 
