@@ -71,9 +71,9 @@ struct sequence{
 // for basic blocks
 struct cfg_blocks {
 
- char fun_calls;                     //for storing function and calls 
+ int fun_calls;                     //for storing function and calls 
  int br_num ;                           // for branching instructions
- char br;                              //for the branch
+                                    //for the branch
 
  struct cfg_blocks* next;           //the next pointer  
 
@@ -87,12 +87,12 @@ struct cfg_blocks {
 void traverse_CGF(struct sequence* ptr) ;                   
 
 
-
+void traverse_blocks(struct cfg_blocks* ptr);
 
 // for pushing the value
-void insert(struct sequence *head, char x[10], char y[10]) ;
+void insert_seq(struct sequence *head, char x[10], char y[10]) ;
 
-
+void insert_cfg(struct cfg_blocks *head, int a, int b) ;
 
 
 

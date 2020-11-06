@@ -342,8 +342,17 @@ while(ptr!=NULL)
 }      
 
 
+void traverse_blocks(struct cfg_blocks* ptr)
+{
+  
+  while(ptr!=NULL)
 
-void insert(struct sequence *head, char x[10], char y[10])
+  ptr= ptr->next;
+
+}
+
+
+void insert_seq(struct sequence *head, char x[10], char y[10])
 {
   
   struct sequence *ptr = (struct sequence*)malloc(sizeof(struct sequence));
@@ -352,6 +361,25 @@ void insert(struct sequence *head, char x[10], char y[10])
   strncpy(ptr->lhs,x,10);
   //ptr-> rhs= *y;
   strncpy(ptr->rhs,y,10);
+  while(p->next!= NULL)
+  {
+    p = p->next;
+
+  }
+  p->next = ptr;
+  ptr->next = NULL;
+  //return head;
+}
+
+
+
+void insert_cfg(struct cfg_blocks *head, int a, int b)
+{
+  
+  struct cfg_blocks *ptr = (struct cfg_blocks*)malloc(sizeof(struct cfg_blocks));
+  struct cfg_blocks *p= head;
+  ptr-> fun_calls = a;
+  ptr-> br_num= b;
   while(p->next!= NULL)
   {
     p = p->next;

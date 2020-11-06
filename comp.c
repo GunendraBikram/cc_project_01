@@ -6,8 +6,8 @@ struct node_str* int_funs_r;
 struct node_str* int_funs_t;
 struct node_str* bool_funs_r;
 struct node_str* bool_funs_t;
-struct node_str* arities_r;
-struct node_str* arities_t;
+//struct node_str* arities_r;
+//struct node_str* arities_t;
 
 
 struct node_str* int_var_r;
@@ -36,10 +36,17 @@ bool is_expr(int t, char *str)
 
 int type_check(struct ast* ast_node)
 {
-	int ntoken = ast_node->ntoken;    //added IF in token
-	int needs_term = (ntoken == PLUS || ntoken == MINUS || ntoken == MUL  || ntoken == DIV || ntoken == MOD  || ntoken == LT || ntoken == GT  || ntoken == LTEQ || ntoken == GTEQ || ntoken == OR);
-	int needs_expr  = (ntoken == NOT || ntoken == AND);                      //problem
+	//int ntoken = ast_node->ntoken;    //added IF in token
+	//int needs_term = (ntoken == PLUS || ntoken == MINUS || ntoken == MUL  || ntoken == DIV || ntoken == MOD  || ntoken == LT || ntoken == GT  || ntoken == LTEQ || ntoken == GTEQ || ntoken == OR);
+	//int needs_expr  = (ntoken == NOT || ntoken == AND);                      //problem
 	//  || ntoken == LT || ntoken == GT  || ntoken == LTEQ || ntoken == GTEQ);
+    char* token = ast_node->token; 
+
+	int needs_term = (token == "PLUS" || token == "IF" || token == "MINUS" || token == "MUL"  || token == "DIV" || token == "MOD"  || token == "LT" || token == "GT"  || token == "LTEQ" || token == "GTEQ");
+	int needs_expr  = (token == "NOT" || token == "AND" || token == "OR");                      //problem
+	//  || ntoken == LT || ntoken == GT  || ntoken == LTEQ || ntoken == GTEQ);
+    
+
 	struct ast_child* temp_child_root = ast_node-> child;
 	while(temp_child_root!= NULL)
 	{
@@ -307,12 +314,12 @@ int translate(struct ast *node)
 int main(void)
   {
   	int retval = yyparse();
-  	//push_str("GET-INT", &int_funs_r, &int_funs_t);
+  	push_str("GET-INT", &int_funs_r, &int_funs_t);
   	if(retval == 0) retval = visit_ast(get_fun_types);
 	push_str("GET-INT", &int_funs_r, &int_funs_t);
-	//if(retval == 0) retval =visit_ast(get_var_types);               //commented out
-  //	if(retval== 0) retval = visit_ast(type_check);
-	//    if(retval== 0) retval = visit_ast(get_arities_type);
+	 if(retval == 0) retval =visit_ast(get_var_types);               //commented out
+     if(retval== 0) retval = visit_ast(type_check);
+
   	if(retval == 0)	 print_ast();
 	else return 1;
 	//visit_ast(br_struct);
