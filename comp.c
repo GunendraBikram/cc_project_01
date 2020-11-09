@@ -71,6 +71,31 @@ void insert_seq(struct sequence *head, char x[10], char y[10])
   //return head;
 }
 
+
+
+   void push_new(struct sequence* head, char x[10], char y[10]) {
+    struct sequence * current = head;
+    while (current->next != NULL) {
+        current = current->next;
+    }
+
+    /* now we can add a new variable */
+    current->next = (struct sequence *) malloc(sizeof(struct sequence));
+    //current->next->val = val;
+     strncpy(current->lhs,x,10);
+
+
+     strncpy(current->rhs,y,10);
+   
+    current->next = NULL;
+      //current->next = NULL;
+   }
+
+
+
+
+
+
  void insert_new(struct sequence *head, char x[10], char y[10])
     {
             /* Iterate through the list till we encounter the last node.*/
@@ -286,12 +311,11 @@ int translate(struct ast *node)
           
           //second = (struct sequence*)malloc(sizeof(struct sequence)); 
 	      
-	      //head->lhs == node->token;
-	      //head->rhs == "NULL";
-	      //head->next = second;
-
+	     
 	      printf("\n= = function %s\n",node->token );
 
+          //push_new(head, "first", "first");
+          
 	      //insert_seq(head,"new", "new_node");
 	      //insert_seq(head, node->token, "NULL");     //insertion in the sequnece
           //insert_new(head, "first", "first");
