@@ -183,10 +183,10 @@ int type_check(struct ast* ast_node)
 
 int get_var_types(struct ast* ast_node) {
 if (ast_node->ntoken == CALL) {
-  char* call_id = ast_node->token;
-  if(0 == find_str(call_id, int_var_r) && 0== find_str(call_id,bool_var_r))
+  char* var_id = ast_node->token;
+  if(0 == find_str(var_id, int_var_r) && 0== find_str(var_id,bool_var_r))
   {
-  	printf("variable  %s has not been defined\n", call_id);
+  	printf("variable  %s has not been defined\n", var_id);
   	return 1;
   }
  }

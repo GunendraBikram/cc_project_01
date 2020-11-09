@@ -1,0 +1,12 @@
+
+= = function name
+entry:
+ v3 := 4 
+ rv := v3
+ br exit
+
+
+ call GET-INT
+ v4:= rv
+ call name
+ v5:= rv

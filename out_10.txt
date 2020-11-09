@@ -1,0 +1,39 @@
+
+= = function t
+entry:
+ call a
+ v4:= rv
+ br v4 bb10 bb11
+bb10:
+ call GET-INT
+ v5:= rv
+ v6 := 8 
+ v7 := v5 EQ v6
+ br v7 bb8 bb9
+bb8:
+ v10 := 50 
+ br bb10:
+bb9:
+ v10 := 44 
+ br bb12:
+bb11:
+ br bb10
+bb10:
+ call b
+ v12:= rv
+ br bb12
+bb12:
+ rv := v12
+ br exit
+
+
+ v13 := 1 
+ v15 := 1 
+ call t
+ v16:= rv
+ v17 := v13 LT v16
+ a1 := v17
+ call := print
+ br exit
+
+

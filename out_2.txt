@@ -1,0 +1,52 @@
+
+= = function f1
+entry:
+ call v1
+ v4:= rv
+ call v2
+ v5:= rv
+ v6 := v4 AND v5
+ br v6 bb7 bb8
+bb7:
+ v9 := 1 
+ br bb9:
+bb8:
+ v9 := 0 
+ br bb9
+bb9:
+ rv := v9
+ br exit
+
+
+
+= = function f2
+entry:
+ call v1
+ v13:= rv
+ call v2
+ v14:= rv
+ v15 := v13 PLUS v14
+ rv := v15
+ br exit
+
+
+ v16 := 1 
+ v17 := 2 
+ call f2
+ v18:= rv
+ v19 := 2 
+ v20 := 1 
+ call f2
+ v21:= rv
+ v22 := v18 LTEQ v21
+ v23 := 1 
+ v24 := 2 
+ call f2
+ v25:= rv
+ v26 := 2 
+ v27 := 1 
+ call f2
+ v28:= rv
+ v29 := v25 GTEQ v28
+ call f1
+ v30:= rv

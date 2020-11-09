@@ -1,0 +1,21 @@
+
+= = function name
+entry:
+ call v
+ v3:= rv
+ v4 := 0 
+ v5 := v3 GT v4
+ br v5 bb6 bb7
+bb6:
+ v8 := 10 
+ br bb8:
+bb7:
+ v8 := 20 
+ br bb8
+bb8:
+ rv := v8
+ br exit
+
+
+ call name
+ v9:= rv
