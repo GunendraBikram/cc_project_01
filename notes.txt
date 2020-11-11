@@ -1,0 +1,51 @@
+tokens:-
+
+define-fun - DEFFUN 
+eval - EVAL
+print - PRINT
+int - INT
+bool - BOOL
+var 
+const - CONST
+plus - PLUS
+minus - MINUS
+mul - MUL
+div  - DIV
+mod  - MOD
+if - IF
+get-int - GETINT 
+true - TRUE
+false - FALSE
+eq - EQ
+gt - GT
+gteq - GE
+lt - LT
+lteq - LE
+not - NOT
+and - AND
+or - OR
+lpar - LPAR 
+rpar - RAPR
+
+ERR, CALL, LETID, VARID, DECLID , REGID, INP, COST, BOOLID, INTID  
+
+
+
+grammar:- 
+
+program-> (define-fun (f un) term) program |
+          (define-fun (f un var) term) program |
+          (define-fun (f un var var) term) program |
+          (eval expr) | (eval term) | (print expr) | (print term)
+
+type -> int | bool
+
+term -> var | const | (+ term term) | (term term) |
+      (x term term) | (div term term) | (mod term term) |
+      (if expr term term) |
+      (get-int) | (fun) | (fun term) | (fun term term) |
+      (fun expr) | (fun expr term) | (fun term expr) | (fun expr expr)
+
+expr -> true | false | var | (= term term) | (< term term) | (<= term term) |
+       (> term term) | (>= term term) |
+       (not expr) | (and expr expr) | (or expr expr)
