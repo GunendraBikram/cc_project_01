@@ -1,7 +1,0 @@
- call GET-INT
- v1:= rv
- a1 := v1
- call := print
- br exit
-
-
