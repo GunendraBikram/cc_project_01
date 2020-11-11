@@ -5,7 +5,7 @@ eval - EVAL
 print - PRINT
 int - INT
 bool - BOOL
-var 
+var  - ID
 const - CONST
 plus - PLUS
 minus - MINUS
@@ -26,8 +26,9 @@ and - AND
 or - OR
 lpar - LPAR 
 rpar - RAPR
+ID - ID , LETID, DECLID, REGID, INTID, VARID , FUNID
 
-ERR, CALL, LETID, VARID, DECLID , REGID, INP, COST, BOOLID, INTID  
+ERR, CALL, INP, COST, BOOLID, GETBOOL
 
 
 

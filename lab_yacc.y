@@ -99,12 +99,12 @@ expr : CONST { $$ = insert_node ($1, CONST);}
 | LPAR LET LPAR letid expr RPAR expr RPAR {
   insert_children (3, $4, $5, $7);
   $$ = insert_node("LET", LET);}
-| LPAR ID exprs RPAR {
+| LPAR ID exprs RPAR { 
   for (int i = 0; i < $3; i++) insert_child(pop_int(&tmp_r, &tmp_t));
   $$ = insert_node($2, CALL);}
-| LPAR GETINT RPAR {
+| LPAR GETINT RPAR { 
   $$ = insert_node("GET-INT", CALL);}
-| LPAR GETBOOL RPAR {
+| LPAR GETBOOL RPAR { 
   $$ = insert_node("GET-BOOL", CALL);}
 ;
 
