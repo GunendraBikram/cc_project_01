@@ -12,4 +12,4 @@ lex.yy.c: lab_lex.l y.tab.h
 	$(LEX) lab_lex.l
 
 clean: 
-	rm a.out lex.yy.c y.tab.c y.tab.h
+	rm comp lex.yy.c y.tab.c y.tab.h
