@@ -42,13 +42,12 @@ void push_br (struct br_instr* i, struct br_instr** r, struct br_instr** t);
 void clean_bbs (struct br_instr** r);
 
 struct asgn_instr {int bb; int lhs; int bin; int op1; int op2; int type; char* fun; struct asgn_instr* next; };
+struct asgn_instr* mk_asgn(int bb, int lhs, int bin, int op1, int op2, int type);
 struct asgn_instr* mk_basgn(int bb, int lhs, int op1, int op2, int type);
 struct asgn_instr* mk_uasgn(int bb, int lhs, int op, int type);
 struct asgn_instr* mk_casgn(int bb, int lhs, char* fun);
 void push_asgn (struct asgn_instr* i, struct asgn_instr** r, struct asgn_instr** t);
 void clean_asgns (struct asgn_instr** r);
-
-//struct bb {int id}
 
 struct ast;
 struct ast_child {struct ast* id; struct ast_child* next; }; //Dynamic data structure for the list of children

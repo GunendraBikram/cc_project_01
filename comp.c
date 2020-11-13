@@ -54,62 +54,35 @@ int get_var_type(struct ast* node, struct ast* end){
 int get_fun_var_types(struct ast* node){
   if (node->ntoken == FUNID){
     char* fun_id = node->token;
-    //printf("check_0");           //check
-    
     if (find_fun_str(fun_id, fun_r) != NULL){
-
       printf("Function %s defined twice\n", fun_id);
       return 1;
     }
-     
-       
-    //printf("check_1");         //check
+
     if (strcmp(node->token, "EVAL") == 0 || strcmp(node->token, "PRINT") == 0) return 0;
 
     int arg_num = get_child_num(node->parent);
     struct ast* body = get_child(node->parent, arg_num);
-    //printf("check_2");      //check
-    
-    struct node_var_str* args = NULL;
-    //printf("check_3\n");    //check
-    //-------------------------------------------------------error part ----------------------------------------------------------//
-    
 
+    struct node_var_str* args = NULL;
     for (int i = 2; i < arg_num; i++) {
       struct ast* var = get_child(node->parent, i);
-      //printf("check_4\n"); //check
-      
       if (find_fun_str(var->token, fun_r) != NULL || strcmp(var->token, fun_id) == 0){
-        printf("check_5\n");   //check  
         printf("Variable and function %s have the same name\n", var->token);
         return -1;
       }
       if (find_var_str(var->id, var->token, vars_r) != NULL){
-      	printf("check_6\n"); //check
         printf("Variable %s declared twice in function %s\n", var->token, fun_id);
         return -1;
       }
       int type = get_var_type(var, body);
-      //printf("check_9\n"); //check
-      
-      //-------------------------final block --------------------------------------------------// the block is executing
-
       if (type == -1){
-      	//printf("check_7\n");  //check
         printf("Unable to detect type of argument %s\n", var->token);
         return -1;
-
-      // -----------------------------------------final block------------------------------------------//  
       }
       push_var_str(var->id, body->id, type, var->token, &vars_r, &vars_t);
       if (args == NULL) args = vars_t;
     }
-     
-
-
-    //----------------------------------------------------------error part-------------------------------------------------------------//
-     printf("check_5");    //check
-
     if (is_term(body)) {
       push_fun_str(fun_id, INT, arg_num - 2, args, &fun_r, &fun_t);
     }
@@ -399,15 +372,7 @@ int fill_instrs (struct ast* node) {
       struct asgn_instr* tmp = assgn_tmp_root;
       while (tmp != NULL){
         if (tmp->bb == br_instrs->id && asgn_tail->bb != br_instrs->id){
-
-          struct asgn_instr* copy = (struct asgn_instr*)malloc(sizeof(struct asgn_instr));
-          copy->bb = tmp->bb;
-          copy->lhs = tmp->lhs;
-          copy->bin = tmp->bin;
-          copy->op1 = tmp->op1;
-          copy->op2 = tmp->op2;
-          copy->type = tmp->type;
-
+          struct asgn_instr* copy = mk_asgn(tmp->bb, tmp->lhs, tmp->bin, tmp->op1, tmp->op2, tmp->type);
           push_asgn(copy, &asgn_root, &asgn_tail);
         }
         tmp = tmp->next;
@@ -423,7 +388,6 @@ int fill_instrs (struct ast* node) {
 }
 
 void print_interm() {
-
   printf ("\nfunction %s\n\n", find_istr(ifun_r, bb_root->id));
   printf ("entry:\n");
 
@@ -440,6 +404,7 @@ void print_interm() {
       }
       else printf("br v%d bb%d bb%d\n\n", br->cond, br->succ1, br->succ2);
       br = br->next;
+      if (br == NULL) return;
       char* fun_name = find_istr(ifun_r, br->id);
       if (fun_name != NULL){
         printf ("\nfunction %s\n\n", fun_name);
@@ -500,27 +465,31 @@ void print_interm() {
 
 int main (int argc, char **argv) {
   int retval = yyparse();
-  
-  push_fun_str("GET-INT", INT, 0, NULL, &fun_r, &fun_t);      //check_0
-  push_fun_str("GET-BOOL", BOOL, 0, NULL, &fun_r, &fun_t);   //check_1
-  if (retval == 0) retval = visit_ast(get_fun_var_types);    //check_2  (main fault)  output, but getting "unable to detlect argument of type h"
-  if (retval == 0) retval = visit_ast(type_check);            //check_3                 //output, but getting "unable to detlect argument of type h"
-  if (retval == 0) print_ast();      // run "dot -Tpdf ast.dot -o ast.pdf" to create a PDF     //output, but getting "unable to detlect argument of type h"
-  //else return 1;       //no ouptput getting "unable to detlect argument of type h"
 
-  visit_ast(compute_br_structure);        //check_4   //segmentation core fault dumped
-  visit_ast(fill_instrs);                //check_5    //working
+  push_fun_str("GET-INT", INT, 0, NULL, &fun_r, &fun_t);
+  push_fun_str("GET-BOOL", BOOL, 0, NULL, &fun_r, &fun_t);
+  if (retval == 0) retval = visit_ast(get_fun_var_types);
+  if (retval == 0) retval = visit_ast(type_check);
+  if (retval == 0) print_ast();      // run "dot -Tpdf ast.dot -o ast.pdf" to create a PDF
+  else {
+    clean_fun_str(&fun_r);
+    clean_var_str(&vars_r);
+    return 1;
+  }
 
-  print_interm();                        //check_6 //output getting "unable to detlect argument of type h"
+  visit_ast(compute_br_structure);
+  visit_ast(fill_instrs);
 
-  clean_asgns(&asgn_root);               //check_7
-  clean_asgns(&assgn_tmp_root);         //checK_8
-  clean_bbs(&bb_root);                   //check_9
-  clean_istr(&ifun_r);                   //check_10
-  clean_fun_str(&fun_r);                 //check_11  
-  clean_var_str(&vars_r);               //check_12
-  
-  free_ast();                           //check_13
+  print_interm();
+
+  clean_asgns(&asgn_root);
+  clean_asgns(&assgn_tmp_root);
+  clean_bbs(&bb_root);
+  clean_istr(&ifun_r);
+  clean_fun_str(&fun_r);
+  clean_var_str(&vars_r);
+
+  free_ast();
   return retval;
 }
 

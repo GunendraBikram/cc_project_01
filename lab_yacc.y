@@ -14,13 +14,9 @@ struct node_int* tmp_t;
 
 %union {int val; char* str;}
 %start program
-%token IF LET PRINT EVAL REGID  INP COST BOOLID INTID 
-//%token IF LET CONST ID PRINT EVAL REGID LETID VARID INP COST BOOLID INTID DECLID
-//%token PLUS MINUS DIV MOD MULT EQ LT GT GE LE NOT OR AND IF LET LPAR RPAR CONST GETINT GETBOOL DEFFUN TRUE FALSE ID INT BOOL ERR PRINT EVAL ////CALL FUNID REGID LETID VARID INP COST BOOLID INTID DECLID
-%type<val> expr funid letid varid vars exprs 
-%token<val>FUNID PLUS MINUS DIV MOD MULT EQ LT GT GE LE NOT OR AND LPAR RPAR CALL GETINT GETBOOL INT BOOL DEFFUN TRUE FALSE ERR
-//%type<str> ID CONST LETID VARID DECLID
-%token<str> ID CONST LETID VARID DECLID
+%token PLUS MINUS DIV MOD MULT EQ LT GT GE LE NOT OR AND IF LET LPAR RPAR CONST GETINT GETBOOL DEFFUN TRUE FALSE ID INT BOOL ERR PRINT EVAL CALL FUNID REGID LETID VARID INP COST BOOLID INTID DECLID
+%type<val> expr funid letid varid vars exprs FUNID PLUS MINUS DIV MOD MULT EQ LT GT GE LE NOT OR AND LPAR RPAR CALL GETINT GETBOOL INT BOOL DEFFUN TRUE FALSE ERR
+%type<str> ID CONST LETID VARID DECLID
 
 %%
 program : LPAR funid expr RPAR {
@@ -99,12 +95,12 @@ expr : CONST { $$ = insert_node ($1, CONST);}
 | LPAR LET LPAR letid expr RPAR expr RPAR {
   insert_children (3, $4, $5, $7);
   $$ = insert_node("LET", LET);}
-| LPAR ID exprs RPAR { 
+| LPAR ID exprs RPAR {
   for (int i = 0; i < $3; i++) insert_child(pop_int(&tmp_r, &tmp_t));
   $$ = insert_node($2, CALL);}
-| LPAR GETINT RPAR { 
+| LPAR GETINT RPAR {
   $$ = insert_node("GET-INT", CALL);}
-| LPAR GETBOOL RPAR { 
+| LPAR GETBOOL RPAR {
   $$ = insert_node("GET-BOOL", CALL);}
 ;
 

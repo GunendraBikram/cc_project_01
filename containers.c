@@ -208,6 +208,7 @@ struct br_instr* mk_cbr(int id, int cond, int succ1, int succ2){
   tmp->cond = cond;
   tmp->succ1 = succ1;
   tmp->succ2 = succ2;
+  tmp->next = NULL;
   return tmp;
 }
 
@@ -216,6 +217,7 @@ struct br_instr* mk_ubr(int id, int succ1){
   tmp->id = id;
   tmp->cond = 0;
   tmp->succ1 = succ1;
+  tmp->next = NULL;
   return tmp;
 }
 
@@ -230,6 +232,19 @@ void push_br (struct br_instr* i, struct br_instr** r, struct br_instr** t){
   }
 }
 
+struct asgn_instr* mk_asgn(int bb, int lhs, int bin, int op1, int op2, int type){
+  struct asgn_instr* tmp = (struct asgn_instr*)malloc(sizeof(struct asgn_instr));
+  tmp->bb = bb;
+  tmp->bin = bin;
+  tmp->lhs = lhs;
+  tmp->bin = 1;
+  tmp->op1 = op1;
+  tmp->op2 = op2;
+  tmp->type = type;
+  tmp->next = NULL;
+  return tmp;
+}
+
 struct asgn_instr* mk_basgn(int bb, int lhs, int op1, int op2, int type){
   struct asgn_instr* tmp = (struct asgn_instr*)malloc(sizeof(struct asgn_instr));
   tmp->bb = bb;
@@ -238,6 +253,7 @@ struct asgn_instr* mk_basgn(int bb, int lhs, int op1, int op2, int type){
   tmp->op1 = op1;
   tmp->op2 = op2;
   tmp->type = type;
+  tmp->next = NULL;
   return tmp;
 }
 
@@ -248,6 +264,7 @@ struct asgn_instr* mk_uasgn(int bb, int lhs, int op, int type){
   tmp->bin = 0;
   tmp->op1 = op;
   tmp->type = type;
+  tmp->next = NULL;
   return tmp;
 }
 
@@ -257,6 +274,7 @@ struct asgn_instr* mk_casgn(int bb, int lhs, char* fun){
   tmp->lhs = lhs;
   tmp->bin = 2;
   tmp->fun = fun;
+  tmp->next = NULL;
   return tmp;
 }
 
@@ -278,6 +296,7 @@ void push_var_str (int begin_id, int end_id, int type, char* name, struct node_v
     (*r)->end_id = end_id;
     (*r)->type = type;
     (*r)->name = name;
+    (*r)->next = NULL;
     *t = *r;
   }
   else {
@@ -287,6 +306,7 @@ void push_var_str (int begin_id, int end_id, int type, char* name, struct node_v
     ptr->end_id = end_id;
     ptr->type = type;
     ptr->name = name;
+    ptr->next = NULL;
     (*t)->next = ptr;                                         //Set the node after tail
     *t = ptr;
   }
@@ -298,6 +318,7 @@ void push_fun_str (char* name, int type, int arity, struct node_var_str* args, s
     (*r)->name = name;
     (*r)->type = type;
     (*r)->args = args;
+    (*r)->next = NULL;
     (*r)->arity = arity;
     *t = *r;
   }
@@ -308,6 +329,7 @@ void push_fun_str (char* name, int type, int arity, struct node_var_str* args, s
     ptr->type = type;
     ptr->name = name;
     ptr->arity = arity;
+    ptr->next = NULL;
     (*t)->next = ptr;                                         //Set the node after tail
     *t = ptr;
   }
