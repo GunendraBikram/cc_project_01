@@ -1,5 +1,6 @@
 #include "y.tab.h"
 #include "containers.h"
+#include<string.h>
 int yyparse();
 
 // symbol table
@@ -463,7 +464,7 @@ void print_interm() {
   printf("br exit\n");
 }
 
-int main (int argc, char **argv) {
+int main (int argc, char *argv[10]) {                  //changes for cmd input
   int retval = yyparse();
 
   push_fun_str("GET-INT", INT, 0, NULL, &fun_r, &fun_t);
@@ -488,6 +489,15 @@ int main (int argc, char **argv) {
   clean_istr(&ifun_r);
   clean_fun_str(&fun_r);
   clean_var_str(&vars_r);
+
+  //printf("check\n"); //check
+  char val_1[10]= "--cp";
+  char val_2[10] = "--cse";
+  int result, result_2;
+  result = strcmp("--cp", val_1);
+  //result_2 = strcmp(argv[1], val_2);
+
+  printf("the value of result is %s\n", argv[1]);
 
   free_ast();
   return retval;
