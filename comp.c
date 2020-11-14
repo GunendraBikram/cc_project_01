@@ -464,6 +464,33 @@ void print_interm() {
   printf("br exit\n");
 }
 
+char val_1[10]= "--cp";           //for cp
+char val_2[10] = "--cse";        //for the cse
+int result, result_2;            // int to store the value
+
+//---------------------------------------------------constant propogation function-----------------------------------------------------------//
+
+void const_prop(int a)
+{
+	
+	printf("under the cp function\n");
+
+
+}
+
+//-----------------------------------------------------common subexpression elimination function------------------------------------------------------------//
+
+
+void cse_fun(int b)
+{
+   
+   printf("under the cse function\n");
+   
+}
+
+
+
+
 int main (int argc, char *argv[10]) {                  //changes for cmd input
   int retval = yyparse();
 
@@ -490,14 +517,27 @@ int main (int argc, char *argv[10]) {                  //changes for cmd input
   clean_fun_str(&fun_r);
   clean_var_str(&vars_r);
 
-  //printf("check\n"); //check
-  char val_1[10]= "--cp";
-  char val_2[10] = "--cse";
-  int result, result_2;
-  result = strcmp("--cp", val_1);
-  //result_2 = strcmp(argv[1], val_2);
+  // condition trigers only if other argumnents are provided
 
-  printf("the value of result is %s\n", argv[1]);
+  if (argc >1)
+  {
+
+  result = strcmp(argv[1], val_1);
+  result_2 = strcmp(argv[1], val_2);
+
+  if (result == 0 && argc >1)
+  {
+
+  	const_prop(result);  //function calling
+  }
+
+  else if (result_2 ==0 && argc >1) {
+
+  	cse_fun(result_2);       //function calling
+  }
+  
+  }
+
 
   free_ast();
   return retval;
