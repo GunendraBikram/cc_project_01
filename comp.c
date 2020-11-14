@@ -284,7 +284,7 @@ int fill_instrs (struct ast* node) {
     } else {
       struct asgn_instr* asgn = mk_casgn(br_instrs->id, node->id, node->token);
       push_asgn(asgn, &asgn_root, &asgn_tail);
-    }
+    }                                                          //checking------------------------------------------------
   }
   else if (node->ntoken == CONST || node->ntoken == TRUE || node->ntoken == FALSE || node->ntoken == VARID){
 
@@ -415,7 +415,7 @@ void print_interm() {
       }
     }
     if (asgn->bin == 0){
-      if (asgn->type == CONST)
+      if (asgn->type == CONST)                                            //for constant
         printf("v%d := %d\n", asgn->lhs, asgn->op1);
       else if (asgn->type == NOT)
         printf("v%d := not v%d\n", asgn->lhs, asgn->op1);
@@ -470,12 +470,14 @@ int result, result_2;            // int to store the value
 
 //---------------------------------------------------constant propogation function-----------------------------------------------------------//
 
-void const_prop(int a)
+void const_prop(struct asgn_instr* asgn)                      //struct asgn_instr* ptr
 {
 	
-	printf("under the cp function\n");
+	printf("check_2\n");                //checking part
 
-
+	printf("the valuse is %d\n", asgn->op1);         //not able to access the elements;
+    
+   
 }
 
 //-----------------------------------------------------common subexpression elimination function------------------------------------------------------------//
@@ -508,7 +510,7 @@ int main (int argc, char *argv[10]) {                  //changes for cmd input
   visit_ast(compute_br_structure);
   visit_ast(fill_instrs);
 
-  print_interm();
+  print_interm();               //printing function
 
   clean_asgns(&asgn_root);
   clean_asgns(&assgn_tmp_root);
@@ -527,8 +529,9 @@ int main (int argc, char *argv[10]) {                  //changes for cmd input
 
   if (result == 0 && argc >1)
   {
-
-  	const_prop(result);  //function calling
+  	                                
+    struct asgn_instr* asgn;                            //struct asgn_instr* ptr;
+  	const_prop(asgn);  //function calling
   }
 
   else if (result_2 ==0 && argc >1) {
@@ -541,5 +544,16 @@ int main (int argc, char *argv[10]) {                  //changes for cmd input
 
   free_ast();
   return retval;
+
+
+
+
+
+
+
+
+
+
+
 }
 
