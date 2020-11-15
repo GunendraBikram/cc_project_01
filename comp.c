@@ -477,9 +477,10 @@ char val_1[10]= "--cp";           //for cp
 char val_2[10] = "--cse";        //for the cse
 int result, result_2;            // int to store the value
 
+
 //---------------------------------------------------constant propogation function-----------------------------------------------------------//
 
-void const_prop()                      //struct asgn_instr* ptr
+void const_prop()                      
 {
   printf("under the cp function");
   printf ("\nfunction %s\n\n", find_istr(ifun_r, bb_root->id));
@@ -511,50 +512,77 @@ void const_prop()                      //struct asgn_instr* ptr
       }
     }
 
-
+  //---------------------------------------------------------------oper----------------------------------------------------------------//
 
     if (asgn->bin == 0){
+      int temp_str;  
       if (asgn->type == CONST)   
-                                               //for constant
-        printf("v%d := %d check_3\n ", asgn->lhs, asgn->op1);
+          
+         {                                     //for constant
+        printf("v%d := %d check_3\n ", asgn->lhs, asgn->op1);}  //checking part
+      
       else if (asgn->type == NOT)
+      {
         printf("v%d := not v%d\n", asgn->lhs, asgn->op1);
+      }
       else if (asgn->type == INP)
+      {
         printf("v%d := a%d\n", asgn->lhs, -asgn->op1);
+      }
       else if (asgn->lhs == 0)
+      {
         printf("rv := v%d\n", asgn->op1);
+      }
       else if (asgn->lhs < 0)
+      {
         printf("a%d := v%d\n", -asgn->lhs, asgn->op1);
-      else
+      }
+      else{
         printf("v%d := v%d\n", asgn->lhs, asgn->op1);
+      }
 
     }
     else if (asgn->bin == 1){
-      if (asgn->type == EQ)
+      if (asgn->type == EQ){
         printf("v%d := v%d = v%d\n", asgn->lhs, asgn->op1, asgn->op2);
-      else if (asgn->type == LT)
+      }
+      else if (asgn->type == LT){
         printf("v%d := v%d < v%d\n", asgn->lhs, asgn->op1, asgn->op2);
-      else if (asgn->type == PLUS)
+      }
+      else if (asgn->type == PLUS){
         printf("v%d := v%d + v%d check_4\n ", asgn->lhs, asgn->op1, asgn->op2);
-      else if (asgn->type == MINUS)
+      }
+      else if (asgn->type == MINUS){
         printf("v%d := v%d - v%d\n", asgn->lhs, asgn->op1, asgn->op2);
-      else if (asgn->type == AND)
+      }
+      else if (asgn->type == AND){
         printf("v%d := v%d and v%d\n", asgn->lhs, asgn->op1, asgn->op2);
-      else if (asgn->type == LE)
+      }
+      else if (asgn->type == LE) {
         printf("v%d := v%d <= v%d\n", asgn->lhs, asgn->op1, asgn->op2);
-      else if (asgn->type == MULT)
+      }
+      else if (asgn->type == MULT){
         printf("v%d := v%d * v%d\n", asgn->lhs, asgn->op1, asgn->op2);
-      else if (asgn->type == DIV)
+      }
+      else if (asgn->type == DIV) {
         printf("v%d := v%d div v%d\n", asgn->lhs, asgn->op1, asgn->op2);
-      else if (asgn->type == MOD)
+      }
+      else if (asgn->type == MOD) {
         printf("v%d := v%d mod v%d\n", asgn->lhs, asgn->op1, asgn->op2);
-      else if (asgn->type == GT)
+      }
+      else if (asgn->type == GT) {
         printf("v%d := v%d > v%d\n", asgn->lhs, asgn->op1, asgn->op2);
-      else if (asgn->type == GE)
+      }
+      else if (asgn->type == GE) {
         printf("v%d := v%d >= v%d\n", asgn->lhs, asgn->op1, asgn->op2);
-      else if (asgn->type == OR)
+      }
+      else if (asgn->type == OR){
         printf("v%d := v%d or v%d\n", asgn->lhs, asgn->op1, asgn->op2);
+      }
     }
+
+    //---------------------------------------------------------------------------------------------------------------------------------------------//
+
     else if (asgn->bin == 2){
       printf("call %s \n", asgn->fun);
       if (strcmp(asgn->fun, "print") != 0)
@@ -576,12 +604,11 @@ void cse_fun()
 {
    
    printf("under the cse function\n");
-  
-   printf ("\nfunction %s\n\n", find_istr(ifun_r, bb_root->id));
+    printf ("\nfunction %s\n\n", find_istr(ifun_r, bb_root->id));
   printf ("entry:\n"); 
   //printf("check_2\n");                 //checking part
 
-  //-----------------------------------------------------------logic for the common subexpression------------------------------------------------//
+  //-----------------------------------------------------------logic for the constatnt propogation------------------------------------------------//
 
   struct asgn_instr* asgn = asgn_root;
   struct br_instr* br = bb_root;
@@ -606,50 +633,77 @@ void cse_fun()
       }
     }
 
-
+  //---------------------------------------------------------------oper----------------------------------------------------------------//
 
     if (asgn->bin == 0){
+      int temp_str;  
       if (asgn->type == CONST)   
-                                               //for constant
-        printf("v%d := %d check_3\n ", asgn->lhs, asgn->op1);
+          
+         {                                     //for constant
+        printf("v%d := %d check_3\n ", asgn->lhs, asgn->op1);}  //checking part
+      
       else if (asgn->type == NOT)
+      {
         printf("v%d := not v%d\n", asgn->lhs, asgn->op1);
+      }
       else if (asgn->type == INP)
+      {
         printf("v%d := a%d\n", asgn->lhs, -asgn->op1);
+      }
       else if (asgn->lhs == 0)
+      {
         printf("rv := v%d\n", asgn->op1);
+      }
       else if (asgn->lhs < 0)
+      {
         printf("a%d := v%d\n", -asgn->lhs, asgn->op1);
-      else
+      }
+      else{
         printf("v%d := v%d\n", asgn->lhs, asgn->op1);
+      }
 
     }
     else if (asgn->bin == 1){
-      if (asgn->type == EQ)
+      if (asgn->type == EQ){
         printf("v%d := v%d = v%d\n", asgn->lhs, asgn->op1, asgn->op2);
-      else if (asgn->type == LT)
+      }
+      else if (asgn->type == LT){
         printf("v%d := v%d < v%d\n", asgn->lhs, asgn->op1, asgn->op2);
-      else if (asgn->type == PLUS)
+      }
+      else if (asgn->type == PLUS){
         printf("v%d := v%d + v%d check_4\n ", asgn->lhs, asgn->op1, asgn->op2);
-      else if (asgn->type == MINUS)
+      }
+      else if (asgn->type == MINUS){
         printf("v%d := v%d - v%d\n", asgn->lhs, asgn->op1, asgn->op2);
-      else if (asgn->type == AND)
+      }
+      else if (asgn->type == AND){
         printf("v%d := v%d and v%d\n", asgn->lhs, asgn->op1, asgn->op2);
-      else if (asgn->type == LE)
+      }
+      else if (asgn->type == LE) {
         printf("v%d := v%d <= v%d\n", asgn->lhs, asgn->op1, asgn->op2);
-      else if (asgn->type == MULT)
+      }
+      else if (asgn->type == MULT){
         printf("v%d := v%d * v%d\n", asgn->lhs, asgn->op1, asgn->op2);
-      else if (asgn->type == DIV)
+      }
+      else if (asgn->type == DIV) {
         printf("v%d := v%d div v%d\n", asgn->lhs, asgn->op1, asgn->op2);
-      else if (asgn->type == MOD)
+      }
+      else if (asgn->type == MOD) {
         printf("v%d := v%d mod v%d\n", asgn->lhs, asgn->op1, asgn->op2);
-      else if (asgn->type == GT)
+      }
+      else if (asgn->type == GT) {
         printf("v%d := v%d > v%d\n", asgn->lhs, asgn->op1, asgn->op2);
-      else if (asgn->type == GE)
+      }
+      else if (asgn->type == GE) {
         printf("v%d := v%d >= v%d\n", asgn->lhs, asgn->op1, asgn->op2);
-      else if (asgn->type == OR)
+      }
+      else if (asgn->type == OR){
         printf("v%d := v%d or v%d\n", asgn->lhs, asgn->op1, asgn->op2);
+      }
     }
+
+    //---------------------------------------------------------------------------------------------------------------------------------------------//
+
     else if (asgn->bin == 2){
       printf("call %s \n", asgn->fun);
       if (strcmp(asgn->fun, "print") != 0)
