@@ -41,6 +41,7 @@ struct br_instr* mk_ubr(int id, int succ1);
 void push_br (struct br_instr* i, struct br_instr** r, struct br_instr** t);
 void clean_bbs (struct br_instr** r);
 
+//---------------------------------------------------------------for CFG----------------------------------------------------------------//
 struct asgn_instr {int bb; int lhs; int bin; int op1; int op2; int type; char* fun; struct asgn_instr* next; };
 struct asgn_instr* mk_asgn(int bb, int lhs, int bin, int op1, int op2, int type);
 struct asgn_instr* mk_basgn(int bb, int lhs, int op1, int op2, int type);

@@ -492,7 +492,7 @@ void const_prop()
   struct asgn_instr* asgn = asgn_root;
   struct br_instr* br = bb_root;
  
-  while (asgn != NULL){
+  while (asgn != NULL){                          //-----------------------------------------------------------------------------------//
     if (asgn->bb != br->id){
       if (br->cond == 0){
         if (br->succ1 != -1)
@@ -515,11 +515,15 @@ void const_prop()
   //---------------------------------------------------------------oper----------------------------------------------------------------//
 
     if (asgn->bin == 0){
-      int temp_str;  
-      if (asgn->type == CONST)   
+      int temp_str;   
+      if (asgn->type == CONST)                   
           
          {                                     //for constant
-        printf("v%d := %d check_3\n ", asgn->lhs, asgn->op1);}  //checking part
+        printf("v%d := %d\n ", asgn->lhs, asgn->op1);
+        temp_str = asgn->op1;
+        printf("%d\n", temp_str);           //constant printing
+
+        }  
       
       else if (asgn->type == NOT)
       {
@@ -528,6 +532,7 @@ void const_prop()
       else if (asgn->type == INP)
       {
         printf("v%d := a%d\n", asgn->lhs, -asgn->op1);
+        printf("check_in_inp\n");
       }
       else if (asgn->lhs == 0)
       {
@@ -543,14 +548,18 @@ void const_prop()
 
     }
     else if (asgn->bin == 1){
+      int temp_str;
       if (asgn->type == EQ){
         printf("v%d := v%d = v%d\n", asgn->lhs, asgn->op1, asgn->op2);
+
       }
       else if (asgn->type == LT){
         printf("v%d := v%d < v%d\n", asgn->lhs, asgn->op1, asgn->op2);
       }
       else if (asgn->type == PLUS){
-        printf("v%d := v%d + v%d check_4\n ", asgn->lhs, asgn->op1, asgn->op2);
+        printf("v%d := v%d + v%d\n ", asgn->lhs, asgn->op1, asgn->op2);
+        temp_str = asgn->op2;
+        printf("v%d\n", temp_str);
       }
       else if (asgn->type == MINUS){
         printf("v%d := v%d - v%d\n", asgn->lhs, asgn->op1, asgn->op2);
