@@ -57,8 +57,9 @@ int pop_int(struct node_int** r, struct node_int** t) {
 }
 
 void dequeue_int (struct node_int** r) {
-  free(*r);
+  struct node_int* tmp = *r;
   (*r) = (*r)->next;
+  free(tmp);
 }
 
 int pop_ast(struct node_int** r, struct node_int** t) {
@@ -356,50 +357,65 @@ struct node_fun_str* find_fun_str(char* name, struct node_fun_str* r){
 
 void clean_asgns (struct asgn_instr** r){
   while (*r != NULL){
-    free(*r);
+    struct asgn_instr* tmp = *r;
     (*r) = (*r)->next;
+    free(tmp);
   }
 }
 
 void clean_bbs (struct br_instr** r){
   while (*r != NULL){
-    free(*r);
+    struct br_instr* tmp = *r;
     (*r) = (*r)->next;
+    free(tmp);
+  }
+}
+
+void clean_int (struct node_int** r){
+  while (*r != NULL){
+    struct node_int* tmp = *r;
+    (*r) = (*r)->next;
+    free(tmp);
   }
 }
 
 void clean_str(struct node_str** r){
   while (*r != NULL){
-    free(*r);
+    struct node_str* tmp = *r;
     (*r) = (*r)->next;
+    free(tmp);
   }
 }
 
 void clean_istr(struct node_istr** r){
   while (*r != NULL){
-    free(*r);
+    struct node_istr* tmp = *r;
     (*r) = (*r)->next;
+    free(tmp);
   }
 }
 
 void clean_dstr(struct node_dstr** r){
   while (*r != NULL){
-    free(*r);
+    struct node_dstr* tmp = *r;
     (*r) = (*r)->next;
+    free(tmp);
   }
 }
 
 void clean_var_str(struct node_var_str** r){
   while (*r != NULL){
-    free(*r);
+    struct node_var_str* tmp = *r;
     (*r) = (*r)->next;
+    free(tmp);
   }
 }
 
 void clean_fun_str(struct node_fun_str** r){
   while (*r != NULL){
-    free(*r);
+    struct node_fun_str* tmp = *r;
     (*r) = (*r)->next;
+    free(tmp);
   }
 }
 

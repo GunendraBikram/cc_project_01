@@ -13,9 +13,8 @@
 #include <stdarg.h>
 
 struct dstr { char* id1; char* id2; };          // A pair of strings: can be useful whenstoring variables associated to a function
-//--------------------------------------------------------------------CFG-------------------------------------------------------//
 
-struct node_int { int id; struct node_int* next; };             //CFG  for node-------------------------------------------------
+struct node_int { int id; struct node_int* next; };
 struct node_str { char* id; struct node_str* next; };
 struct node_dstr { char* id1; char* id2; struct node_dstr* next; };
 struct node_istr { int id1; char* id2; struct node_istr* next; };
@@ -35,26 +34,20 @@ void push_istr (int c1, char* c2, struct node_istr** r, struct node_istr** t);
 char* find_istr(struct node_istr* r, int key);
 void clean_istr(struct node_istr** r);
 
-//--------------------------------CFG------------------------------------------------------------------------------------------------//
-struct br_instr { int id; int cond; int succ1; int succ2; struct br_instr* next;}; //CFG for branching
-struct br_instr* mk_cbr(int id, int cond, int succ1, int succ2);   //CFG
-struct br_instr* mk_ubr(int id, int succ1);                      //CFG
+
+struct br_instr { int id; int cond; int succ1; int succ2; struct br_instr* next;};
+struct br_instr* mk_cbr(int id, int cond, int succ1, int succ2);
+struct br_instr* mk_ubr(int id, int succ1);
 void push_br (struct br_instr* i, struct br_instr** r, struct br_instr** t);
 void clean_bbs (struct br_instr** r);
 
-//-----------------------------------------------for the assignment instruction--------------------------------------------------//
-
-struct asgn_instr {int bb; int lhs; int bin; int op1; int op2; int type; char* fun; struct asgn_instr* next; };  //CFG for assignmnet instruction
+struct asgn_instr {int bb; int lhs; int bin; int op1; int op2; int type; char* fun; struct asgn_instr* next; };
 struct asgn_instr* mk_asgn(int bb, int lhs, int bin, int op1, int op2, int type);
 struct asgn_instr* mk_basgn(int bb, int lhs, int op1, int op2, int type);
 struct asgn_instr* mk_uasgn(int bb, int lhs, int op, int type);
 struct asgn_instr* mk_casgn(int bb, int lhs, char* fun);
 void push_asgn (struct asgn_instr* i, struct asgn_instr** r, struct asgn_instr** t);
 void clean_asgns (struct asgn_instr** r);
-
-//----------------------------------------------------------------------------------------------------------------------------------//
-
-
 
 struct ast;
 struct ast_child {struct ast* id; struct ast_child* next; }; //Dynamic data structure for the list of children
@@ -72,6 +65,7 @@ void clean_dstr(struct node_dstr** r);
 
 void push_int (int i, struct node_int** r, struct node_int** t);
 void push_unique_int (int i, struct node_int** r);
+void clean_int (struct node_int** r);
 int pop_int (struct node_int** r, struct node_int** t);
 int print_int(struct node_int* r);
 void dequeue_int (struct node_int** r);

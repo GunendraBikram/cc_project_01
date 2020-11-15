@@ -1,24 +1,26 @@
 #include "y.tab.h"
 #include "containers.h"
-#include<string.h>
 int yyparse();
 
 // symbol table
-struct node_fun_str* fun_r;
-struct node_fun_str* fun_t;
-struct node_var_str* vars_r;
-struct node_var_str* vars_t;
+struct node_fun_str* fun_r = NULL;
+struct node_fun_str* fun_t = NULL;
+struct node_var_str* vars_r = NULL;
+struct node_var_str* vars_t = NULL;
 
 // br structure
-struct node_istr* ifun_r;
-struct node_istr* ifun_t;
+struct node_istr* ifun_r = NULL;
+struct node_istr* ifun_t = NULL;
 
 // semantic checks
 
 bool is_term (struct ast* node){
   int t = node->ntoken;
   if (t == CONST || t == PLUS || t == MINUS || t == MULT || t == DIV || t == MOD) return true;
-  if (t == VARID && INTID == find_var_str(node->id, node->token, vars_r)->type) return true;
+  if (t == VARID) {
+    struct node_var_str* tmp = find_var_str(node->id, node->token, vars_r);
+    if (tmp != NULL && INTID == tmp->type) return true;
+  }
   if (t == CALL && NULL != find_fun_str(node->token, fun_r) && INT == find_fun_str(node->token, fun_r)->type) return true;
   if (t == IF) return is_term (get_child(node, 2));
   if (t == LET) return is_term (get_child(node, 3));
@@ -28,7 +30,10 @@ bool is_term (struct ast* node){
 bool is_fla (struct ast* node){
   int t = node->ntoken;
   if (t == TRUE || t == FALSE || t == EQ || t == LE || t == LT || t == GT || t == GE || t == NOT || t == AND || t == OR) return true;
-  if (t == VARID && BOOLID == find_var_str(node->id, node->token, vars_r)->type) return true;
+  if (t == VARID) {
+    struct node_var_str* tmp = find_var_str(node->id, node->token, vars_r);
+    if (tmp != NULL && BOOLID == tmp->type) return true;
+  }
   if (t == CALL && NULL != find_fun_str(node->token, fun_r) && BOOL == find_fun_str(node->token, fun_r)->type) return true;
   if (t == IF) return is_fla (get_child(node, 2));
   if (t == LET) return is_fla (get_child(node, 3));
@@ -117,12 +122,12 @@ int type_check(struct ast* node){
   int needs_term = (t == EQ || t == LE || t == LT || t == GT || t == GE || t == PLUS || t == MINUS || t == MULT || t == DIV || t == MOD);
   int needs_fla  = (t == NOT || t == AND || t == OR);
   struct ast_child* temp_child_root = node -> child;
-  while(temp_child_root != NULL) {
+  while (temp_child_root != NULL) {
     struct ast* child_node = temp_child_root->id;
 
     if ((needs_term && !is_term(child_node)) ||
         (needs_fla && !is_fla(child_node))) {
-      printf("Does not type check: operator %s vs operand  %s\n", node->token, child_node->token);
+      printf("Does not type check: operator %s vs operand %s\n", node->token, child_node->token);
       return 1;
     }
     temp_child_root = temp_child_root -> next;
@@ -180,22 +185,22 @@ int type_check(struct ast* node){
 int tmp;
 int cur_num = 0;
 
-struct node_int* bb_beg_root;
-struct node_int* bb_beg_tail;
+struct node_int* bb_beg_root = NULL;
+struct node_int* bb_beg_tail = NULL;
 
-struct node_int* bb_num_root;
-struct node_int* bb_num_tail;
+struct node_int* bb_num_root = NULL;
+struct node_int* bb_num_tail = NULL;
 
-struct br_instr* bb_root;
-struct br_instr* bb_tail;
+struct br_instr* bb_root = NULL;
+struct br_instr* bb_tail = NULL;
 
-struct asgn_instr* assgn_tmp_root;
-struct asgn_instr* assgn_tmp_tail;
+struct asgn_instr* assgn_tmp_root = NULL;
+struct asgn_instr* assgn_tmp_tail = NULL;
 
-struct asgn_instr* asgn_root;
-struct asgn_instr* asgn_tail;
+struct asgn_instr* asgn_root = NULL;
+struct asgn_instr* asgn_tail = NULL;
 
-struct br_instr* br_instrs;
+struct br_instr* br_instrs = NULL;
 
 void proc_rec(struct ast* node) {
   
@@ -284,12 +289,13 @@ int fill_instrs (struct ast* node) {
     } else {
       struct asgn_instr* asgn = mk_casgn(br_instrs->id, node->id, node->token);
       push_asgn(asgn, &asgn_root, &asgn_tail);
-    }                                                          //checking------------------------------------------------
+    }
   }
-  else if (node->ntoken == CONST || node->ntoken == TRUE || node->ntoken == FALSE || node->ntoken == VARID){
+  else if (node->ntoken == CONST || node->ntoken == TRUE || node->ntoken == FALSE || node->ntoken == VARID || node->ntoken == LET){
 
     int val, type;
     if (node->ntoken == VARID) {val = find_var_str(node->id, node->token, vars_r)->begin_id; type = REGID;}
+    else if (node->ntoken == LET) {val = get_child(node, 3)->id; type = REGID;}
     else if (node->ntoken == TRUE) {val = 1; type = CONST;}
     else if (node->ntoken == FALSE) {val = 0; type = CONST;}
     else {val = atoi(node->token); type = CONST;}
@@ -363,7 +369,9 @@ int fill_instrs (struct ast* node) {
       push_asgn(asgn, &asgn_root, &asgn_tail);
     }
     else if (parent_node->ntoken == PRINT || parent_node->ntoken == EVAL) {
-      struct asgn_instr* asgn = mk_uasgn(br_instrs->id, 0, node->id, REGID);
+      struct asgn_instr* asgn = mk_uasgn(br_instrs->id, -1, get_child(parent_node, 2)->id, REGID);
+      push_asgn(asgn, &asgn_root, &asgn_tail);
+      asgn = mk_casgn(br_instrs->id, parent_node->id, "print");
       push_asgn(asgn, &asgn_root, &asgn_tail);
     }
   }
@@ -457,7 +465,8 @@ void print_interm() {
     }
     else if (asgn->bin == 2){
       printf("call %s \n", asgn->fun);
-      printf("v%d := rv\n", asgn->lhs);
+      if (strcmp(asgn->fun, "print") != 0)
+        printf("v%d := rv\n", asgn->lhs);
     }
     asgn = asgn->next;
   }
@@ -470,12 +479,12 @@ int result, result_2;            // int to store the value
 
 //---------------------------------------------------constant propogation function-----------------------------------------------------------//
 
-void const_prop(struct asgn_instr* asgn)                      //struct asgn_instr* ptr
+void const_prop()                      //struct asgn_instr* ptr
 {
-	
-	printf("check_2\n");                //checking part
+  
+  printf("check_2\n");                //checking part
 
-	printf("the valuse is %d\n", asgn->op1);         //not able to access the elements;
+  
     
    
 }
@@ -493,7 +502,8 @@ void cse_fun(int b)
 
 
 
-int main (int argc, char *argv[10]) {                  //changes for cmd input
+
+int main (int argc, char *argv[10]) {
   int retval = yyparse();
 
   push_fun_str("GET-INT", INT, 0, NULL, &fun_r, &fun_t);
@@ -510,7 +520,7 @@ int main (int argc, char *argv[10]) {                  //changes for cmd input
   visit_ast(compute_br_structure);
   visit_ast(fill_instrs);
 
-  print_interm();               //printing function
+  print_interm();
 
   clean_asgns(&asgn_root);
   clean_asgns(&assgn_tmp_root);
@@ -518,7 +528,6 @@ int main (int argc, char *argv[10]) {                  //changes for cmd input
   clean_istr(&ifun_r);
   clean_fun_str(&fun_r);
   clean_var_str(&vars_r);
-
   // condition trigers only if other argumnents are provided
 
   if (argc >1)
@@ -529,31 +538,21 @@ int main (int argc, char *argv[10]) {                  //changes for cmd input
 
   if (result == 0 && argc >1)
   {
-  	                                
-    struct asgn_instr* asgn;                            //struct asgn_instr* ptr;
-  	const_prop(asgn);  //function calling
+                                    
+                              //struct asgn_instr* ptr;
+    const_prop();  //function calling
   }
 
   else if (result_2 ==0 && argc >1) {
 
-  	cse_fun(result_2);       //function calling
+    cse_fun(result_2);       //function calling
   }
   
   }
 
 
+
   free_ast();
   return retval;
-
-
-
-
-
-
-
-
-
-
-
 }
 
