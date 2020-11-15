@@ -481,7 +481,7 @@ int result, result_2;            // int to store the value
 
 void const_prop()                      //struct asgn_instr* ptr
 {
-  
+  printf("under the cp function");
   printf ("\nfunction %s\n\n", find_istr(ifun_r, bb_root->id));
   printf ("entry:\n"); 
   //printf("check_2\n");                 //checking part
@@ -686,6 +686,13 @@ int main (int argc, char *argv[10]) {
   //print_interm();
   
   // condition trigers only if other argumnents are provided  
+  if (argc == 1)
+  {
+    print_interm();
+
+  }
+
+
 
   if (argc >1)
   {
