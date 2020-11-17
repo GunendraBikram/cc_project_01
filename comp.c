@@ -535,6 +535,23 @@ struct Node *insertatend(struct Node *head, int data_1, int data_2 )            
 
 //----------------------------------------------------check if the values exit in the block------------------------------------------//
 
+//create a data srtucture that has one value S it can be any type and store every iteration and compare itertaion every time.
+//use while!=NULL and create the iteration and store value, if assignments  are same don't increase the counter
+// then just compare the cunter value and printf 
+
+
+
+struct final
+
+{
+
+   int counter;
+
+   struct final *next;
+
+};
+
+
 int check(struct Node *ptr, int data_1, int data_2)                      //data_1 = lhs, data_2 = op1
 {
   
@@ -546,7 +563,7 @@ int check(struct Node *ptr, int data_1, int data_2)                      //data_
    
    if (ptr->lhs== data_1 &&  ptr->rhs == data_2)                //found return 0
 
-   {
+   {                                                  //insert the value in the final at the check part
      //printf("check_1 triggered\n");   
      return 0;
 
@@ -576,11 +593,11 @@ int check(struct Node *ptr, int data_1, int data_2)                      //data_
 
 }
 
-
+int count= 0;
                         
 void const_prop()                      
 {
-  printf("under the cp function");                      //added
+  //printf("under the cp function");                      //added
   printf ("\nfunction %s\n\n", find_istr(ifun_r, bb_root->id));
   printf ("entry:\n"); 
   //printf("check_2\n");                 //checking part
@@ -640,13 +657,9 @@ void const_prop()
 
           //push_val(head, asgn->lhs,asgn->op1);
 
-
-
           printf("check_2\n");
           
           linkedlisttraversal(head);                       //traversal
-
-          
 
          ///////////////////////////////////////////////////////////////
          if (check(head, asgn->lhs,asgn->op1) == 1) {
@@ -759,6 +772,15 @@ void const_prop()
         printf("v%d := v%d + v%d\n", asgn->lhs, asgn->op1, asgn->op2);
       
          }  
+
+       else
+
+       {
+           printf("check\n");
+        //do something or print result
+
+       }
+
 
       }
       else if (asgn->type == MINUS){
