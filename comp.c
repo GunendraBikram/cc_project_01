@@ -499,8 +499,9 @@ struct  Node
 void linkedlisttraversal(struct Node *ptr)
 {   while(ptr!=NULL)
   {
+
   printf("The value of lhs is %d\n ",ptr->lhs);
-  //
+ 
   printf("the value of op1 is %d\n ", ptr->rhs);
   
   ptr= ptr->next;
@@ -528,6 +529,9 @@ struct Node *insertatend(struct Node *head, int data_1, int data_2 )            
   return head;
 
 }
+
+//--------------------------------------------------------------------------//
+
 
 //----------------------------------------------------check if the values exit in the block------------------------------------------//
 
@@ -573,13 +577,7 @@ int check(struct Node *ptr, int data_1, int data_2)                      //data_
 }
 
 
-
-
-
-
- int count =0;
-
-int temp_str;                             //variable def
+                        
 void const_prop()                      
 {
   printf("under the cp function");                      //added
@@ -591,12 +589,15 @@ void const_prop()
 
   struct asgn_instr* asgn = asgn_root;
   struct br_instr* br = bb_root;
-  
-  
-      
+
+   
+  struct Node *head;                                              //head assigned
+  head= (struct Node*)malloc(sizeof(struct Node));                //assignment of memory
+
   while (asgn != NULL){  
 
-              //-----------------------------------------------------------------------------------//
+
+            //-----------------------------------------------------------------------------------//
     if (asgn->bb != br->id){
      // printf("the value of bb is %d\n",asgn->bb);       //checking
       //printf("the value of id is %d\n",br->id);         //checking
@@ -632,25 +633,32 @@ void const_prop()
       if (asgn->type == CONST)                   
           
          {                                           //insertion
-          struct Node *head;
-          head= (struct Node*)malloc(sizeof(struct Node));
+          //struct Node *head;
+          //head= (struct Node*)malloc(sizeof(struct Node));                  //commented
           
           insertatend(head,asgn->lhs,asgn->op1);
-          //linkedlisttraversal(head);                       //traversal
+
+          //push_val(head, asgn->lhs,asgn->op1);
+
+
+
+          printf("check_2\n");
+          
+          linkedlisttraversal(head);                       //traversal
 
           
 
          ///////////////////////////////////////////////////////////////
          if (check(head, asgn->lhs,asgn->op1) == 1) {
 
-
+           //linkedlisttraversal(head);
          // printf("the value of temp is %d\n", temp_str);                              //check
         //printf("the prev_value %d and temp value %d", prev_value, temp_str);
         //if (prev_value == temp_str)
         //{   
                                            //for constant
         printf("v%d := %d\n", asgn->lhs, asgn->op1); 
-        temp_str = asgn->op1;              //constant assignmnet for the block
+        printf("check\n");                                                       //constant assignmnet for the block
         //temp_str = as;
       
        
@@ -660,84 +668,192 @@ void const_prop()
         }  
       
       else if (asgn->type == NOT)
-      {
+
+
+      {  if (NULL){
+         
+        insertatend(head,asgn->lhs,asgn->op1);
+
         printf("v%d := not v%d\n", asgn->lhs, asgn->op1);
+
+      }
       }
       else if (asgn->type == INP)
-      {  
+      { 
+        if (NULL)
+        {
+           insertatend(head,asgn->lhs,asgn->op1);
+
         printf("v%d := a%d\n", asgn->lhs, -asgn->op1);      //---------------assignment------------------------------//
         //printf("check_in_inp\n");                              //added
+        }
       }
       else if (asgn->lhs == 0)
       {
+        if(NULL)
+        {
+           insertatend(head,asgn->lhs,asgn->op1);
         printf("rv := v%d\n", asgn->op1);
+      
+       }
       }
       else if (asgn->lhs < 0)
+      
       {
+        if(NULL)
+        { 
+          insertatend(head,asgn->lhs,asgn->op1); 
         printf("a%d := v%d\n",-asgn->lhs, asgn->op1);
         //printf("inside\n");                                                       //check
+       }
       }
       else{
+        if (NULL) 
+        {
+         insertatend(head,asgn->lhs,asgn->op1);
         printf("v%d := v%d\n", asgn->lhs, asgn->op1);            //registor assignment for the block
 
-        //printf("check for register\n");                             //check
+        
+        }//printf("check for register\n");                             //check
       }
 
     }
     else if (asgn->bin == 1){
       //int temp_str;                                                                    //check--------------------------------
       if (asgn->type == EQ){
+
+       if (NULL)
+
+       {
+         insertatend(head,asgn->lhs,asgn->op1);
+          insertatend(head,asgn->lhs,asgn->op2);
+
         printf("v%d := v%d = v%d\n", asgn->lhs, asgn->op1, asgn->op2);
 
+       }
+
       }
+
       else if (asgn->type == LT){
+
+        if (NULL)
+
+        {
+          insertatend(head,asgn->lhs,asgn->op1);
+          insertatend(head,asgn->lhs,asgn->op2);
+
         printf("v%d := v%d < v%d\n", asgn->lhs, asgn->op1, asgn->op2);
+      
+       }
       }
+
       else if (asgn->type == PLUS){
 
-        /////////////////////////////////////////
 
-        
-        
-        
-        //printf("%d\n", asgn->lhs);
+        if(NULL)
+
+        { insertatend(head,asgn->lhs,asgn->op1);
+          insertatend(head,asgn->lhs,asgn->op2);
+           
+      
         printf("v%d := v%d + v%d\n", asgn->lhs, asgn->op1, asgn->op2);
-        
-        //printf("in the addition\n");
-
-
-       
       
-      ////////////////////////////////////////////                   
-      
+         }  
 
       }
       else if (asgn->type == MINUS){
+
+        if(NULL)
+
+        { insertatend(head,asgn->lhs,asgn->op1);
+          insertatend(head,asgn->lhs,asgn->op2);
+
         printf("v%d := v%d - v%d\n", asgn->lhs, asgn->op1, asgn->op2);
+      
+       }
       }
+
       else if (asgn->type == AND){
+       
+        if(NULL)
+
+        {insertatend(head,asgn->lhs,asgn->op1);
+        insertatend(head,asgn->lhs,asgn->op2);
+
         printf("v%d := v%d and v%d\n", asgn->lhs, asgn->op1, asgn->op2);
+      
+       }
       }
       else if (asgn->type == LE) {
+
+        if(NULL)
+
+        {
+
+        insertatend(head,asgn->lhs,asgn->op1);
+        insertatend(head,asgn->lhs,asgn->op2);
         printf("v%d := v%d <= v%d\n", asgn->lhs, asgn->op1, asgn->op2);
-      }
+       
+        }
+       }
       else if (asgn->type == MULT){
+
+        if(NULL)
+        {
+          insertatend(head,asgn->lhs,asgn->op1);
+          insertatend(head,asgn->lhs,asgn->op2);
         printf("v%d := v%d * v%d\n", asgn->lhs, asgn->op1, asgn->op2);
+       }
+
       }
       else if (asgn->type == DIV) {
+       if(NULL)
+
+       {insertatend(head,asgn->lhs,asgn->op1);
+        insertatend(head,asgn->lhs,asgn->op2);
+           
         printf("v%d := v%d div v%d\n", asgn->lhs, asgn->op1, asgn->op2);
+      
+      }
       }
       else if (asgn->type == MOD) {
+        
+        if(NULL)
+        {insertatend(head,asgn->lhs,asgn->op1);
+        insertatend(head,asgn->lhs,asgn->op2);
+
         printf("v%d := v%d mod v%d\n", asgn->lhs, asgn->op1, asgn->op2);
+      
+      }
       }
       else if (asgn->type == GT) {
+
+        if (NULL)
+
+        {insertatend(head,asgn->lhs,asgn->op1);
+        insertatend(head,asgn->lhs,asgn->op2);
         printf("v%d := v%d > v%d\n", asgn->lhs, asgn->op1, asgn->op2);
+      
+       }
       }
       else if (asgn->type == GE) {
+        if(NULL)
+        {
+          insertatend(head,asgn->lhs,asgn->op1);
+          insertatend(head,asgn->lhs,asgn->op2);
         printf("v%d := v%d >= v%d\n", asgn->lhs, asgn->op1, asgn->op2);
+       }
       }
       else if (asgn->type == OR){
+
+        if(NULL)
+
+        {
+          insertatend(head,asgn->lhs,asgn->op1);
+          insertatend(head,asgn->lhs,asgn->op2);
         printf("v%d := v%d or v%d\n", asgn->lhs, asgn->op1, asgn->op2);
+
+      }
       }
     }
 
@@ -928,7 +1044,7 @@ int main (int argc, char *argv[10]) {
     cse_fun();       //function calling
   }
   
-  }
+  }  
 
   clean_asgns(&asgn_root);
   clean_asgns(&assgn_tmp_root);
