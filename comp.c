@@ -480,9 +480,109 @@ int result, result_2;            // int to store the value
 
 //---------------------------------------------------constant propogation function-----------------------------------------------------------//
 
+
+
+
+
+
+
+struct  Node
+{
+  int lhs;
+ 
+  int rhs;
+                                  //count made
+  struct  Node *next;
+  
+};
+
+void linkedlisttraversal(struct Node *ptr)
+{   while(ptr!=NULL)
+  {
+  printf("The value of lhs is %d\n ",ptr->lhs);
+  //
+  printf("the value of op1 is %d\n ", ptr->rhs);
+  
+  ptr= ptr->next;
+    }
+}
+                                                             
+struct Node *insertatend(struct Node *head, int data_1, int data_2 )             //  lhs, rhs , count
+{
+
+  struct Node *ptr = (struct Node*)malloc(sizeof(struct Node));
+  struct Node  *p= head;
+  
+  ptr->lhs = data_1;
+
+  ptr->rhs= data_2;
+
+ 
+  while(p->next!= NULL)
+  {
+    p = p->next;
+
+  }
+  p->next = ptr;
+  ptr->next = NULL;
+  return head;
+
+}
+
+//----------------------------------------------------check if the values exit in the block------------------------------------------//
+
+int check(struct Node *ptr, int data_1, int data_2)                      //data_1 = lhs, data_2 = op1
+{
+  
+   while(ptr!= NULL)
+
+   {
+    
+    //for common expression---------------------------------------------------------of constants
+   
+   if (ptr->lhs== data_1 &&  ptr->rhs == data_2)                //found return 0
+
+   {
+     //printf("check_1 triggered\n");   
+     return 0;
+
+                                      //the check part triggered
+
+   }
+
+   //for the checking of operation part-----------------------------------------------------------------
+  
+   else if  (NULL )
+
+   {
+
+
+
+
+   }
+ ptr->next = ptr;
+
+   //printf("check_2 triggered\n");
+  return 1;
+
+
+}
+
+
+
+}
+
+
+
+
+
+
+ int count =0;
+
+int temp_str;                             //variable def
 void const_prop()                      
 {
-  printf("under the cp function");
+  printf("under the cp function");                      //added
   printf ("\nfunction %s\n\n", find_istr(ifun_r, bb_root->id));
   printf ("entry:\n"); 
   //printf("check_2\n");                 //checking part
@@ -491,14 +591,25 @@ void const_prop()
 
   struct asgn_instr* asgn = asgn_root;
   struct br_instr* br = bb_root;
- 
-  while (asgn != NULL){                          //-----------------------------------------------------------------------------------//
+  
+  
+      
+  while (asgn != NULL){  
+
+              //-----------------------------------------------------------------------------------//
     if (asgn->bb != br->id){
+     // printf("the value of bb is %d\n",asgn->bb);       //checking
+      //printf("the value of id is %d\n",br->id);         //checking
+
+
       if (br->cond == 0){
-        if (br->succ1 != -1)
+        if (br->succ1 != -1){
           printf("br bb%d\n\n", br->succ1);
-        else
+
+        }
+        else{
           printf("br exit\n\n");
+        }
       }
       else printf("br v%d bb%d bb%d\n\n", br->cond, br->succ1, br->succ2);
       br = br->next;
@@ -513,16 +624,39 @@ void const_prop()
     }
 
   //---------------------------------------------------------------oper----------------------------------------------------------------//
-
+     
+    // int prev_value = temp_str;
+     //printf("previous_value %d\n", prev_value);
     if (asgn->bin == 0){
-      int temp_str;   
+       
       if (asgn->type == CONST)                   
           
-         {                                     //for constant
-        printf("v%d := %d\n ", asgn->lhs, asgn->op1);
-        temp_str = asgn->op1;
-        printf("%d\n", temp_str);           //constant printing
+         {                                           //insertion
+          struct Node *head;
+          head= (struct Node*)malloc(sizeof(struct Node));
+          
+          insertatend(head,asgn->lhs,asgn->op1);
+          //linkedlisttraversal(head);                       //traversal
 
+          
+
+         ///////////////////////////////////////////////////////////////
+         if (check(head, asgn->lhs,asgn->op1) == 1) {
+
+
+         // printf("the value of temp is %d\n", temp_str);                              //check
+        //printf("the prev_value %d and temp value %d", prev_value, temp_str);
+        //if (prev_value == temp_str)
+        //{   
+                                           //for constant
+        printf("v%d := %d\n", asgn->lhs, asgn->op1); 
+        temp_str = asgn->op1;              //constant assignmnet for the block
+        //temp_str = as;
+      
+       
+          }
+
+     ////////////////////////////////////////////////////////     
         }  
       
       else if (asgn->type == NOT)
@@ -530,9 +664,9 @@ void const_prop()
         printf("v%d := not v%d\n", asgn->lhs, asgn->op1);
       }
       else if (asgn->type == INP)
-      {
-        printf("v%d := a%d\n", asgn->lhs, -asgn->op1);
-        printf("check_in_inp\n");
+      {  
+        printf("v%d := a%d\n", asgn->lhs, -asgn->op1);      //---------------assignment------------------------------//
+        //printf("check_in_inp\n");                              //added
       }
       else if (asgn->lhs == 0)
       {
@@ -540,15 +674,18 @@ void const_prop()
       }
       else if (asgn->lhs < 0)
       {
-        printf("a%d := v%d\n", -asgn->lhs, asgn->op1);
+        printf("a%d := v%d\n",-asgn->lhs, asgn->op1);
+        //printf("inside\n");                                                       //check
       }
       else{
-        printf("v%d := v%d\n", asgn->lhs, asgn->op1);
+        printf("v%d := v%d\n", asgn->lhs, asgn->op1);            //registor assignment for the block
+
+        //printf("check for register\n");                             //check
       }
 
     }
     else if (asgn->bin == 1){
-      int temp_str;
+      //int temp_str;                                                                    //check--------------------------------
       if (asgn->type == EQ){
         printf("v%d := v%d = v%d\n", asgn->lhs, asgn->op1, asgn->op2);
 
@@ -557,9 +694,23 @@ void const_prop()
         printf("v%d := v%d < v%d\n", asgn->lhs, asgn->op1, asgn->op2);
       }
       else if (asgn->type == PLUS){
-        printf("v%d := v%d + v%d\n ", asgn->lhs, asgn->op1, asgn->op2);
-        temp_str = asgn->op2;
-        printf("v%d\n", temp_str);
+
+        /////////////////////////////////////////
+
+        
+        
+        
+        //printf("%d\n", asgn->lhs);
+        printf("v%d := v%d + v%d\n", asgn->lhs, asgn->op1, asgn->op2);
+        
+        //printf("in the addition\n");
+
+
+       
+      
+      ////////////////////////////////////////////                   
+      
+
       }
       else if (asgn->type == MINUS){
         printf("v%d := v%d - v%d\n", asgn->lhs, asgn->op1, asgn->op2);
@@ -625,10 +776,12 @@ void cse_fun()
   while (asgn != NULL){
     if (asgn->bb != br->id){
       if (br->cond == 0){
-        if (br->succ1 != -1)
+        if (br->succ1 != -1){
           printf("br bb%d\n\n", br->succ1);
-        else
+        }
+        else{
           printf("br exit\n\n");
+        }
       }
       else printf("br v%d bb%d bb%d\n\n", br->cond, br->succ1, br->succ2);
       br = br->next;
