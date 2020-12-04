@@ -36,6 +36,14 @@ void push_unique_int (int i, struct node_int** r){
   }
 }
 
+int find_int(int c, struct node_int* r){
+  while (r != NULL){
+    if (c == r->id) return 0;
+    r = r->next;
+  }
+  return 1;
+}
+
 int pop_int(struct node_int** r, struct node_int** t) {
   if ((*r)->next == NULL) {             //Check if next node is NULL - check for only one node
     int retval = (*r)->id;              //Store the id of the current node in retval
@@ -148,7 +156,6 @@ int print_int(struct node_int* r){
   return 1;
 }
 
-
 void push_istr (int c1, char* c2, struct node_istr** r, struct node_istr** t){
   if (*r == NULL) {                          //If root node is null
     *r = (struct node_istr*)malloc(sizeof(struct node_istr)); //Create a new node
@@ -238,7 +245,6 @@ struct asgn_instr* mk_asgn(int bb, int lhs, int bin, int op1, int op2, int type)
   tmp->bb = bb;
   tmp->bin = bin;
   tmp->lhs = lhs;
-  tmp->bin = 1;
   tmp->op1 = op1;
   tmp->op2 = op2;
   tmp->type = type;
@@ -264,6 +270,7 @@ struct asgn_instr* mk_uasgn(int bb, int lhs, int op, int type){
   tmp->lhs = lhs;
   tmp->bin = 0;
   tmp->op1 = op;
+  tmp->op2 = -1;
   tmp->type = type;
   tmp->next = NULL;
   return tmp;
@@ -278,6 +285,23 @@ struct asgn_instr* mk_casgn(int bb, int lhs, char* fun){
   tmp->next = NULL;
   return tmp;
 }
+
+void rm_asgn (struct asgn_instr* i, struct asgn_instr** r, struct asgn_instr** t){
+  struct asgn_instr* pred = (*r);
+  while (pred != NULL && pred->next != i) pred = pred->next;
+  if (pred == NULL) return;
+  if (i == *t) (*t) = pred;
+  else (*pred).next = i->next;
+  free(i);
+}
+
+//int find_asgn (struct asgn_instr* i, struct asgn_instr* r){
+//  while (r != NULL){
+//    if (r == i) return 0;
+//    else r = r->next;
+//  }
+//  return 1;
+//}
 
 void push_asgn (struct asgn_instr* i, struct asgn_instr** r, struct asgn_instr** t){
   if (*r == NULL){
@@ -336,7 +360,6 @@ void push_fun_str (char* name, int type, int arity, struct node_var_str* args, s
   }
 }
 
-
 struct node_var_str* find_var_str(int loc_id, char* name, struct node_var_str* r){
   while (r != NULL){
     if (strcmp(name, r->name) == 0 &&
@@ -345,7 +368,6 @@ struct node_var_str* find_var_str(int loc_id, char* name, struct node_var_str* r
   }
   return NULL;
 }
-
 
 struct node_fun_str* find_fun_str(char* name, struct node_fun_str* r){
   while (r != NULL){
@@ -465,7 +487,6 @@ int insert_node(char* token, int ntoken) {
   return current_node_id;
 }
 
-
 void insert_child(int val){        //This function helps to fill the child list
   struct ast* node = find_ast_node(val);
   if (ast_child_root == NULL) {     //If null list
@@ -490,8 +511,7 @@ void insert_child(int val){        //This function helps to fill the child list
   }
 }
 
-void insert_children (int n, ...)
-{
+void insert_children (int n, ...){
   va_list vl;
   va_start(vl,n);
   for (int i = 0; i < n; i++)
@@ -546,6 +566,23 @@ int get_child_num(struct ast* ast_node){
     temp_child_root = temp_child_root->next;
   }
   return child_num;
+}
+
+int visit_instr(struct br_instr* br, struct asgn_instr* asgn,
+                int (*f)(struct asgn_instr* asgn, struct br_instr* br, int arg1, int arg2),
+                int arg1, int arg2){
+  // goes to the end of the function
+  while (asgn != NULL){
+    if (asgn->bb != br->id){
+      if (br->cond == 0 && br->succ1 == -1){
+        return 0;
+      }
+      br = br->next;
+    }
+    if (f (asgn, br, arg1, arg2) != 0) return 1;
+    if (asgn->bb == br->id) asgn = asgn->next;
+  }
+  return 0;
 }
 
 int visit_ast(int (*f)(struct ast* ast_node)){

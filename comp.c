@@ -51,6 +51,9 @@ int get_var_type(struct ast* node, struct ast* end){
       else if (t == NOT || t == AND || t == OR) {
         return BOOLID;
       }
+      else if (t == IF && get_child(tmp->parent, 1) == tmp) {
+        return BOOLID;
+      }
     }
     tmp = tmp->next;
   }
@@ -260,6 +263,10 @@ int compute_br_structure(struct ast* node){
 
 int inp_counter;
 
+// utils and printing
+
+struct node_int* regs;
+
 int fill_instrs (struct ast* node) {
 
   if (bb_beg_root != NULL && bb_beg_root->id == node->id){
@@ -396,631 +403,196 @@ int fill_instrs (struct ast* node) {
   return 0;
 }
 
+bool is_op1_reg(struct asgn_instr* asgn) {
+  return asgn->bin == 1 || (asgn->bin == 0 &&
+    asgn->type != CONST &&
+    asgn->type != INP);
+}
+
+bool is_op1_pure_reg(struct asgn_instr* asgn) {
+  return asgn->bin == 1 || (asgn->bin == 0 &&
+    asgn->type != CONST &&
+    asgn->type != NOT &&
+    asgn->type != INP);
+}
+
+int get_registers(struct asgn_instr* asgn, struct br_instr* br, int empty1, int empty2) {
+  if (asgn->lhs > 0)
+    push_unique_int(asgn->lhs, &regs);
+  if (is_op1_reg(asgn))
+    push_unique_int(asgn->op1, &regs);
+  if (asgn->bin == 1)
+    push_unique_int(asgn->op2, &regs);
+  return 0;
+}
+
+void print_asgn(struct asgn_instr* asgn) {
+  if (asgn->bin == 0){
+    if (asgn->type == CONST)
+      printf ("v%d := %d\n", asgn->lhs, asgn->op1);
+    else if (asgn->type == NOT)
+      printf ("v%d := not v%d\n", asgn->lhs, asgn->op1);
+    else if (asgn->type == INP)
+      printf ("v%d := a%d\n", asgn->lhs, -asgn->op1);
+    else if (asgn->lhs == 0)
+      printf ("rv := v%d\n", asgn->op1);
+    else if (asgn->lhs < 0)
+      printf ("a%d := v%d\n", -asgn->lhs, asgn->op1);
+    else
+      printf ("v%d := v%d\n", asgn->lhs, asgn->op1);
+  }
+  else if (asgn->bin == 1){
+    if (asgn->type == EQ)
+      printf ("v%d := v%d = v%d\n", asgn->lhs, asgn->op1, asgn->op2);
+    else if (asgn->type == LT)
+      printf ("v%d := v%d < v%d\n", asgn->lhs, asgn->op1, asgn->op2);
+    else if (asgn->type == PLUS)
+      printf ("v%d := v%d + v%d\n", asgn->lhs, asgn->op1, asgn->op2);
+    else if (asgn->type == MINUS)
+      printf ("v%d := v%d - v%d\n", asgn->lhs, asgn->op1, asgn->op2);
+    else if (asgn->type == AND)
+      printf ("v%d := v%d and v%d\n", asgn->lhs, asgn->op1, asgn->op2);
+    else if (asgn->type == LE)
+      printf ("v%d := v%d <= v%d\n", asgn->lhs, asgn->op1, asgn->op2);
+    else if (asgn->type == MULT)
+      printf ("v%d := v%d * v%d\n", asgn->lhs, asgn->op1, asgn->op2);
+    else if (asgn->type == DIV)
+      printf ("v%d := v%d div v%d\n", asgn->lhs, asgn->op1, asgn->op2);
+    else if (asgn->type == MOD)
+      printf ("v%d := v%d mod v%d\n", asgn->lhs, asgn->op1, asgn->op2);
+    else if (asgn->type == GT)
+      printf ("v%d := v%d > v%d\n", asgn->lhs, asgn->op1, asgn->op2);
+    else if (asgn->type == GE)
+      printf ("v%d := v%d >= v%d\n", asgn->lhs, asgn->op1, asgn->op2);
+    else if (asgn->type == OR)
+      printf ("v%d := v%d or v%d\n", asgn->lhs, asgn->op1, asgn->op2);
+  }
+  else if (asgn->bin == 2){
+    printf ("call %s \n", asgn->fun);
+    if (strcmp(asgn->fun, "print") != 0)
+      printf ("v%d := rv\n", asgn->lhs);
+  }
+}
+
 void print_interm() {
-  printf ("\nfunction %s\n\n", find_istr(ifun_r, bb_root->id));
-  printf ("entry:\n");
+  printf ("\nfunction %s\n", find_istr(ifun_r, bb_root->id));
+  visit_instr(bb_root, asgn_root, get_registers, 0, 0);
+  printf ("; registers: ");
+  print_int(regs);
+  printf ("\nentry:\n");
 
   struct asgn_instr* asgn = asgn_root;
   struct br_instr* br = bb_root;
-
+  
   while (asgn != NULL){
     if (asgn->bb != br->id){
       if (br->cond == 0){
         if (br->succ1 != -1)
-          printf("br bb%d\n\n", br->succ1);
+          printf ("br bb%d\n\n", br->succ1);
         else
-          printf("br exit\n\n");
+          printf ("br exit\n\n");
       }
-      else printf("br v%d bb%d bb%d\n\n", br->cond, br->succ1, br->succ2);
+      else printf ("br v%d bb%d bb%d\n\n", br->cond, br->succ1, br->succ2);
       br = br->next;
       if (br == NULL) return;
       char* fun_name = find_istr(ifun_r, br->id);
       if (fun_name != NULL){
-        printf ("\nfunction %s\n\n", fun_name);
-        printf ("bb entry:\n");
+        printf ("\nfunction %s\n", fun_name);
+        clean_int(&regs);
+        visit_instr(br, asgn, get_registers, 0, 0);
+        printf ("; registers: ");
+        print_int(regs);
+        printf ("\nentry:\n");
       } else {
         printf ("bb%d:\n", br->id);
       }
     }
-    if (asgn->bin == 0){
-      if (asgn->type == CONST)                                            //for constant
-        printf("v%d := %d\n", asgn->lhs, asgn->op1);
-      else if (asgn->type == NOT)
-        printf("v%d := not v%d\n", asgn->lhs, asgn->op1);
-      else if (asgn->type == INP)
-        printf("v%d := a%d\n", asgn->lhs, -asgn->op1);
-      else if (asgn->lhs == 0)
-        printf("rv := v%d\n", asgn->op1);
-      else if (asgn->lhs < 0)
-        printf("a%d := v%d\n", -asgn->lhs, asgn->op1);
-      else
-        printf("v%d := v%d\n", asgn->lhs, asgn->op1);
-
+    if (asgn->bb == br->id) {
+      print_asgn(asgn);
+      asgn = asgn->next;
     }
-    else if (asgn->bin == 1){
-      if (asgn->type == EQ)
-        printf("v%d := v%d = v%d\n", asgn->lhs, asgn->op1, asgn->op2);
-      else if (asgn->type == LT)
-        printf("v%d := v%d < v%d\n", asgn->lhs, asgn->op1, asgn->op2);
-      else if (asgn->type == PLUS)
-        printf("v%d := v%d + v%d\n", asgn->lhs, asgn->op1, asgn->op2);
-      else if (asgn->type == MINUS)
-        printf("v%d := v%d - v%d\n", asgn->lhs, asgn->op1, asgn->op2);
-      else if (asgn->type == AND)
-        printf("v%d := v%d and v%d\n", asgn->lhs, asgn->op1, asgn->op2);
-      else if (asgn->type == LE)
-        printf("v%d := v%d <= v%d\n", asgn->lhs, asgn->op1, asgn->op2);
-      else if (asgn->type == MULT)
-        printf("v%d := v%d * v%d\n", asgn->lhs, asgn->op1, asgn->op2);
-      else if (asgn->type == DIV)
-        printf("v%d := v%d div v%d\n", asgn->lhs, asgn->op1, asgn->op2);
-      else if (asgn->type == MOD)
-        printf("v%d := v%d mod v%d\n", asgn->lhs, asgn->op1, asgn->op2);
-      else if (asgn->type == GT)
-        printf("v%d := v%d > v%d\n", asgn->lhs, asgn->op1, asgn->op2);
-      else if (asgn->type == GE)
-        printf("v%d := v%d >= v%d\n", asgn->lhs, asgn->op1, asgn->op2);
-      else if (asgn->type == OR)
-        printf("v%d := v%d or v%d\n", asgn->lhs, asgn->op1, asgn->op2);
-    }
-    else if (asgn->bin == 2){
-      printf("call %s \n", asgn->fun);
-      if (strcmp(asgn->fun, "print") != 0)
-        printf("v%d := rv\n", asgn->lhs);
-    }
-    asgn = asgn->next;
   }
-  printf("br exit\n");
+  clean_int(&regs);
+  printf ("br exit\n");
 }
 
-char val_1[10]= "--cp";           //for cp
-char val_2[10] = "--cse";        //for the cse
-int result, result_2;            // int to store the value
-
-
-//---------------------------------------------------constant propogation function-----------------------------------------------------------//
-
-
-
-
-
-
-
-struct  Node
-{
-  int lhs;
- 
-  int rhs;
-                                  //count made
-  struct  Node *next;
-  
-};
-
-void linkedlisttraversal(struct Node *ptr)
-{   while(ptr!=NULL)
-  {
-
-  printf("The value of lhs is %d\n ",ptr->lhs);
- 
-  printf("the value of op1 is %d\n ", ptr->rhs);
-  
-  ptr= ptr->next;
-    }
-}
-                                                             
-struct Node *insertatend(struct Node *head, int data_1, int data_2 )             //  lhs, rhs , count
-{
-
-  struct Node *ptr = (struct Node*)malloc(sizeof(struct Node));
-  struct Node  *p= head;
-  
-  ptr->lhs = data_1;
-
-  ptr->rhs= data_2;
-
- 
-  while(p->next!= NULL)
-  {
-    p = p->next;
-
-  }
-  p->next = ptr;
-  ptr->next = NULL;
-  return head;
-
-}
-
-//--------------------------------------------------------------------------//
-
-
-//----------------------------------------------------check if the values exit in the block------------------------------------------//
-
-//create a data srtucture that has one value S it can be any type and store every iteration and compare itertaion every time.
-//use while!=NULL and create the iteration and store value, if assignments  are same don't increase the counter
-// then just compare the cunter value and printf 
-
-
-
-struct final
-
-{
-
-   int counter;
-
-   struct final *next;
-
-};
-
-
-int check(struct Node *ptr, int data_1, int data_2)                      //data_1 = lhs, data_2 = op1
-{
-  
-   while(ptr!= NULL)
-
-   {
-    
-    //for common expression---------------------------------------------------------of constants
-   
-   if (ptr->lhs== data_1 &&  ptr->rhs == data_2)                //found return 0
-
-   {                                                  //insert the value in the final at the check part
-     //printf("check_1 triggered\n");   
-     return 0;
-
-                                      //the check part triggered
-
-   }
-
-   //for the checking of operation part-----------------------------------------------------------------
-  
-   else if  (NULL )
-
-   {
-
-
-
-
-   }
- ptr->next = ptr;
-
-   //printf("check_2 triggered\n");
-  return 1;
-
-
-}
-
-
-
-}
-
-int count= 0;
-                        
-void const_prop()                      
-{
-  //printf("under the cp function");                      //added
-  printf ("\nfunction %s\n\n", find_istr(ifun_r, bb_root->id));
-  printf ("entry:\n"); 
-  //printf("check_2\n");                 //checking part
-
-  //-----------------------------------------------------------logic for the constatnt propogation------------------------------------------------//
-
+bool remove_redun(){
+  bool done = false;
   struct asgn_instr* asgn = asgn_root;
-  struct br_instr* br = bb_root;
-
-   
-  struct Node *head;                                              //head assigned
-  head= (struct Node*)malloc(sizeof(struct Node));                //assignment of memory
-
-  while (asgn != NULL){  
-
-
-            //-----------------------------------------------------------------------------------//
-    if (asgn->bb != br->id){
-     // printf("the value of bb is %d\n",asgn->bb);       //checking
-      //printf("the value of id is %d\n",br->id);         //checking
-
-
-      if (br->cond == 0){
-        if (br->succ1 != -1){
-          printf("br bb%d\n\n", br->succ1);
-
-        }
-        else{
-          printf("br exit\n\n");
-        }
-      }
-      else printf("br v%d bb%d bb%d\n\n", br->cond, br->succ1, br->succ2);
-      br = br->next;
-      if (br == NULL) return;
-      char* fun_name = find_istr(ifun_r, br->id);
-      if (fun_name != NULL){
-        printf ("\nfunction %s\n\n", fun_name);
-        printf ("bb entry:\n");
-      } else {
-        printf ("bb%d:\n", br->id);
-      }
-    }
-
-  //---------------------------------------------------------------oper----------------------------------------------------------------//
-     
-    // int prev_value = temp_str;
-     //printf("previous_value %d\n", prev_value);
-    if (asgn->bin == 0){
-       
-      if (asgn->type == CONST)                   
-          
-         {                                           //insertion
-          //struct Node *head;
-          //head= (struct Node*)malloc(sizeof(struct Node));                  //commented
-          
-          insertatend(head,asgn->lhs,asgn->op1);
-
-          //push_val(head, asgn->lhs,asgn->op1);
-
-          printf("check_2\n");
-          
-          linkedlisttraversal(head);                       //traversal
-
-         ///////////////////////////////////////////////////////////////
-         if (check(head, asgn->lhs,asgn->op1) == 1) {
-
-           //linkedlisttraversal(head);
-         // printf("the value of temp is %d\n", temp_str);                              //check
-        //printf("the prev_value %d and temp value %d", prev_value, temp_str);
-        //if (prev_value == temp_str)
-        //{   
-                                           //for constant
-        printf("v%d := %d\n", asgn->lhs, asgn->op1); 
-        printf("check\n");                                                       //constant assignmnet for the block
-        //temp_str = as;
-      
-       
-          }
-
-     ////////////////////////////////////////////////////////     
-        }  
-      
-      else if (asgn->type == NOT)
-
-
-      {  if (NULL){
-         
-        insertatend(head,asgn->lhs,asgn->op1);
-
-        printf("v%d := not v%d\n", asgn->lhs, asgn->op1);
-
-      }
-      }
-      else if (asgn->type == INP)
-      { 
-        if (NULL)
-        {
-           insertatend(head,asgn->lhs,asgn->op1);
-
-        printf("v%d := a%d\n", asgn->lhs, -asgn->op1);      //---------------assignment------------------------------//
-        //printf("check_in_inp\n");                              //added
-        }
-      }
-      else if (asgn->lhs == 0)
-      {
-        if(NULL)
-        {
-           insertatend(head,asgn->lhs,asgn->op1);
-        printf("rv := v%d\n", asgn->op1);
-      
-       }
-      }
-      else if (asgn->lhs < 0)
-      
-      {
-        if(NULL)
-        { 
-          insertatend(head,asgn->lhs,asgn->op1); 
-        printf("a%d := v%d\n",-asgn->lhs, asgn->op1);
-        //printf("inside\n");                                                       //check
-       }
-      }
-      else{
-        if (NULL) 
-        {
-         insertatend(head,asgn->lhs,asgn->op1);
-        printf("v%d := v%d\n", asgn->lhs, asgn->op1);            //registor assignment for the block
-
-        
-        }//printf("check for register\n");                             //check
-      }
-
-    }
-    else if (asgn->bin == 1){
-      //int temp_str;                                                                    //check--------------------------------
-      if (asgn->type == EQ){
-
-       if (NULL)
-
-       {
-         insertatend(head,asgn->lhs,asgn->op1);
-          insertatend(head,asgn->lhs,asgn->op2);
-
-        printf("v%d := v%d = v%d\n", asgn->lhs, asgn->op1, asgn->op2);
-
-       }
-
-      }
-
-      else if (asgn->type == LT){
-
-        if (NULL)
-
-        {
-          insertatend(head,asgn->lhs,asgn->op1);
-          insertatend(head,asgn->lhs,asgn->op2);
-
-        printf("v%d := v%d < v%d\n", asgn->lhs, asgn->op1, asgn->op2);
-      
-       }
-      }
-
-      else if (asgn->type == PLUS){
-
-
-        if(NULL)
-
-        { insertatend(head,asgn->lhs,asgn->op1);
-          insertatend(head,asgn->lhs,asgn->op2);
-           
-      
-        printf("v%d := v%d + v%d\n", asgn->lhs, asgn->op1, asgn->op2);
-      
-         }  
-
-       else
-
-       {
-           printf("check\n");
-        //do something or print result
-
-       }
-
-
-      }
-      else if (asgn->type == MINUS){
-
-        if(NULL)
-
-        { insertatend(head,asgn->lhs,asgn->op1);
-          insertatend(head,asgn->lhs,asgn->op2);
-
-        printf("v%d := v%d - v%d\n", asgn->lhs, asgn->op1, asgn->op2);
-      
-       }
-      }
-
-      else if (asgn->type == AND){
-       
-        if(NULL)
-
-        {insertatend(head,asgn->lhs,asgn->op1);
-        insertatend(head,asgn->lhs,asgn->op2);
-
-        printf("v%d := v%d and v%d\n", asgn->lhs, asgn->op1, asgn->op2);
-      
-       }
-      }
-      else if (asgn->type == LE) {
-
-        if(NULL)
-
-        {
-
-        insertatend(head,asgn->lhs,asgn->op1);
-        insertatend(head,asgn->lhs,asgn->op2);
-        printf("v%d := v%d <= v%d\n", asgn->lhs, asgn->op1, asgn->op2);
-       
-        }
-       }
-      else if (asgn->type == MULT){
-
-        if(NULL)
-        {
-          insertatend(head,asgn->lhs,asgn->op1);
-          insertatend(head,asgn->lhs,asgn->op2);
-        printf("v%d := v%d * v%d\n", asgn->lhs, asgn->op1, asgn->op2);
-       }
-
-      }
-      else if (asgn->type == DIV) {
-       if(NULL)
-
-       {insertatend(head,asgn->lhs,asgn->op1);
-        insertatend(head,asgn->lhs,asgn->op2);
-           
-        printf("v%d := v%d div v%d\n", asgn->lhs, asgn->op1, asgn->op2);
-      
-      }
-      }
-      else if (asgn->type == MOD) {
-        
-        if(NULL)
-        {insertatend(head,asgn->lhs,asgn->op1);
-        insertatend(head,asgn->lhs,asgn->op2);
-
-        printf("v%d := v%d mod v%d\n", asgn->lhs, asgn->op1, asgn->op2);
-      
-      }
-      }
-      else if (asgn->type == GT) {
-
-        if (NULL)
-
-        {insertatend(head,asgn->lhs,asgn->op1);
-        insertatend(head,asgn->lhs,asgn->op2);
-        printf("v%d := v%d > v%d\n", asgn->lhs, asgn->op1, asgn->op2);
-      
-       }
-      }
-      else if (asgn->type == GE) {
-        if(NULL)
-        {
-          insertatend(head,asgn->lhs,asgn->op1);
-          insertatend(head,asgn->lhs,asgn->op2);
-        printf("v%d := v%d >= v%d\n", asgn->lhs, asgn->op1, asgn->op2);
-       }
-      }
-      else if (asgn->type == OR){
-
-        if(NULL)
-
-        {
-          insertatend(head,asgn->lhs,asgn->op1);
-          insertatend(head,asgn->lhs,asgn->op2);
-        printf("v%d := v%d or v%d\n", asgn->lhs, asgn->op1, asgn->op2);
-
-      }
-      }
-    }
-
-    //---------------------------------------------------------------------------------------------------------------------------------------------//
-
-    else if (asgn->bin == 2){
-      printf("call %s \n", asgn->fun);
-      if (strcmp(asgn->fun, "print") != 0)
-        printf("v%d := rv\n", asgn->lhs);
-    }
-    asgn = asgn->next;
-  }
-  printf("br exit\n");
-
-  
-    
-   
-}
-
-//-----------------------------------------------------common subexpression elimination function------------------------------------------------------------//
-
-
-void cse_fun()
-{
-   
-   printf("under the cse function\n");
-    printf ("\nfunction %s\n\n", find_istr(ifun_r, bb_root->id));
-  printf ("entry:\n"); 
-  //printf("check_2\n");                 //checking part
-
-  //-----------------------------------------------------------logic for the constatnt propogation------------------------------------------------//
-
-  struct asgn_instr* asgn = asgn_root;
-  struct br_instr* br = bb_root;
- 
   while (asgn != NULL){
-    if (asgn->bb != br->id){
-      if (br->cond == 0){
-        if (br->succ1 != -1){
-          printf("br bb%d\n\n", br->succ1);
-        }
-        else{
-          printf("br exit\n\n");
-        }
-      }
-      else printf("br v%d bb%d bb%d\n\n", br->cond, br->succ1, br->succ2);
-      br = br->next;
-      if (br == NULL) return;
-      char* fun_name = find_istr(ifun_r, br->id);
-      if (fun_name != NULL){
-        printf ("\nfunction %s\n\n", fun_name);
-        printf ("bb entry:\n");
-      } else {
-        printf ("bb%d:\n", br->id);
-      }
+    struct asgn_instr* succ = asgn->next;
+    if (is_op1_pure_reg(asgn) && asgn->bin == 0 && asgn->lhs > 0 && asgn->lhs == asgn->op1){
+      rm_asgn(asgn, &asgn_root, &asgn_tail);
+      done = true;
     }
-
-  //---------------------------------------------------------------oper----------------------------------------------------------------//
-
-    if (asgn->bin == 0){
-      int temp_str;  
-      if (asgn->type == CONST)   
-          
-         {                                     //for constant
-        printf("v%d := %d check_3\n ", asgn->lhs, asgn->op1);}  //checking part
-      
-      else if (asgn->type == NOT)
-      {
-        printf("v%d := not v%d\n", asgn->lhs, asgn->op1);
-      }
-      else if (asgn->type == INP)
-      {
-        printf("v%d := a%d\n", asgn->lhs, -asgn->op1);
-      }
-      else if (asgn->lhs == 0)
-      {
-        printf("rv := v%d\n", asgn->op1);
-      }
-      else if (asgn->lhs < 0)
-      {
-        printf("a%d := v%d\n", -asgn->lhs, asgn->op1);
-      }
-      else{
-        printf("v%d := v%d\n", asgn->lhs, asgn->op1);
-      }
-
-    }
-    else if (asgn->bin == 1){
-      if (asgn->type == EQ){
-        printf("v%d := v%d = v%d\n", asgn->lhs, asgn->op1, asgn->op2);
-      }
-      else if (asgn->type == LT){
-        printf("v%d := v%d < v%d\n", asgn->lhs, asgn->op1, asgn->op2);
-      }
-      else if (asgn->type == PLUS){
-        printf("v%d := v%d + v%d check_4\n ", asgn->lhs, asgn->op1, asgn->op2);
-      }
-      else if (asgn->type == MINUS){
-        printf("v%d := v%d - v%d\n", asgn->lhs, asgn->op1, asgn->op2);
-      }
-      else if (asgn->type == AND){
-        printf("v%d := v%d and v%d\n", asgn->lhs, asgn->op1, asgn->op2);
-      }
-      else if (asgn->type == LE) {
-        printf("v%d := v%d <= v%d\n", asgn->lhs, asgn->op1, asgn->op2);
-      }
-      else if (asgn->type == MULT){
-        printf("v%d := v%d * v%d\n", asgn->lhs, asgn->op1, asgn->op2);
-      }
-      else if (asgn->type == DIV) {
-        printf("v%d := v%d div v%d\n", asgn->lhs, asgn->op1, asgn->op2);
-      }
-      else if (asgn->type == MOD) {
-        printf("v%d := v%d mod v%d\n", asgn->lhs, asgn->op1, asgn->op2);
-      }
-      else if (asgn->type == GT) {
-        printf("v%d := v%d > v%d\n", asgn->lhs, asgn->op1, asgn->op2);
-      }
-      else if (asgn->type == GE) {
-        printf("v%d := v%d >= v%d\n", asgn->lhs, asgn->op1, asgn->op2);
-      }
-      else if (asgn->type == OR){
-        printf("v%d := v%d or v%d\n", asgn->lhs, asgn->op1, asgn->op2);
-      }
-    }
-
-    //---------------------------------------------------------------------------------------------------------------------------------------------//
-
-    else if (asgn->bin == 2){
-      printf("call %s \n", asgn->fun);
-      if (strcmp(asgn->fun, "print") != 0)
-        printf("v%d := rv\n", asgn->lhs);
-    }
-    asgn = asgn->next;
+    asgn = succ;
   }
-  printf("br exit\n");
-
-   
+  return done;
 }
 
+int rename_reg(struct asgn_instr* asgn, struct br_instr* br, int reg_src, int reg_dst){
+  if (br->cond == reg_src) (*(&br))->cond = reg_dst;
+  if (asgn->lhs == reg_src) (*(&asgn))->lhs = reg_dst;
+  if (is_op1_reg(asgn) && asgn->op1 == reg_src)
+    (*(&asgn))->op1 = reg_dst;
+  if (asgn->bin == 1 && asgn->op2 == reg_src)
+    (*(&asgn))->op2 = reg_dst;
+  return 0;
+}
 
+int rename_all(struct br_instr* br, struct asgn_instr* asgn, int reg_src, int reg_dst){
+  return visit_instr(br, asgn, rename_reg, reg_src, reg_dst);
+}
 
+int ssa_reg(struct asgn_instr* asgn, struct br_instr* br, int reg, int empty){
+  if (asgn->lhs == reg) return 1;
+  return 0;
+}
 
+int is_in_ssa(struct br_instr* br, struct asgn_instr* asgn, int reg){
+  return visit_instr(br, asgn, ssa_reg, reg, 0);
+}
 
-int main (int argc, char *argv[10]) {
+// optimizations
+
+void cass() {
+  struct asgn_instr* asgn = asgn_root;
+  struct asgn_instr* fun_beg = asgn_root;
+  struct br_instr* br = bb_root;
+
+  while (asgn != NULL) {
+    if (asgn->bb != br->id) {
+      if (br->cond == 0 && br->succ1 == -1){
+        fun_beg = asgn->next;
+      }
+      br = br->next;
+    }
+
+    if (asgn->lhs > 0 && asgn->bin == 0) {
+      int new_id = -1;
+      if (0 == is_in_ssa(br, asgn->next, asgn->lhs) &&
+          is_op1_pure_reg(asgn)) {
+        new_id = asgn->op1;
+      }
+
+      if (new_id > 0){
+        struct asgn_instr* tmp = fun_beg;
+        while (tmp != asgn) {
+          if (tmp->lhs == asgn->lhs) break;  // make sure that the renamed reg is not used in the other branches
+          tmp = tmp->next;
+        }
+        if (tmp == asgn)
+        {
+          rename_all(br, asgn, asgn->lhs, new_id);
+        }
+      }
+    }
+    if (asgn->bb == br->id) asgn = asgn->next;
+  }
+  if (remove_redun()) cass();
+}
+
+int main (int argc, char **argv) {
   int retval = yyparse();
 
   push_fun_str("GET-INT", INT, 0, NULL, &fun_r, &fun_t);
@@ -1037,36 +609,11 @@ int main (int argc, char *argv[10]) {
   visit_ast(compute_br_structure);
   visit_ast(fill_instrs);
 
-  //print_interm();
-  
-  // condition trigers only if other argumnents are provided  
-  if (argc == 1)
-  {
-    print_interm();
-
+  for (int i = 1; i < argc; i++) {
+    if (strcmp(argv[i], "--cass") == 0) cass();
   }
 
-
-
-  if (argc >1)
-  {
-
-  result = strcmp(argv[1], val_1);
-  result_2 = strcmp(argv[1], val_2);
-
-  if (result == 0 && argc >1)
-  {
-                                    
-                              //struct asgn_instr* ptr;
-    const_prop();  //function calling
-  }
-
-  else if (result_2 ==0 && argc >1) {
-
-    cse_fun();       //function calling
-  }
-  
-  }  
+  print_interm();
 
   clean_asgns(&asgn_root);
   clean_asgns(&assgn_tmp_root);
@@ -1074,9 +621,6 @@ int main (int argc, char *argv[10]) {
   clean_istr(&ifun_r);
   clean_fun_str(&fun_r);
   clean_var_str(&vars_r);
- 
-
-  
 
   free_ast();
   return retval;
