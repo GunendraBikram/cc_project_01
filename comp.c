@@ -544,6 +544,23 @@ int rename_all(struct br_instr* br, struct asgn_instr* asgn, int reg_src, int re
   return visit_instr(br, asgn, rename_reg, reg_src, reg_dst);
 }
 
+int avail_reg(struct asgn_instr* asgn, struct br_instr* br, int reg, int empty)   ////avial_reg  
+
+{
+ if(asgn->lhs== reg) return 1;
+ if (is_op1_pure_reg(asgn) && asgn->op1 == reg) return 1;
+ if (asgn->bin== 1 &&  asgn->op2 == reg) return 1;
+
+ return 0;
+}
+
+int is_available(struct br_instr* br, struct asgn_instr* asgn, int reg)         ////is_avail
+{
+
+  return visit_instr(br, asgn, avail_reg,reg, 0) ;
+}
+
+
 int ssa_reg(struct asgn_instr* asgn, struct br_instr* br, int reg, int empty){
   if (asgn->lhs == reg) return 1;
   return 0;
@@ -592,6 +609,55 @@ void cass() {
   if (remove_redun()) cass();
 }
 
+//--------------------------------------------------add------------------------------------------------------------------//
+
+
+void register_alloca()                         //function def
+{
+  struct asgn_instr* asgn = asgn_root;
+  struct asgn_instr* fun_beg = asgn_root;
+  struct br_instr* br = bb_root;
+
+  while(asgn!=NULL)
+  { if(asgn->bb != br->id)
+    {
+      if(br->cond == 0 && br->succ1 == -1)
+      {
+        fun_beg = asgn->next;
+      }
+
+      br= br->next;
+      
+
+    }
+
+    if(asgn->lhs>0)
+    {
+      if(is_available(br,asgn->next,asgn->op1) == 0 && is_op1_reg(asgn))
+      {
+        struct asgn_instr* tmp = fun_beg;
+        while (tmp!= asgn)
+        {
+          if(tmp->lhs == asgn->lhs) break;
+
+          tmp  = tmp->next;
+        }
+
+        rename_all(br,asgn,asgn->lhs,asgn->op1);
+
+      }
+
+    }
+
+  if(asgn->bb == br->id) asgn = asgn->next;
+  
+  }
+
+
+}
+
+
+//---------------------------------------------------------------end-----------------------------------------------------//
 int main (int argc, char **argv) {
   int retval = yyparse();
 
@@ -610,7 +676,7 @@ int main (int argc, char **argv) {
   visit_ast(fill_instrs);
 
   for (int i = 1; i < argc; i++) {
-    if (strcmp(argv[i], "--cass") == 0) cass();
+    if (strcmp(argv[i], "--cass") == 0) cass(),register_alloca();  //calling
   }
 
   print_interm();
