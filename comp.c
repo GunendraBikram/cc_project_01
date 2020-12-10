@@ -659,7 +659,15 @@ void register_alloca()                         //function def
 
 //....................
 int visit_x86(void){
-  printf("\nHello from visit_x86\n");
+ struct asgn_instr* tmp1, tmp2, tmp3 = asgn_root;
+tmp1 = 
+tmp2=
+tmp 3= 
+mov1 tmp1, -12(%ebp);
+mov1 tmp2, -16(%ebp);
+mov1 tmp3, -20(%ebp);
+  
+return 0;  
 }
 
 //---------------------------------------------------------------end-----------------------------------------------------//
