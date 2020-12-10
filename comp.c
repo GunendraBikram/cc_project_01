@@ -656,7 +656,7 @@ void register_alloca()                         //function def
 
 }
 
-
+/*
 //....................
 int visit_x86(void){
 int visit_x86(){
@@ -689,7 +689,7 @@ mov1 tmp3, -20(%ebp);
   
 return 0;  
 }
-
+*/
 //---------------------------------------------------------------end-----------------------------------------------------//
 int main (int argc, char **argv) {
   int retval = yyparse();
@@ -723,6 +723,6 @@ int main (int argc, char **argv) {
 
   free_ast();
   return retval;
-  visit_x86();
+  //visit_x86();
 }
 
