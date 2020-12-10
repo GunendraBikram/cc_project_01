@@ -659,13 +659,33 @@ void register_alloca()                         //function def
 
 //....................
 int visit_x86(void){
- struct asgn_instr* tmp1, tmp2, tmp3 = asgn_root;
+int visit_x86(){
+struct asgn_instr* asgn =asgn_root;
+struct asgn_instr* fun_beg =asgn_root;
+struct asgn_instr*  br = bb_root;
+while(asgn!=NULL)
+{ if(asgn->bb != br->id)
+  {
+   {if(br->cond == 0 && br->succ1 ==-1)
+    {
+	fun_beg = asgn->next;
+    }
+    br = br -> next;
+   }
+
+  struct asgn_instr* tmp1, tmp2, tmp3 = asgn_root;
 tmp1 = 
-tmp2=
-tmp 3= 
+tmp2 =
+tmp3 = 
 mov1 tmp1, -12(%ebp);
 mov1 tmp2, -16(%ebp);
 mov1 tmp3, -20(%ebp);
+	
+   } 
+   if(asgn->bb != NULL) 
+   asgn = asgn->next;
+}
+
   
 return 0;  
 }
